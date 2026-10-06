@@ -1,0 +1,21 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "tanstack-start-app",
+	"compatibility_date": "2025-09-02",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"main": "@tanstack/react-start/server-entry",
+	"vars": {
+		"BETTER_AUTH_URL": "http://localhost:3000"
+	},
+	"d1_databases": [
+		{
+			"binding": "test_jpdh",
+			"database_name": "test-jpdh",
+			"database_id": "16efb987-7543-4ca6-895a-1cc9e29ab2cd",
+			"migrations_dir": "drizzle",
+			"migrations_pattern": "drizzle/*/migration.sql"
+		}
+	]
+}
