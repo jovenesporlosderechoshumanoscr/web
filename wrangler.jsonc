@@ -9,6 +9,7 @@
 	"vars": {
 		"BETTER_AUTH_URL": "http://localhost:3000"
 	},
+	"send_email": [{"name":"EMAIL"}],
 	"d1_databases": [
 		{
 			"binding": "test_jpdh",
