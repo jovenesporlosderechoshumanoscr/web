@@ -13,101 +13,94 @@ import {
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import { useForm } from "@tanstack/react-form"
-import { Link } from "@tanstack/react-router"
-import { useState } from "react"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { toast } from "sonner"
 
 const formSchema = z.object({
-	email: z
-		.email(),
 	password: z
 		.string()
-		.min(5, "Password must be at least 5 characters.")
-		.max(32, "Password must be at most 32 characters."),
+		.min(8, "La contraseña debe tener al menos 8 caracteres.")
+		.max(128, "La contraseña debe tener como máximo 128 caracteres."),
+	confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+	message: "Las contraseñas no coinciden.",
+	path: ["confirmPassword"],
 })
 
-export function LoginForm({
+export function ResetPasswordForm({
 	className,
+	token,
 	...props
-}: React.ComponentProps<"div">) {
-
-	const [verificationEmail, setVerificationEmail] = useState('')
+}: React.ComponentProps<"div"> & { token: string }) {
+	const navigate = useNavigate()
 
 	const form = useForm({
 		defaultValues: {
-			email: '',
 			password: '',
+			confirmPassword: '',
 		},
 		validators: {
 			onSubmit: formSchema,
 		},
 
 		onSubmit: async ({ value }) => {
-
 			try {
-				await authClient.signIn.email(
+				await authClient.resetPassword(
 					{
-						email: value.email,
-						password: value.password,
-						callbackURL: '/admin/panel',
+						newPassword: value.password,
+						token,
 					},
 					{
 						onSuccess: () => {
-							toast.success('Acceso autorizado')
+							toast.success('Contraseña actualizada')
+							navigate({ to: '/login' })
 						},
-					onError: (ctx) => {
-						if (ctx.error.status === 403) {
-							setVerificationEmail(value.email)
-							toast.error('Verificación de correo requerida')
-							return
-						}
-							toast.error('Credenciales inválidas')
+						onError: (ctx) => {
+							toast.error(ctx.error.message ?? 'El enlace no es válido o ha caducado')
 						},
 					}
 				)
-			} catch (error) {
+			} catch {
 				toast.error('Error del sistema')
 			}
 		},
 	})
 
 	return (
-
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden p-0">
 				<CardContent className="grid p-0 md:grid-cols-2">
 					<FieldGroup>
 						<div className="flex flex-col items-center gap-2 text-center">
-							<h1 className="text-2xl font-bold">Welcome back</h1>
+							<h1 className="text-2xl font-bold">Nueva contraseña</h1>
 							<p className="text-balance text-muted-foreground">
-								Login to your Acme Inc account
+								Elige una contraseña segura para tu cuenta
 							</p>
 						</div>
 						<form
-							id="login-form"
+							id="reset-password-form"
 							onSubmit={(e) => {
 								e.preventDefault()
 								form.handleSubmit()
 							}}
 						>
 							<form.Field
-								name="email"
+								name="password"
 								children={(field) => {
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor="email">Email</FieldLabel>
+											<FieldLabel htmlFor="password">Nueva contraseña</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
 												value={field.state.value}
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="m@example.com"
-												className=""
+												placeholder="••••••••"
 												aria-invalid={isInvalid}
-												type="email"
+												type="password"
 												required
 											/>
 											{isInvalid && (
@@ -118,34 +111,23 @@ export function LoginForm({
 								}}
 							/>
 							<form.Field
-								name="password"
+								name="confirmPassword"
 								children={(field) => {
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-
 										<Field data-invalid={isInvalid}>
-											<div className="flex items-center">
-												<FieldLabel htmlFor="password">Password</FieldLabel>
-												<Link
-													to="/forgot-password"
-													className="ml-auto text-sm underline-offset-2 hover:underline"
-												>
-													Forgot your password?
-												</Link>
-											</div>
+											<FieldLabel htmlFor="confirmPassword">Confirma la contraseña</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
 												value={field.state.value}
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="enter secure password please..."
-												className=""
+												placeholder="••••••••"
 												aria-invalid={isInvalid}
 												type="password"
 												required
-
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -156,15 +138,10 @@ export function LoginForm({
 							/>
 
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button type="submit">Cambiar contraseña</Button>
 							</Field>
-							{verificationEmail && (
-								<FieldDescription className="text-center">
-									¿No recibiste el correo? <Link to="/resend-verification" search={{ email: verificationEmail }} className="underline underline-offset-2 hover:underline">Reenviar verificación</Link>
-								</FieldDescription>
-							)}
 							<FieldDescription className="text-center">
-								Don&apos;t have an account? <a href="#">Sign up</a>
+								¿No recibiste el enlace? <Link to="/forgot-password" className="underline underline-offset-2 hover:underline">Solicita uno nuevo</Link>
 							</FieldDescription>
 						</form>
 					</FieldGroup>
@@ -178,8 +155,7 @@ export function LoginForm({
 				</CardContent>
 			</Card >
 			<FieldDescription className="px-6 text-center">
-				By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-				and <a href="#">Privacy Policy</a>.
+				¿Ya tienes cuenta? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link>
 			</FieldDescription>
 		</div >
 	)

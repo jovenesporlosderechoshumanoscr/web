@@ -10,7 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminPanelProtectedRouteRouteImport } from './routes/admin/panel/_protected/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -21,9 +25,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResendVerificationRoute = ResendVerificationRouteImport.update({
+  id: '/resend-verification',
+  path: '/resend-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -51,7 +75,11 @@ const AdminPanelProtectedIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -59,7 +87,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
@@ -67,7 +99,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -77,17 +113,34 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/forgot-password'
     | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/verify-email'
     | '/admin/login'
     | '/admin/panel'
     | '/api/auth/$'
     | '/admin/panel/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/admin/login' | '/api/auth/$' | '/admin/panel'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/verify-email'
+    | '/admin/login'
+    | '/api/auth/$'
+    | '/admin/panel'
   id:
     | '__root__'
     | '/'
+    | '/forgot-password'
     | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/verify-email'
     | '/admin/login'
     | '/admin/panel/_protected'
     | '/api/auth/$'
@@ -96,7 +149,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  ResendVerificationRoute: typeof ResendVerificationRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminPanelProtectedRouteRoute: typeof AdminPanelProtectedRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -111,11 +168,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resend-verification': {
+      id: '/resend-verification'
+      path: '/resend-verification'
+      fullPath: '/resend-verification'
+      preLoaderRoute: typeof ResendVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -165,7 +250,11 @@ const AdminPanelProtectedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  ResendVerificationRoute: ResendVerificationRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminPanelProtectedRouteRoute: AdminPanelProtectedRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

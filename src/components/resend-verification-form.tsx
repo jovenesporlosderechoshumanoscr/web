@@ -14,29 +14,22 @@ import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import { useForm } from "@tanstack/react-form"
 import { Link } from "@tanstack/react-router"
-import { useState } from "react"
 import { toast } from "sonner"
 
 const formSchema = z.object({
 	email: z
-		.email(),
-	password: z
-		.string()
-		.min(5, "Password must be at least 5 characters.")
-		.max(32, "Password must be at most 32 characters."),
+		.email("Introduce un correo electrónico válido."),
 })
 
-export function LoginForm({
+export function ResendVerificationForm({
 	className,
+	defaultEmail = '',
 	...props
-}: React.ComponentProps<"div">) {
-
-	const [verificationEmail, setVerificationEmail] = useState('')
+}: React.ComponentProps<"div"> & { defaultEmail?: string }) {
 
 	const form = useForm({
 		defaultValues: {
-			email: '',
-			password: '',
+			email: defaultEmail,
 		},
 		validators: {
 			onSubmit: formSchema,
@@ -45,23 +38,17 @@ export function LoginForm({
 		onSubmit: async ({ value }) => {
 
 			try {
-				await authClient.signIn.email(
+				await authClient.sendVerificationEmail(
 					{
 						email: value.email,
-						password: value.password,
-						callbackURL: '/admin/panel',
+						callbackURL: '/verify-email',
 					},
 					{
 						onSuccess: () => {
-							toast.success('Acceso autorizado')
+							toast.success('Correo de verificación enviado')
 						},
-					onError: (ctx) => {
-						if (ctx.error.status === 403) {
-							setVerificationEmail(value.email)
-							toast.error('Verificación de correo requerida')
-							return
-						}
-							toast.error('Credenciales inválidas')
+						onError: () => {
+							toast.error('No se pudo enviar el correo')
 						},
 					}
 				)
@@ -78,13 +65,13 @@ export function LoginForm({
 				<CardContent className="grid p-0 md:grid-cols-2">
 					<FieldGroup>
 						<div className="flex flex-col items-center gap-2 text-center">
-							<h1 className="text-2xl font-bold">Welcome back</h1>
+							<h1 className="text-2xl font-bold">Verifica tu correo</h1>
 							<p className="text-balance text-muted-foreground">
-								Login to your Acme Inc account
+								Te enviaremos un enlace para confirmar tu cuenta
 							</p>
 						</div>
 						<form
-							id="login-form"
+							id="resend-verification-form"
 							onSubmit={(e) => {
 								e.preventDefault()
 								form.handleSubmit()
@@ -117,54 +104,12 @@ export function LoginForm({
 									)
 								}}
 							/>
-							<form.Field
-								name="password"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-
-										<Field data-invalid={isInvalid}>
-											<div className="flex items-center">
-												<FieldLabel htmlFor="password">Password</FieldLabel>
-												<Link
-													to="/forgot-password"
-													className="ml-auto text-sm underline-offset-2 hover:underline"
-												>
-													Forgot your password?
-												</Link>
-											</div>
-											<Input
-												id={field.name}
-												name={field.name}
-												value={field.state.value}
-												onBlur={field.handleBlur}
-												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="enter secure password please..."
-												className=""
-												aria-invalid={isInvalid}
-												type="password"
-												required
-
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
 
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button type="submit">Enviar enlace</Button>
 							</Field>
-							{verificationEmail && (
-								<FieldDescription className="text-center">
-									¿No recibiste el correo? <Link to="/resend-verification" search={{ email: verificationEmail }} className="underline underline-offset-2 hover:underline">Reenviar verificación</Link>
-								</FieldDescription>
-							)}
 							<FieldDescription className="text-center">
-								Don&apos;t have an account? <a href="#">Sign up</a>
+								¿Ya verificaste tu correo? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link>
 							</FieldDescription>
 						</form>
 					</FieldGroup>
@@ -178,8 +123,7 @@ export function LoginForm({
 				</CardContent>
 			</Card >
 			<FieldDescription className="px-6 text-center">
-				By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-				and <a href="#">Privacy Policy</a>.
+				El enlace de verificación caduca en 1 hora.
 			</FieldDescription>
 		</div >
 	)
