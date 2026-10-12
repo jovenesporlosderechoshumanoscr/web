@@ -19,6 +19,8 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminPanelProtectedRouteRouteImport } from './routes/admin/panel/_protected/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminPanelProtectedIndexRouteImport } from './routes/admin/panel/_protected/index'
+import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin/panel/_protected/blog/index'
+import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -72,6 +74,18 @@ const AdminPanelProtectedIndexRoute =
     path: '/',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const AdminPanelProtectedBlogIndexRoute =
+  AdminPanelProtectedBlogIndexRouteImport.update({
+    id: '/blog/',
+    path: '/blog/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedUsersIndexRoute =
+  AdminPanelProtectedUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,6 +98,8 @@ export interface FileRoutesByFullPath {
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,6 +111,8 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,6 +126,8 @@ export interface FileRoutesById {
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/_protected/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -122,6 +142,8 @@ export interface FileRouteTypes {
     | '/admin/panel'
     | '/api/auth/$'
     | '/admin/panel/'
+    | '/admin/panel/blog/'
+    | '/admin/panel/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +155,8 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/api/auth/$'
     | '/admin/panel'
+    | '/admin/panel/blog'
+    | '/admin/panel/users'
   id:
     | '__root__'
     | '/'
@@ -145,6 +169,8 @@ export interface FileRouteTypes {
     | '/admin/panel/_protected'
     | '/api/auth/$'
     | '/admin/panel/_protected/'
+    | '/admin/panel/_protected/blog/'
+    | '/admin/panel/_protected/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -231,16 +257,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedIndexRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/admin/panel/_protected/blog/': {
+      id: '/admin/panel/_protected/blog/'
+      path: '/blog'
+      fullPath: '/admin/panel/blog/'
+      preLoaderRoute: typeof AdminPanelProtectedBlogIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/users/': {
+      id: '/admin/panel/_protected/users/'
+      path: '/users'
+      fullPath: '/admin/panel/users/'
+      preLoaderRoute: typeof AdminPanelProtectedUsersIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
   }
 }
 
 interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedIndexRoute: typeof AdminPanelProtectedIndexRoute
+  AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
+  AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
 }
 
 const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildren =
   {
     AdminPanelProtectedIndexRoute: AdminPanelProtectedIndexRoute,
+    AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
+    AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
   }
 
 const AdminPanelProtectedRouteRouteWithChildren =

@@ -2,7 +2,8 @@ import { db } from "@/server/db";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/server/email";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins/admin";
+import { admin as adminPlugin } from "better-auth/plugins/admin";
+import { ac, admin, editor, student } from "@/lib/permission";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import * as schema from "@/server/db/schema";
 
@@ -29,5 +30,9 @@ export const auth = betterAuth({
 	},
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
-	plugins: [admin(), tanstackStartCookies()],
+	plugins: [adminPlugin({
+		defaultRole: "student",
+		ac,
+		roles: {admin, editor, student},
+	}), tanstackStartCookies()],
   });

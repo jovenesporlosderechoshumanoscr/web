@@ -38,11 +38,9 @@ export function AdminSidebarMain({
         {items.map((item) => (
           <Collapsible key={item.title}  defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton  tooltip={item.title}>
-                <Link to={item.url}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </Link>
+              <SidebarMenuButton tooltip={item.title} render={<Link to={item.url} />}>
+                {item.icon}
+                <span>{item.title}</span>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -57,10 +55,8 @@ export function AdminSidebarMain({
                     <SidebarMenuSub>
                       {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton >
-                            <Link to={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
+                          <SidebarMenuSubButton render={<Link to={subItem.url} />}>
+                            <span>{subItem.title}</span>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

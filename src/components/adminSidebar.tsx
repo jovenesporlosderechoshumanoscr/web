@@ -5,87 +5,23 @@ import {
 	SidebarGroup,
 	SidebarHeader,
 } from "@/components/ui/sidebar"
-import { IconBook, IconCategory, IconRobot, IconTerminal2 } from "@tabler/icons-react"
+import { IconBook, IconCategory} from "@tabler/icons-react"
 import { AdminSidebarMain } from "./adminSidebarMain"
+import { NavUser } from "./adminSidebarUser"
 
 const data = {
 	navMain: [
 		{
-			title: "Categorías",
-			url: "/panel/categories",
+			title: "Blog",
+			url: "/admin/panel/blog",
 			icon: (
 				<IconCategory
 				/>
-			),
-			items: [
-				{
-					title: "Todas",
-					url: "/panel/categories",
-				},
-			],
-		},
-		{
-			title: "Productos",
-			url: "/panel/products",
-			icon: (
-				<IconTerminal2
-				/>
-			),
-			isActive: true,
-			items: [
-				{
-					title: "Todos",
-					url: "/panel/products",
-				},
-			],
-		},
-		{
-			title: "Ordenes",
-			url: "/panel/orders",
-			icon: (
-				<IconRobot
-				/>
-			),
-			items: [
-				{
-					title: "Todas",
-					url: "/panel/orders",
-				},
-				{
-					title: "Crear orden",
-					url: "/panel/orders/new",
-				},
-				{
-					title: "Pendientes",
-					url: "/panel/orders",
-				},
-				{
-					title: "En transito",
-					url: "/panel/orders",
-				},
-				{
-					title: "Completadas",
-					url: "/panel/orders",
-				},
-			],
-		},
-		{
-			title: "Proveedores",
-			url: "/panel/proveedores",
-			icon: (
-				<IconRobot
-				/>
-			),
-			items: [
-				{
-					title: "Todos",
-					url: "/panel/proveedores",
-				},
-			],
+			)
 		},
 		{
 			title: "usuarios",
-			url: "/panel/users",
+			url: "/admin/panel/users",
 			icon: (
 				<IconBook
 				/>
@@ -93,15 +29,15 @@ const data = {
 			items: [
 				{
 					title: "Crear Usuario",
-					url: "/panel/users",
+					url: "/admin/panel/users",
 				},
 
 			],
 		},
-	]}
+	]
+}
 
 export function AdminSidebar({ props }: { props: any }) {
-	console.log(props)
 
 	return (
 		<Sidebar>
@@ -111,14 +47,12 @@ export function AdminSidebar({ props }: { props: any }) {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup >
-				<AdminSidebarMain items={data.navMain} />
-				</SidebarGroup>
-				<SidebarGroup className="border-t border-black">
-
-
+					<AdminSidebarMain items={data.navMain} />
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarFooter />
+			<SidebarFooter >
+				<NavUser user={props} />
+			</SidebarFooter>
 		</Sidebar>
 	)
 }
