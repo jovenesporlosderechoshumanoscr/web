@@ -21,6 +21,8 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminPanelProtectedIndexRouteImport } from './routes/admin/panel/_protected/index'
 import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin/panel/_protected/blog/index'
 import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
+import { Route as AdminPanelProtectedUsersCreateRouteImport } from './routes/admin/panel/_protected/users/create'
+import { Route as AdminPanelProtectedUsersEditUserIdRouteImport } from './routes/admin/panel/_protected/users/edit.$userId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -86,6 +88,18 @@ const AdminPanelProtectedUsersIndexRoute =
     path: '/users/',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const AdminPanelProtectedUsersCreateRoute =
+  AdminPanelProtectedUsersCreateRouteImport.update({
+    id: '/users/create',
+    path: '/users/create',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedUsersEditUserIdRoute =
+  AdminPanelProtectedUsersEditUserIdRouteImport.update({
+    id: '/users/edit/$userId',
+    path: '/users/edit/$userId',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -98,8 +112,10 @@ export interface FileRoutesByFullPath {
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
   '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -111,8 +127,10 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
   '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,8 +144,10 @@ export interface FileRoutesById {
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/_protected/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/_protected/users/create': typeof AdminPanelProtectedUsersCreateRoute
   '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/_protected/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -142,8 +162,10 @@ export interface FileRouteTypes {
     | '/admin/panel'
     | '/api/auth/$'
     | '/admin/panel/'
+    | '/admin/panel/users/create'
     | '/admin/panel/blog/'
     | '/admin/panel/users/'
+    | '/admin/panel/users/edit/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,8 +177,10 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/api/auth/$'
     | '/admin/panel'
+    | '/admin/panel/users/create'
     | '/admin/panel/blog'
     | '/admin/panel/users'
+    | '/admin/panel/users/edit/$userId'
   id:
     | '__root__'
     | '/'
@@ -169,8 +193,10 @@ export interface FileRouteTypes {
     | '/admin/panel/_protected'
     | '/api/auth/$'
     | '/admin/panel/_protected/'
+    | '/admin/panel/_protected/users/create'
     | '/admin/panel/_protected/blog/'
     | '/admin/panel/_protected/users/'
+    | '/admin/panel/_protected/users/edit/$userId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -271,20 +297,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedUsersIndexRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/admin/panel/_protected/users/create': {
+      id: '/admin/panel/_protected/users/create'
+      path: '/users/create'
+      fullPath: '/admin/panel/users/create'
+      preLoaderRoute: typeof AdminPanelProtectedUsersCreateRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/users/edit/$userId': {
+      id: '/admin/panel/_protected/users/edit/$userId'
+      path: '/users/edit/$userId'
+      fullPath: '/admin/panel/users/edit/$userId'
+      preLoaderRoute: typeof AdminPanelProtectedUsersEditUserIdRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
   }
 }
 
 interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedIndexRoute: typeof AdminPanelProtectedIndexRoute
+  AdminPanelProtectedUsersCreateRoute: typeof AdminPanelProtectedUsersCreateRoute
   AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
   AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
+  AdminPanelProtectedUsersEditUserIdRoute: typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 
 const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildren =
   {
     AdminPanelProtectedIndexRoute: AdminPanelProtectedIndexRoute,
+    AdminPanelProtectedUsersCreateRoute: AdminPanelProtectedUsersCreateRoute,
     AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
     AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
+    AdminPanelProtectedUsersEditUserIdRoute:
+      AdminPanelProtectedUsersEditUserIdRoute,
   }
 
 const AdminPanelProtectedRouteRouteWithChildren =

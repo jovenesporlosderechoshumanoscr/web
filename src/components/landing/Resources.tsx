@@ -1,5 +1,5 @@
 import { IconArrowRight, IconArticle, IconBook } from '@tabler/icons-react'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -56,14 +56,10 @@ export default function Resources() {
               </CardHeader>
               <CardContent />
               <CardFooter>
-                <Button
-                  render={
-                    <a href={cta.href}>
-                      {cta.label}
-                      <IconArrowRight aria-hidden="true" />
-                    </a>
-                  }
-                />
+                <a href={cta.href} className={buttonVariants()}>
+                  {cta.label}
+                  <IconArrowRight aria-hidden="true" />
+                </a>
               </CardFooter>
             </Card>
           ))}

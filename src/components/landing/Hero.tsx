@@ -11,7 +11,7 @@ export const heroContent = {
   primaryCta: { label: 'Conoce nuestro trabajo', href: '#trabajo' },
   secondaryCta: { label: 'Centro de acción', href: '#accion' },
   image: {
-    src: 'https://placehold.co/800x900',
+    src: '/heroimg.webp',
     alt: 'Retrato de una lideresa comunitaria sonriendo',
   },
   stampText: 'JUSTICIA • COMUNIDAD • DIGNIDAD • ',

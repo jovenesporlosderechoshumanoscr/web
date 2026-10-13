@@ -44,13 +44,14 @@ export function AdminSidebarMain({
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
-                  <CollapsibleTrigger >
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <IconChevronRight
-                      />
-                      <span className="sr-only">Toggle</span>
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
+                  <CollapsibleTrigger
+                    render={
+                      <SidebarMenuAction className="data-[state=open]:rotate-90">
+                        <IconChevronRight />
+                        <span className="sr-only">Toggle</span>
+                      </SidebarMenuAction>
+                    }
+                  />
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items.map((subItem) => (
