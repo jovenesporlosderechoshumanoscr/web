@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import type { PostBlock } from "../validation/blog";
 
 export const user = sqliteTable("user", {
 
@@ -73,6 +74,38 @@ export const account = sqliteTable(
       .notNull(),
   },
   (table) => [index("account_userId_idx").on(table.userId)],
+);
+
+export const post = sqliteTable(
+  "post",
+  {
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    slug: text("slug").notNull().unique(),
+    status: text("status", { enum: ["draft", "published"] })
+      .default("draft")
+      .notNull(),
+    blocks: text("blocks", { mode: "json" })
+      .$type<PostBlock[]>()
+      .notNull(),
+    excerpt: text("excerpt"),
+    coverImage: text("cover_image"),
+    authorId: text("author_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    publishedAt: integer("published_at", { mode: "timestamp_ms" }),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("post_status_idx").on(table.status),
+    index("post_publishedAt_idx").on(table.publishedAt),
+  ],
 );
 
 export const verification = sqliteTable(

@@ -56,7 +56,7 @@ export function ResetPasswordForm({
 							navigate({ to: '/login' })
 						},
 						onError: (ctx) => {
-							toast.error(ctx.error.message ?? 'El enlace no es válido o ha caducado')
+							toast.error(ctx.error.message)
 						},
 					}
 				)

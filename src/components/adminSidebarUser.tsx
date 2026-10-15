@@ -79,7 +79,7 @@ export function NavUser({
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem render={<Link to="/admin/panel" />}>
+							<DropdownMenuItem render={<Link to="/admin/panel/profile" />}>
 								<IconRosetteDiscountCheck
 								/>
 								Mi cuenta

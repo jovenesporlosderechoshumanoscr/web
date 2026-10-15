@@ -62,3 +62,43 @@ export const deleteUserSchema = z.object({
 });
 
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
+
+/**
+ * Actualización del perfil propio: solo nombre. El correo NO se actualiza
+ * aquí (better-auth rechaza `email` en /update-user); usar changeEmailSchema.
+ */
+export const updateProfileSchema = z.object({
+  name: z.string().trim().min(1, "El nombre es requerido").max(100),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+/**
+ * Solicitud de cambio de correo propio: better-auth envía un enlace de
+ * verificación al nuevo correo y el cambio se aplica al hacer clic.
+ */
+export const changeEmailSchema = z.object({
+  newEmail: z.string().trim().email("Email inválido").max(255),
+});
+
+export type ChangeEmailInput = z.infer<typeof changeEmailSchema>;
+
+/**
+ * Cambio de contraseña del usuario actual. better-auth exige la contraseña
+ * actual; `confirmPassword` solo se valida (igualdad) y no viaja al server.
+ */
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "La contraseña actual es requerida"),
+    newPassword: z
+      .string()
+      .min(8, "La contraseña debe tener al menos 8 caracteres")
+      .max(128),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Las contraseñas no coinciden.",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;

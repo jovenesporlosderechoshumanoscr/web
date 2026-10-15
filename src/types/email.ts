@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
 interface SendEmail {
 	send(message: EmailMessage | EmailMessageBuilder): Promise<EmailSendResult>;
 }

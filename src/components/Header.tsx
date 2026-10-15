@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 
 export default function Header() {
@@ -9,10 +10,10 @@ export default function Header() {
 
 			<nav className="flex items-center">
 				<ul className="flex w-full items-center justify-evenly">
-					<li><a href="/">Home</a></li>
-					<li><a href="/about">About</a></li>
-					<li><a href="/contact">Contact</a></li>
-					<li><a href="/contact">Quienes somos</a></li>
+					<li><Link to="/">Inicio</Link></li>
+					<li><Link to="/about">Acerca de nosotros</Link></li>
+					<li><Link to="/contact">Contacto</Link></li>
+					<li><Link to="/blog">Blog</Link></li>
 				</ul>
 			</nav>
 

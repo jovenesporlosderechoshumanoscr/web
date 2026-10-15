@@ -36,11 +36,11 @@ const getUsers = createServerFn({ method: "GET" })
     }
     const where = filters.length > 0 ? and(...filters) : undefined;
 
-    const [totalRow] = await db
+    const totalRows = await db
       .select({ value: count() })
       .from(user)
       .where(where);
-    const total = totalRow?.value ?? 0;
+    const total = totalRows.at(0)?.value ?? 0;
 
     const items = await db
       .select()
@@ -64,12 +64,10 @@ const getUserById = createServerFn({ method: "GET" })
       throw new Error("Unauthorized");
     }
 
-    const result = await auth.api.getUser({
+    return auth.api.getUser({
       headers,
       query: { id: data.id },
     });
-
-    return result ?? null;
   });
 
 export const userQueries = {

@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { USER_ROLES, USER_ROLE_LABELS, type UserRole } from "@/lib/roles";
+import { USER_ROLES, USER_ROLE_LABELS  } from "@/lib/roles";
+import type {UserRole} from "@/lib/roles";
 
 export type UserFormValues = {
   name: string;
@@ -71,7 +72,7 @@ export function UserForm({
         name: initialValues.name ?? "",
         email: initialValues.email ?? "",
         password: "",
-        role: (initialValues.role as UserRole) ?? "student",
+        role: (initialValues.role ?? "student") as UserRole,
         banned: initialValues.banned ?? false,
         banReason: initialValues.banReason ?? "",
         banExpires: toDateInputValue(initialValues.banExpires),
@@ -79,7 +80,10 @@ export function UserForm({
     }
   }, [initialValues?.name, initialValues?.email, initialValues?.role, initialValues?.banned, initialValues?.banReason, initialValues?.banExpires]);
 
-  function set<K extends keyof UserFormValues>(key: K, value: UserFormValues[K]) {
+  function set<TKey extends keyof UserFormValues>(
+    key: TKey,
+    value: UserFormValues[TKey],
+  ) {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 

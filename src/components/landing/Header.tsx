@@ -13,11 +13,9 @@ import { authClient } from '@/lib/auth-client'
 export const headerContent = {
 	logo: 'JPDH',
 	navLinks: [
-		{ label: 'Trabajo', href: '#trabajo' },
-		{ label: 'Historias', href: '#historias' },
-		{ label: 'Voces', href: '#voces' },
-		{ label: 'Centro de acción', href: '#accion' },
-		{ label: 'Nosotros', href: '#nosotros' },
+		{ label: 'Blog', href: '/blog' },
+		{ label: 'Sobre nosotros', href: '/about' },
+		{ label: 'Contacto', href: '/contact' },
 	],
 } as const
 
@@ -37,12 +35,12 @@ export default function Header() {
 					<ul className="flex items-center gap-6 lg:gap-8">
 						{headerContent.navLinks.map((link) => (
 							<li key={link.label}>
-								<a
-									href={link.href}
+								<Link
+									to={link.href}
 									className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:underline focus-visible:outline-none"
 								>
 									{link.label}
-								</a>
+								</Link>
 							</li>
 						))}
 					</ul>
@@ -90,12 +88,12 @@ export default function Header() {
 										<li key={link.label}>
 											<SheetClose
 												render={
-													<a
-														href={link.href}
+													<Link
+														to={link.href}
 														className="block rounded-md px-2 py-3 text-base font-medium hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
 													>
 														{link.label}
-													</a>
+													</Link>
 												}
 											/>
 										</li>

@@ -11,6 +11,12 @@
 		"EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
 	},
 	"send_email": [{"name":"EMAIL"}],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "jpdh-media"
+		}
+	],
 	"d1_databases": [
 		{
 			"binding": "test_jpdh",

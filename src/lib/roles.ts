@@ -12,6 +12,6 @@ export const USER_ROLE_LABELS: Record<UserRole, string> = {
 
 export function getRoleLabel(role: string | null | undefined): string {
   if (!role) return "Sin rol";
-  const label = (USER_ROLE_LABELS as Record<string, string>)[role];
-  return label ?? role;
+  const labels = USER_ROLE_LABELS as Record<string, string>;
+  return labels[role] ?? role;
 }

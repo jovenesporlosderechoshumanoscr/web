@@ -22,6 +22,7 @@ const data = {
 		{
 			title: "usuarios",
 			url: "/admin/panel/users",
+			roles: ["admin"],
 			icon: (
 				<IconBook
 				/>
@@ -39,6 +40,10 @@ const data = {
 
 export function AdminSidebar({ props }: { props: any }) {
 
+	const items = data.navMain.filter(
+		(item) => !item.roles || item.roles.includes(props.role),
+	)
+
 	return (
 		<Sidebar>
 			<SidebarHeader className="py-2">
@@ -47,7 +52,7 @@ export function AdminSidebar({ props }: { props: any }) {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup >
-					<AdminSidebarMain items={data.navMain} />
+					<AdminSidebarMain items={items} />
 				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter >

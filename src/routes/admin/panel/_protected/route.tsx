@@ -12,7 +12,8 @@ export const Route = createFileRoute('/admin/panel/_protected')({
 				search: { redirect: location.href },
 			});
 		}
-		if (!session.user.role || session.user.role !== "admin") {
+		const ALLOWED_ROLES = ["admin", "editor"];
+		if (!session.user.role || !ALLOWED_ROLES.includes(session.user.role)) {
 			throw redirect({
 				to: "/",
 				search: { redirect: location.href },

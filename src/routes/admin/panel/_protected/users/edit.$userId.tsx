@@ -18,7 +18,7 @@ function RouteComponent() {
     return <p className="p-4 text-sm">Cargando usuario…</p>;
   }
 
-  if (userQuery.isError || !userQuery.data) {
+  if (userQuery.isError) {
     return <p className="p-4 text-sm text-destructive">Usuario no encontrado.</p>;
   }
 

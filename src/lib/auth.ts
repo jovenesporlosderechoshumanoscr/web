@@ -28,6 +28,15 @@ export const auth = betterAuth({
 			await sendVerificationEmail({ to: user.email, url })
 		},
 	},
+	user: {
+		// Habilita auth.api.changeEmail / authClient.changeEmail.
+		// El flujo envía un enlace de verificación al NUEVO correo y el
+		// cambio se aplica recién al hacer clic (requiere emailVerification
+		// configurado, que ya está).
+		changeEmail: {
+			enabled: true,
+		},
+	},
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
 	plugins: [adminPlugin({
