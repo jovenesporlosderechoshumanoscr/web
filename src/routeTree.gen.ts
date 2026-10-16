@@ -16,6 +16,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StudentRouteRouteImport } from './routes/student/route'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
@@ -68,6 +69,11 @@ const ResendVerificationRoute = ResendVerificationRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudentRouteRoute = StudentRouteRouteImport.update({
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/resend-verification'
     | '/reset-password'
+    | '/signup'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/resend-verification'
     | '/reset-password'
+    | '/signup'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/resend-verification'
     | '/reset-password'
+    | '/signup'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -341,6 +353,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ResendVerificationRoute: typeof ResendVerificationRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupRoute: typeof SignupRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -399,6 +412,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student': {
@@ -583,6 +603,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ResendVerificationRoute: ResendVerificationRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SignupRoute: SignupRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,
