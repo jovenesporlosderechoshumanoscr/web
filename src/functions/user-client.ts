@@ -2,11 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userQueries } from "@/server/queries/user-server";
 import { userMutations } from "@/server/mutations/user-server";
 import type {
-  ChangeEmailInput,
   ChangePasswordInput,
   CreateUserInput,
   DeleteUserInput,
   GetUsersInput,
+  ProfileCallbackPath,
   UpdateProfileInput,
   UpdateUserInput,
 } from "@/server/validation/user";
@@ -77,10 +77,12 @@ export function useUpdateProfile() {
 }
 
 /** Solicita el cambio de correo: se verifica desde el nuevo email. */
-export function useChangeEmail() {
+export function useChangeEmail(
+  callbackPath: ProfileCallbackPath = "/admin/panel/profile",
+) {
   return useMutation({
-    mutationFn: (input: ChangeEmailInput) =>
-      userMutations.changeEmail({ data: input }),
+    mutationFn: (input: { newEmail: string }) =>
+      userMutations.changeEmail({ data: { ...input, callbackPath } }),
   });
 }
 

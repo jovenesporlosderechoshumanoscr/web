@@ -16,11 +16,14 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as StudentRouteRouteImport } from './routes/student/route'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as MediaSplatRouteImport } from './routes/media/$'
+import { Route as StudentIndexRouteImport } from './routes/student/index'
+import { Route as StudentProfileRouteImport } from './routes/student/profile'
 import { Route as AdminPanelProtectedRouteRouteImport } from './routes/admin/panel/_protected/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminPanelProtectedIndexRouteImport } from './routes/admin/panel/_protected/index'
@@ -67,6 +70,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentRouteRoute = StudentRouteRouteImport.update({
+  id: '/student',
+  path: '/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
@@ -91,6 +99,16 @@ const MediaSplatRoute = MediaSplatRouteImport.update({
   id: '/media/$',
   path: '/media/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudentRouteRoute,
+} as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StudentRouteRoute,
 } as any)
 const AdminPanelProtectedRouteRoute =
   AdminPanelProtectedRouteRouteImport.update({
@@ -154,6 +172,7 @@ const AdminPanelProtectedUsersEditUserIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -164,7 +183,9 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
   '/blog/': typeof BlogIndexRoute
+  '/student/': typeof StudentIndexRoute
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
@@ -188,7 +209,9 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
   '/blog': typeof BlogIndexRoute
+  '/student': typeof StudentIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
@@ -202,6 +225,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -212,7 +236,9 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
   '/blog/': typeof BlogIndexRoute
+  '/student/': typeof StudentIndexRoute
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/panel/_protected/profile': typeof AdminPanelProtectedProfileRoute
@@ -228,6 +254,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/student'
     | '/about'
     | '/contact'
     | '/forgot-password'
@@ -238,7 +265,9 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
+    | '/student/profile'
     | '/blog/'
+    | '/student/'
     | '/admin/panel'
     | '/api/auth/$'
     | '/admin/panel/profile'
@@ -262,7 +291,9 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
+    | '/student/profile'
     | '/blog'
+    | '/student'
     | '/api/auth/$'
     | '/admin/panel/profile'
     | '/admin/panel'
@@ -275,6 +306,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/student'
     | '/about'
     | '/contact'
     | '/forgot-password'
@@ -285,7 +317,9 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
+    | '/student/profile'
     | '/blog/'
+    | '/student/'
     | '/admin/panel/_protected'
     | '/api/auth/$'
     | '/admin/panel/_protected/profile'
@@ -300,6 +334,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StudentRouteRoute: typeof StudentRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -366,6 +401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student': {
+      id: '/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify-email': {
       id: '/verify-email'
       path: '/verify-email'
@@ -400,6 +442,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/media/$'
       preLoaderRoute: typeof MediaSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/student/': {
+      id: '/student/'
+      path: '/'
+      fullPath: '/student/'
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof StudentRouteRoute
+    }
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof StudentRouteRoute
     }
     '/admin/panel/_protected': {
       id: '/admin/panel/_protected'
@@ -474,6 +530,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StudentRouteRouteChildren {
+  StudentProfileRoute: typeof StudentProfileRoute
+  StudentIndexRoute: typeof StudentIndexRoute
+}
+
+const StudentRouteRouteChildren: StudentRouteRouteChildren = {
+  StudentProfileRoute: StudentProfileRoute,
+  StudentIndexRoute: StudentIndexRoute,
+}
+
+const StudentRouteRouteWithChildren = StudentRouteRoute._addFileChildren(
+  StudentRouteRouteChildren,
+)
+
 interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedProfileRoute: typeof AdminPanelProtectedProfileRoute
   AdminPanelProtectedIndexRoute: typeof AdminPanelProtectedIndexRoute
@@ -506,6 +576,7 @@ const AdminPanelProtectedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StudentRouteRoute: StudentRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,

@@ -8,7 +8,6 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet'
-import { authClient } from '@/lib/auth-client'
 
 export const headerContent = {
 	logo: 'JPDH',
@@ -47,14 +46,13 @@ export default function Header() {
 				</nav>
 
 				<div className="hidden md:block">
-					<Button
+					<Link
+						to="/login"
 						className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-primary-foreground"
-						onClick={() => authClient.signOut()}
-
 					>
-						zone estudiantes
+						zona estudiantes
 						<IconArrowRight aria-hidden="true" />
-					</Button>
+					</Link>
 
 				</div>
 
@@ -100,14 +98,13 @@ export default function Header() {
 									))}
 								</ul>
 							</nav>
-							<Button
+							<Link
+								to="/login"
 								className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-primary-foreground"
-								onClick={() => authClient.signOut()}
-
 							>
 								zona estudiantes
 								<IconArrowRight aria-hidden="true" />
-							</Button>
+							</Link>
 
 						</SheetContent>
 					</Sheet>

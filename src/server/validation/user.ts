@@ -74,11 +74,24 @@ export const updateProfileSchema = z.object({
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 
 /**
+ * Rutas de perfil a las que puede volver el enlace de verificación de
+ * cambio de correo. Lista cerrada para que el cliente no pueda redirigir
+ * a destinos arbitrarios.
+ */
+export const profileCallbackPaths = [
+  "/admin/panel/profile",
+  "/student/profile",
+] as const;
+
+export type ProfileCallbackPath = (typeof profileCallbackPaths)[number];
+
+/**
  * Solicitud de cambio de correo propio: better-auth envía un enlace de
  * verificación al nuevo correo y el cambio se aplica al hacer clic.
  */
 export const changeEmailSchema = z.object({
   newEmail: z.string().trim().email("Email inválido").max(255),
+  callbackPath: z.enum(profileCallbackPaths).default("/admin/panel/profile"),
 });
 
 export type ChangeEmailInput = z.infer<typeof changeEmailSchema>;

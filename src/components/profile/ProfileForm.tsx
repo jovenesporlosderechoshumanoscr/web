@@ -13,10 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useChangeEmail, useUpdateProfile } from "@/functions/user-client";
+import type { ProfileCallbackPath } from "@/server/validation/user";
 
 type ProfileFormProps = {
   name: string;
   email: string;
+ 
+  profilePath?: ProfileCallbackPath;
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,10 +29,14 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * el correo se cambia con un enlace de verificación enviado al nuevo correo
  * (el cambio se aplica al hacer clic, no antes).
  */
-export function ProfileForm({ name, email }: ProfileFormProps) {
+export function ProfileForm({
+  name,
+  email,
+  profilePath = "/admin/panel/profile",
+}: ProfileFormProps) {
   const router = useRouter();
   const updateProfile = useUpdateProfile();
-  const changeEmail = useChangeEmail();
+  const changeEmail = useChangeEmail(profilePath);
 
   const [nameValue, setNameValue] = useState(name);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -60,7 +67,7 @@ export function ProfileForm({ name, email }: ProfileFormProps) {
       {
         onSuccess: () => {
           toast.success("Nombre actualizado");
-          // Re-ejecuta el beforeLoad de _protected para refrescar el sidebar.
+          // Re-ejecuta el beforeLoad del layout para refrescar el sidebar.
           void router.invalidate();
         },
         onError: (error) => setNameError(error.message),

@@ -19,16 +19,13 @@ async function ensureAdmin() {
   return headers;
 }
 
-/** Roles que pueden acceder al panel y, por tanto, editar su perfil. */
-const PROFILE_ALLOWED_ROLES = ["admin", "editor"];
-
-/** Rutas de retorno del flujo de verificación de correo. */
-const PROFILE_PATH = "/admin/panel/profile";
-const PROFILE_EMAIL_CHANGED_PATH = `${PROFILE_PATH}?emailChanged=1`;
+/** Roles que pueden editar su propio perfil (nombre, correo, contraseña). */
+const PROFILE_ALLOWED_ROLES = ["admin", "editor", "student"];
 
 /**
  * Verifica sesión para operaciones sobre la PROPIA cuenta (perfil). No exige
- * rol admin: cualquier usuario del panel (admin o editor) edita sus datos.
+ * rol admin: cualquier usuario autenticado con rol (admin, editor o student)
+ * edita sus datos.
  */
 async function ensureProfileSession() {
   const headers = getRequestHeaders();
@@ -162,7 +159,9 @@ const updateProfile = createServerFn({ method: "POST" })
 /**
  * Inicia el cambio de correo del usuario autenticado. better-auth envía un
  * enlace de verificación al NUEVO correo; el cambio se aplica al hacer clic.
- * Por anti-enumeración responde igual aunque el correo ya esté en uso.
+ * El enlace vuelve a la página de perfil indicada (`callbackPath`, validada
+ * contra una lista cerrada). Por anti-enumeración responde igual aunque el
+ * correo ya esté en uso.
  */
 const changeEmail = createServerFn({ method: "POST" })
   .validator(changeEmailSchema)
@@ -174,7 +173,7 @@ const changeEmail = createServerFn({ method: "POST" })
         headers,
         body: {
           newEmail: data.newEmail,
-          callbackURL: PROFILE_EMAIL_CHANGED_PATH,
+          callbackURL: `${data.callbackPath}?emailChanged=1`,
         },
       });
     } catch (error) {
