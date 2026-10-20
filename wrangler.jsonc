@@ -7,9 +7,16 @@
 	],
 	"main": "@tanstack/react-start/server-entry",
 	"vars": {
-		"BETTER_AUTH_URL": "http://localhost:3000"
+		"BETTER_AUTH_URL": "http://localhost:3000",
+		"EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
 	},
 	"send_email": [{"name":"EMAIL"}],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "jpdh-media"
+		}
+	],
 	"d1_databases": [
 		{
 			"binding": "test_jpdh",

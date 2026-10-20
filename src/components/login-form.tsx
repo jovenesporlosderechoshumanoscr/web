@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import { useForm } from "@tanstack/react-form"
+import { Link } from "@tanstack/react-router"
+import { useState } from "react"
 import { toast } from "sonner"
 
 const formSchema = z.object({
@@ -26,10 +28,11 @@ const formSchema = z.object({
 
 export function LoginForm({
 	className,
+	redirectTo = "/admin/panel",
 	...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { redirectTo?: string }) {
 
-
+	const [verificationEmail, setVerificationEmail] = useState('')
 
 	const form = useForm({
 		defaultValues: {
@@ -47,17 +50,18 @@ export function LoginForm({
 					{
 						email: value.email,
 						password: value.password,
-						callbackURL: '/admin/panel',
+						callbackURL: redirectTo,
 					},
 					{
 						onSuccess: () => {
 							toast.success('Acceso autorizado')
 						},
-						onError: (ctx) => {
-							if (ctx.error.status === 403) {
-								toast.error('Verificación de correo requerida')
-								return
-							}
+					onError: (ctx) => {
+						if (ctx.error.status === 403) {
+							setVerificationEmail(value.email)
+							toast.error('Verificación de correo requerida')
+							return
+						}
 							toast.error('Credenciales inválidas')
 						},
 					}
@@ -70,7 +74,7 @@ export function LoginForm({
 
 	return (
 
-		<div className={cn("flex flex-col gap-6", className)} {...props}>
+		<div className={cn("flex w-full flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden p-0">
 				<CardContent className="grid p-0 md:grid-cols-2">
 					<FieldGroup>
@@ -124,12 +128,12 @@ export function LoginForm({
 										<Field data-invalid={isInvalid}>
 											<div className="flex items-center">
 												<FieldLabel htmlFor="password">Password</FieldLabel>
-												<a
-													href="#"
+												<Link
+													to="/forgot-password"
 													className="ml-auto text-sm underline-offset-2 hover:underline"
 												>
 													Forgot your password?
-												</a>
+												</Link>
 											</div>
 											<Input
 												id={field.name}
@@ -155,8 +159,13 @@ export function LoginForm({
 							<Field>
 								<Button type="submit">Login</Button>
 							</Field>
+							{verificationEmail && (
+								<FieldDescription className="text-center">
+									¿No recibiste el correo? <Link to="/resend-verification" search={{ email: verificationEmail }} className="underline underline-offset-2 hover:underline">Reenviar verificación</Link>
+								</FieldDescription>
+							)}
 							<FieldDescription className="text-center">
-								Don&apos;t have an account? <a href="#">Sign up</a>
+								¿No tienes cuenta? <Link to="/signup" className="underline underline-offset-2 hover:underline">Regístrate</Link>
 							</FieldDescription>
 						</form>
 					</FieldGroup>

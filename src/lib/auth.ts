@@ -1,7 +1,9 @@
 import { db } from "@/server/db";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/server/email";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins/admin";
+import { admin as adminPlugin } from "better-auth/plugins/admin";
+import { ac, admin, editor, student } from "@/lib/permission";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import * as schema from "@/server/db/schema";
 
@@ -12,9 +14,34 @@ export const auth = betterAuth({
     }),
 	emailAndPassword: {
 		enabled: true,
-		disableSignUp: false
+		disableSignUp: false,
+		requireEmailVerification: true,
+		sendResetPassword: async ({ user, url }) => {
+			await sendPasswordResetEmail({ to: user.email, url })
+		},
+	},
+	emailVerification: {
+		sendOnSignUp: true,
+		sendOnSignIn: true,
+		autoSignInAfterVerification: true,
+		sendVerificationEmail: async ({ user, url }) => {
+			await sendVerificationEmail({ to: user.email, url })
+		},
+	},
+	user: {
+		// Habilita auth.api.changeEmail / authClient.changeEmail.
+		// El flujo envía un enlace de verificación al NUEVO correo y el
+		// cambio se aplica recién al hacer clic (requiere emailVerification
+		// configurado, que ya está).
+		changeEmail: {
+			enabled: true,
+		},
 	},
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
-	plugins: [admin(), tanstackStartCookies()],
+	plugins: [adminPlugin({
+		defaultRole: "student",
+		ac,
+		roles: {admin, editor, student},
+	}), tanstackStartCookies()],
   });

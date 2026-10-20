@@ -1,4 +1,3 @@
-import { createAuth } from '@/lib/auth';
 import { drizzle } from 'drizzle-orm/d1';
 import * as schema from "./schema";
 import { defineRelations } from 'drizzle-orm';

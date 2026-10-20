@@ -10,15 +10,50 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as StudentRouteRouteImport } from './routes/student/route'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as MediaSplatRouteImport } from './routes/media/$'
+import { Route as StudentIndexRouteImport } from './routes/student/index'
+import { Route as StudentProfileRouteImport } from './routes/student/profile'
 import { Route as AdminPanelProtectedRouteRouteImport } from './routes/admin/panel/_protected/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminPanelProtectedIndexRouteImport } from './routes/admin/panel/_protected/index'
+import { Route as AdminPanelProtectedProfileRouteImport } from './routes/admin/panel/_protected/profile'
+import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin/panel/_protected/blog/index'
+import { Route as AdminPanelProtectedBlogCreateRouteImport } from './routes/admin/panel/_protected/blog/create'
+import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
+import { Route as AdminPanelProtectedUsersCreateRouteImport } from './routes/admin/panel/_protected/users/create'
+import { Route as AdminPanelProtectedBlogEditPostIdRouteImport } from './routes/admin/panel/_protected/blog/edit.$postId'
+import { Route as AdminPanelProtectedUsersEditUserIdRouteImport } from './routes/admin/panel/_protected/users/edit.$userId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -26,10 +61,60 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResendVerificationRoute = ResendVerificationRouteImport.update({
+  id: '/resend-verification',
+  path: '/resend-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentRouteRoute = StudentRouteRouteImport.update({
+  id: '/student',
+  path: '/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaSplatRoute = MediaSplatRouteImport.update({
+  id: '/media/$',
+  path: '/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudentRouteRoute,
+} as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StudentRouteRoute,
 } as any)
 const AdminPanelProtectedRouteRoute =
   AdminPanelProtectedRouteRouteImport.update({
@@ -48,56 +133,232 @@ const AdminPanelProtectedIndexRoute =
     path: '/',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const AdminPanelProtectedProfileRoute =
+  AdminPanelProtectedProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedBlogIndexRoute =
+  AdminPanelProtectedBlogIndexRouteImport.update({
+    id: '/blog/',
+    path: '/blog/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedBlogCreateRoute =
+  AdminPanelProtectedBlogCreateRouteImport.update({
+    id: '/blog/create',
+    path: '/blog/create',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedUsersIndexRoute =
+  AdminPanelProtectedUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedUsersCreateRoute =
+  AdminPanelProtectedUsersCreateRouteImport.update({
+    id: '/users/create',
+    path: '/users/create',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedBlogEditPostIdRoute =
+  AdminPanelProtectedBlogEditPostIdRouteImport.update({
+    id: '/blog/edit/$postId',
+    path: '/blog/edit/$postId',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedUsersEditUserIdRoute =
+  AdminPanelProtectedUsersEditUserIdRouteImport.update({
+    id: '/users/edit/$userId',
+    path: '/users/edit/$userId',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/student': typeof StudentRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/blog/': typeof BlogIndexRoute
+  '/student/': typeof StudentIndexRoute
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/blog': typeof BlogIndexRoute
+  '/student': typeof StudentIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/student': typeof StudentRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/resend-verification': typeof ResendVerificationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/media/$': typeof MediaSplatRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/blog/': typeof BlogIndexRoute
+  '/student/': typeof StudentIndexRoute
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/panel/_protected/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel/_protected/': typeof AdminPanelProtectedIndexRoute
+  '/admin/panel/_protected/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/_protected/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
+  '/admin/panel/_protected/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/_protected/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/student'
+    | '/about'
+    | '/contact'
+    | '/forgot-password'
     | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/signup'
+    | '/verify-email'
     | '/admin/login'
+    | '/blog/$slug'
+    | '/media/$'
+    | '/student/profile'
+    | '/blog/'
+    | '/student/'
     | '/admin/panel'
     | '/api/auth/$'
+    | '/admin/panel/profile'
     | '/admin/panel/'
+    | '/admin/panel/blog/create'
+    | '/admin/panel/users/create'
+    | '/admin/panel/blog/'
+    | '/admin/panel/users/'
+    | '/admin/panel/blog/edit/$postId'
+    | '/admin/panel/users/edit/$userId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/admin/login' | '/api/auth/$' | '/admin/panel'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/forgot-password'
+    | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/signup'
+    | '/verify-email'
+    | '/admin/login'
+    | '/blog/$slug'
+    | '/media/$'
+    | '/student/profile'
+    | '/blog'
+    | '/student'
+    | '/api/auth/$'
+    | '/admin/panel/profile'
+    | '/admin/panel'
+    | '/admin/panel/blog/create'
+    | '/admin/panel/users/create'
+    | '/admin/panel/blog'
+    | '/admin/panel/users'
+    | '/admin/panel/blog/edit/$postId'
+    | '/admin/panel/users/edit/$userId'
   id:
     | '__root__'
     | '/'
+    | '/student'
+    | '/about'
+    | '/contact'
+    | '/forgot-password'
     | '/login'
+    | '/resend-verification'
+    | '/reset-password'
+    | '/signup'
+    | '/verify-email'
     | '/admin/login'
+    | '/blog/$slug'
+    | '/media/$'
+    | '/student/profile'
+    | '/blog/'
+    | '/student/'
     | '/admin/panel/_protected'
     | '/api/auth/$'
+    | '/admin/panel/_protected/profile'
     | '/admin/panel/_protected/'
+    | '/admin/panel/_protected/blog/create'
+    | '/admin/panel/_protected/users/create'
+    | '/admin/panel/_protected/blog/'
+    | '/admin/panel/_protected/users/'
+    | '/admin/panel/_protected/blog/edit/$postId'
+    | '/admin/panel/_protected/users/edit/$userId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StudentRouteRoute: typeof StudentRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  ResendVerificationRoute: typeof ResendVerificationRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupRoute: typeof SignupRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  MediaSplatRoute: typeof MediaSplatRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   AdminPanelProtectedRouteRoute: typeof AdminPanelProtectedRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -111,11 +372,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resend-verification': {
+      id: '/resend-verification'
+      path: '/resend-verification'
+      fullPath: '/resend-verification'
+      preLoaderRoute: typeof ResendVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student': {
+      id: '/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -124,6 +441,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media/$': {
+      id: '/media/$'
+      path: '/media/$'
+      fullPath: '/media/$'
+      preLoaderRoute: typeof MediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/': {
+      id: '/student/'
+      path: '/'
+      fullPath: '/student/'
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof StudentRouteRoute
+    }
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof StudentRouteRoute
     }
     '/admin/panel/_protected': {
       id: '/admin/panel/_protected'
@@ -146,16 +498,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedIndexRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/admin/panel/_protected/profile': {
+      id: '/admin/panel/_protected/profile'
+      path: '/profile'
+      fullPath: '/admin/panel/profile'
+      preLoaderRoute: typeof AdminPanelProtectedProfileRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/blog/': {
+      id: '/admin/panel/_protected/blog/'
+      path: '/blog'
+      fullPath: '/admin/panel/blog/'
+      preLoaderRoute: typeof AdminPanelProtectedBlogIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/blog/create': {
+      id: '/admin/panel/_protected/blog/create'
+      path: '/blog/create'
+      fullPath: '/admin/panel/blog/create'
+      preLoaderRoute: typeof AdminPanelProtectedBlogCreateRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/users/': {
+      id: '/admin/panel/_protected/users/'
+      path: '/users'
+      fullPath: '/admin/panel/users/'
+      preLoaderRoute: typeof AdminPanelProtectedUsersIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/users/create': {
+      id: '/admin/panel/_protected/users/create'
+      path: '/users/create'
+      fullPath: '/admin/panel/users/create'
+      preLoaderRoute: typeof AdminPanelProtectedUsersCreateRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/blog/edit/$postId': {
+      id: '/admin/panel/_protected/blog/edit/$postId'
+      path: '/blog/edit/$postId'
+      fullPath: '/admin/panel/blog/edit/$postId'
+      preLoaderRoute: typeof AdminPanelProtectedBlogEditPostIdRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/users/edit/$userId': {
+      id: '/admin/panel/_protected/users/edit/$userId'
+      path: '/users/edit/$userId'
+      fullPath: '/admin/panel/users/edit/$userId'
+      preLoaderRoute: typeof AdminPanelProtectedUsersEditUserIdRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
   }
 }
 
+interface StudentRouteRouteChildren {
+  StudentProfileRoute: typeof StudentProfileRoute
+  StudentIndexRoute: typeof StudentIndexRoute
+}
+
+const StudentRouteRouteChildren: StudentRouteRouteChildren = {
+  StudentProfileRoute: StudentProfileRoute,
+  StudentIndexRoute: StudentIndexRoute,
+}
+
+const StudentRouteRouteWithChildren = StudentRouteRoute._addFileChildren(
+  StudentRouteRouteChildren,
+)
+
 interface AdminPanelProtectedRouteRouteChildren {
+  AdminPanelProtectedProfileRoute: typeof AdminPanelProtectedProfileRoute
   AdminPanelProtectedIndexRoute: typeof AdminPanelProtectedIndexRoute
+  AdminPanelProtectedBlogCreateRoute: typeof AdminPanelProtectedBlogCreateRoute
+  AdminPanelProtectedUsersCreateRoute: typeof AdminPanelProtectedUsersCreateRoute
+  AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
+  AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
+  AdminPanelProtectedBlogEditPostIdRoute: typeof AdminPanelProtectedBlogEditPostIdRoute
+  AdminPanelProtectedUsersEditUserIdRoute: typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 
 const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildren =
   {
+    AdminPanelProtectedProfileRoute: AdminPanelProtectedProfileRoute,
     AdminPanelProtectedIndexRoute: AdminPanelProtectedIndexRoute,
+    AdminPanelProtectedBlogCreateRoute: AdminPanelProtectedBlogCreateRoute,
+    AdminPanelProtectedUsersCreateRoute: AdminPanelProtectedUsersCreateRoute,
+    AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
+    AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
+    AdminPanelProtectedBlogEditPostIdRoute:
+      AdminPanelProtectedBlogEditPostIdRoute,
+    AdminPanelProtectedUsersEditUserIdRoute:
+      AdminPanelProtectedUsersEditUserIdRoute,
   }
 
 const AdminPanelProtectedRouteRouteWithChildren =
@@ -165,8 +596,19 @@ const AdminPanelProtectedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StudentRouteRoute: StudentRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  ResendVerificationRoute: ResendVerificationRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SignupRoute: SignupRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  MediaSplatRoute: MediaSplatRoute,
+  BlogIndexRoute: BlogIndexRoute,
   AdminPanelProtectedRouteRoute: AdminPanelProtectedRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

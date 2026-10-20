@@ -1,8 +1,10 @@
+import { AdminSidebar } from '@/components/adminSidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { getSession } from '@/lib/auth.functions';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/panel/_protected')({
-   beforeLoad: async ({ location }) => {
+	beforeLoad: async ({ location }) => {
 		const session = await getSession();
 		if (!session) {
 			throw redirect({
@@ -10,7 +12,8 @@ export const Route = createFileRoute('/admin/panel/_protected')({
 				search: { redirect: location.href },
 			});
 		}
-		if (session.user.role !== "admin") {
+		const ALLOWED_ROLES = ["admin", "editor"];
+		if (!session.user.role || !ALLOWED_ROLES.includes(session.user.role)) {
 			throw redirect({
 				to: "/",
 				search: { redirect: location.href },
@@ -18,7 +21,18 @@ export const Route = createFileRoute('/admin/panel/_protected')({
 		}
 		return { user: session.user };
 	},
-	component: () => (
-				<Outlet />
-	),
+	component: RouteComponent,
 })
+
+function RouteComponent() {
+	const { user } = Route.useRouteContext();
+	return (
+		<SidebarProvider>
+			<AdminSidebar props={user} />
+			<SidebarTrigger />
+			<Outlet />
+
+		</SidebarProvider>
+
+	)
+}
