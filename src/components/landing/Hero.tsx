@@ -75,6 +75,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="outline"
+              nativeButton={false}
               render={
                 <a href={heroContent.secondaryCta.href}>
                   {heroContent.secondaryCta.label}

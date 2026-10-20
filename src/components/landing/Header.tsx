@@ -85,6 +85,7 @@ export default function Header() {
 									{headerContent.navLinks.map((link) => (
 										<li key={link.label}>
 											<SheetClose
+								nativeButton={false}
 												render={
 													<Link
 														to={link.href}

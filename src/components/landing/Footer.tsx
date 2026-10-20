@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -13,8 +14,8 @@ export const footerContent = {
     { label: 'Historias', href: '#historias' },
     { label: 'Voces', href: '#voces' },
     { label: 'Centro de acción', href: '#accion' },
-    { label: 'Nosotros', href: '#nosotros' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Nosotros', href: '/about' },
+    { label: 'Contacto', href: '/contact' },
   ],
   socials: [
     { label: 'X', href: '#', Icon: IconBrandX },
@@ -42,12 +43,21 @@ export default function Footer() {
             <ul className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6">
               {footerContent.links.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:underline"
-                  >
-                    {link.label}
-                  </a>
+                  {link.href.startsWith('/') ? (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:underline"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

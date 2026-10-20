@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { IconArrowRight } from '@tabler/icons-react'
 
 export const aboutContent = {
@@ -7,7 +8,7 @@ export const aboutContent = {
     'Somos una organización dedicada a acompañar procesos comunitarios de justicia social, fortaleciendo liderazgos locales y creando redes de apoyo mutuo en cada territorio donde trabajamos.',
     'Creemos que la transformación sostenible nace de la escucha, la memoria y la acción colectiva. Por eso articulamos formación, incidencia y cuidado comunitario.',
   ],
-  link: { label: 'Conoce más', href: '#nosotros' },
+  link: { label: 'Conoce más', href: '/about' },
   image: {
     src: 'https://placehold.co/800x1000',
     alt: 'Integrantes de la comunidad reunidos en asamblea',
@@ -37,13 +38,13 @@ export default function About() {
               {paragraph}
             </p>
           ))}
-          <a
-            href={aboutContent.link.href}
+          <Link
+            to={aboutContent.link.href}
             className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
           >
             {aboutContent.link.label}
             <IconArrowRight aria-hidden="true" className="size-4" />
-          </a>
+          </Link>
         </div>
         <div>
           <img
