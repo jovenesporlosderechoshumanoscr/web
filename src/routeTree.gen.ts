@@ -14,10 +14,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StudentRouteRouteImport } from './routes/student/route'
+import { Route as TeermsServiceRouteImport } from './routes/teerms-service'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -69,6 +71,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResendVerificationRoute = ResendVerificationRouteImport.update({
   id: '/resend-verification',
   path: '/resend-verification',
@@ -87,6 +94,11 @@ const SignupRoute = SignupRouteImport.update({
 const StudentRouteRoute = StudentRouteRouteImport.update({
   id: '/student',
   path: '/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeermsServiceRoute = TeermsServiceRouteImport.update({
+  id: '/teerms-service',
+  path: '/teerms-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -238,9 +250,11 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teerms-service': typeof TeermsServiceRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -273,9 +287,11 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teerms-service': typeof TeermsServiceRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -308,9 +324,11 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teerms-service': typeof TeermsServiceRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -346,9 +364,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
+    | '/teerms-service'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -381,9 +401,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
+    | '/teerms-service'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -415,9 +437,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
+    | '/teerms-service'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -452,9 +476,11 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResendVerificationRoute: typeof ResendVerificationRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  TeermsServiceRoute: typeof TeermsServiceRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -501,6 +527,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resend-verification': {
       id: '/resend-verification'
       path: '/resend-verification'
@@ -527,6 +560,13 @@ declare module '@tanstack/react-router' {
       path: '/student'
       fullPath: '/student'
       preLoaderRoute: typeof StudentRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teerms-service': {
+      id: '/teerms-service'
+      path: '/teerms-service'
+      fullPath: '/teerms-service'
+      preLoaderRoute: typeof TeermsServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-email': {
@@ -790,9 +830,11 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
   ResendVerificationRoute: ResendVerificationRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  TeermsServiceRoute: TeermsServiceRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,

@@ -19,11 +19,11 @@ import { toast } from "sonner"
 
 const formSchema = z.object({
 	email: z
-		.email(),
+		.email("Ingresa un correo válido."),
 	password: z
 		.string()
-		.min(5, "Password must be at least 5 characters.")
-		.max(32, "Password must be at most 32 characters."),
+		.min(5, "La contraseña debe tener al menos 5 caracteres.")
+		.max(32, "La contraseña debe tener máximo 32 caracteres."),
 })
 
 export function LoginForm({
@@ -41,6 +41,7 @@ export function LoginForm({
 		},
 		validators: {
 			onSubmit: formSchema,
+			onBlur: formSchema,
 		},
 
 		onSubmit: async ({ value }) => {
@@ -77,11 +78,11 @@ export function LoginForm({
 		<div className={cn("flex w-full flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden p-0">
 				<CardContent className="grid p-0 md:grid-cols-2">
-					<FieldGroup>
+					<FieldGroup className="p-6 md:p-8">
 						<div className="flex flex-col items-center gap-2 text-center">
-							<h1 className="text-2xl font-bold">Welcome back</h1>
+							<h1 className="text-2xl font-bold">Bienvenido</h1>
 							<p className="text-balance text-muted-foreground">
-								Login to your Acme Inc account
+								Inicia sesión para continuar
 							</p>
 						</div>
 						<form
@@ -157,7 +158,7 @@ export function LoginForm({
 							/>
 
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button className="mt-4" type="submit">Login</Button>
 							</Field>
 							{verificationEmail && (
 								<FieldDescription className="text-center">

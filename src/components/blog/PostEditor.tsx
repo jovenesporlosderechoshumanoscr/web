@@ -185,7 +185,7 @@ export function PostEditor({
 
       {/* Preview editable (ocupa todo el alto y ancho disponibles) */}
       <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-        <article className="flex w-full flex-col gap-6">
+        <article className="mx-auto flex w-full max-w-3xl flex-col gap-6">
           <header className="flex flex-col gap-3">
             <h1 className="text-3xl font-bold tracking-tight break-words empty:before:content-['Título_de_la_página'] empty:before:text-muted-foreground/40">
               {values.title}
@@ -194,7 +194,7 @@ export function PostEditor({
               <img
                 src={values.coverImage}
                 alt={values.title}
-                className="w-full rounded-lg border object-cover"
+                className="w-full max-h-72 rounded-lg border object-cover"
               />
             )}
           </header>
