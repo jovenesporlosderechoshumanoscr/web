@@ -27,13 +27,21 @@ import { Route as StudentIndexRouteImport } from './routes/student/index'
 import { Route as StudentProfileRouteImport } from './routes/student/profile'
 import { Route as AdminPanelProtectedRouteRouteImport } from './routes/admin/panel/_protected/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as StudentCoursesIndexRouteImport } from './routes/student/courses/index'
+import { Route as StudentCoursesCourseSlugRouteImport } from './routes/student/courses/$courseSlug'
 import { Route as AdminPanelProtectedIndexRouteImport } from './routes/admin/panel/_protected/index'
 import { Route as AdminPanelProtectedProfileRouteImport } from './routes/admin/panel/_protected/profile'
+import { Route as StudentCoursesCourseSlugIndexRouteImport } from './routes/student/courses/$courseSlug/index'
 import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin/panel/_protected/blog/index'
 import { Route as AdminPanelProtectedBlogCreateRouteImport } from './routes/admin/panel/_protected/blog/create'
+import { Route as AdminPanelProtectedCoursesIndexRouteImport } from './routes/admin/panel/_protected/courses/index'
+import { Route as AdminPanelProtectedCoursesCreateRouteImport } from './routes/admin/panel/_protected/courses/create'
 import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
 import { Route as AdminPanelProtectedUsersCreateRouteImport } from './routes/admin/panel/_protected/users/create'
+import { Route as StudentCoursesCourseSlugLessonLessonIdRouteImport } from './routes/student/courses/$courseSlug/lesson.$lessonId'
 import { Route as AdminPanelProtectedBlogEditPostIdRouteImport } from './routes/admin/panel/_protected/blog/edit.$postId'
+import { Route as AdminPanelProtectedCoursesBuilderCourseIdRouteImport } from './routes/admin/panel/_protected/courses/builder.$courseId'
+import { Route as AdminPanelProtectedCoursesEditCourseIdRouteImport } from './routes/admin/panel/_protected/courses/edit.$courseId'
 import { Route as AdminPanelProtectedUsersEditUserIdRouteImport } from './routes/admin/panel/_protected/users/edit.$userId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -127,6 +135,17 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentCoursesIndexRoute = StudentCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => StudentRouteRoute,
+} as any)
+const StudentCoursesCourseSlugRoute =
+  StudentCoursesCourseSlugRouteImport.update({
+    id: '/courses/$courseSlug',
+    path: '/courses/$courseSlug',
+    getParentRoute: () => StudentRouteRoute,
+  } as any)
 const AdminPanelProtectedIndexRoute =
   AdminPanelProtectedIndexRouteImport.update({
     id: '/',
@@ -139,6 +158,12 @@ const AdminPanelProtectedProfileRoute =
     path: '/profile',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const StudentCoursesCourseSlugIndexRoute =
+  StudentCoursesCourseSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => StudentCoursesCourseSlugRoute,
+  } as any)
 const AdminPanelProtectedBlogIndexRoute =
   AdminPanelProtectedBlogIndexRouteImport.update({
     id: '/blog/',
@@ -149,6 +174,18 @@ const AdminPanelProtectedBlogCreateRoute =
   AdminPanelProtectedBlogCreateRouteImport.update({
     id: '/blog/create',
     path: '/blog/create',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedCoursesIndexRoute =
+  AdminPanelProtectedCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedCoursesCreateRoute =
+  AdminPanelProtectedCoursesCreateRouteImport.update({
+    id: '/courses/create',
+    path: '/courses/create',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
 const AdminPanelProtectedUsersIndexRoute =
@@ -163,10 +200,28 @@ const AdminPanelProtectedUsersCreateRoute =
     path: '/users/create',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const StudentCoursesCourseSlugLessonLessonIdRoute =
+  StudentCoursesCourseSlugLessonLessonIdRouteImport.update({
+    id: '/lesson/$lessonId',
+    path: '/lesson/$lessonId',
+    getParentRoute: () => StudentCoursesCourseSlugRoute,
+  } as any)
 const AdminPanelProtectedBlogEditPostIdRoute =
   AdminPanelProtectedBlogEditPostIdRouteImport.update({
     id: '/blog/edit/$postId',
     path: '/blog/edit/$postId',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedCoursesBuilderCourseIdRoute =
+  AdminPanelProtectedCoursesBuilderCourseIdRouteImport.update({
+    id: '/courses/builder/$courseId',
+    path: '/courses/builder/$courseId',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
+const AdminPanelProtectedCoursesEditCourseIdRoute =
+  AdminPanelProtectedCoursesEditCourseIdRouteImport.update({
+    id: '/courses/edit/$courseId',
+    path: '/courses/edit/$courseId',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
 const AdminPanelProtectedUsersEditUserIdRoute =
@@ -195,13 +250,21 @@ export interface FileRoutesByFullPath {
   '/student/': typeof StudentIndexRoute
   '/admin/panel': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/student/courses/$courseSlug': typeof StudentCoursesCourseSlugRouteWithChildren
+  '/student/courses/': typeof StudentCoursesIndexRoute
   '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel/': typeof AdminPanelProtectedIndexRoute
+  '/student/courses/$courseSlug/': typeof StudentCoursesCourseSlugIndexRoute
   '/admin/panel/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/courses/create': typeof AdminPanelProtectedCoursesCreateRoute
   '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/courses/': typeof AdminPanelProtectedCoursesIndexRoute
   '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
+  '/admin/panel/courses/edit/$courseId': typeof AdminPanelProtectedCoursesEditCourseIdRoute
   '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesByTo {
@@ -221,13 +284,20 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/student': typeof StudentIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/student/courses': typeof StudentCoursesIndexRoute
   '/admin/panel/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel': typeof AdminPanelProtectedIndexRoute
+  '/student/courses/$courseSlug': typeof StudentCoursesCourseSlugIndexRoute
   '/admin/panel/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/courses/create': typeof AdminPanelProtectedCoursesCreateRoute
   '/admin/panel/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/courses': typeof AdminPanelProtectedCoursesIndexRoute
   '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
+  '/admin/panel/courses/edit/$courseId': typeof AdminPanelProtectedCoursesEditCourseIdRoute
   '/admin/panel/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRoutesById {
@@ -250,13 +320,21 @@ export interface FileRoutesById {
   '/student/': typeof StudentIndexRoute
   '/admin/panel/_protected': typeof AdminPanelProtectedRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/student/courses/$courseSlug': typeof StudentCoursesCourseSlugRouteWithChildren
+  '/student/courses/': typeof StudentCoursesIndexRoute
   '/admin/panel/_protected/profile': typeof AdminPanelProtectedProfileRoute
   '/admin/panel/_protected/': typeof AdminPanelProtectedIndexRoute
+  '/student/courses/$courseSlug/': typeof StudentCoursesCourseSlugIndexRoute
   '/admin/panel/_protected/blog/create': typeof AdminPanelProtectedBlogCreateRoute
+  '/admin/panel/_protected/courses/create': typeof AdminPanelProtectedCoursesCreateRoute
   '/admin/panel/_protected/users/create': typeof AdminPanelProtectedUsersCreateRoute
+  '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
+  '/admin/panel/_protected/courses/': typeof AdminPanelProtectedCoursesIndexRoute
   '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/_protected/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
+  '/admin/panel/_protected/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
+  '/admin/panel/_protected/courses/edit/$courseId': typeof AdminPanelProtectedCoursesEditCourseIdRoute
   '/admin/panel/_protected/users/edit/$userId': typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 export interface FileRouteTypes {
@@ -280,13 +358,21 @@ export interface FileRouteTypes {
     | '/student/'
     | '/admin/panel'
     | '/api/auth/$'
+    | '/student/courses/$courseSlug'
+    | '/student/courses/'
     | '/admin/panel/profile'
     | '/admin/panel/'
+    | '/student/courses/$courseSlug/'
     | '/admin/panel/blog/create'
+    | '/admin/panel/courses/create'
     | '/admin/panel/users/create'
+    | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog/'
+    | '/admin/panel/courses/'
     | '/admin/panel/users/'
     | '/admin/panel/blog/edit/$postId'
+    | '/admin/panel/courses/builder/$courseId'
+    | '/admin/panel/courses/edit/$courseId'
     | '/admin/panel/users/edit/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -306,13 +392,20 @@ export interface FileRouteTypes {
     | '/blog'
     | '/student'
     | '/api/auth/$'
+    | '/student/courses'
     | '/admin/panel/profile'
     | '/admin/panel'
+    | '/student/courses/$courseSlug'
     | '/admin/panel/blog/create'
+    | '/admin/panel/courses/create'
     | '/admin/panel/users/create'
+    | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog'
+    | '/admin/panel/courses'
     | '/admin/panel/users'
     | '/admin/panel/blog/edit/$postId'
+    | '/admin/panel/courses/builder/$courseId'
+    | '/admin/panel/courses/edit/$courseId'
     | '/admin/panel/users/edit/$userId'
   id:
     | '__root__'
@@ -334,13 +427,21 @@ export interface FileRouteTypes {
     | '/student/'
     | '/admin/panel/_protected'
     | '/api/auth/$'
+    | '/student/courses/$courseSlug'
+    | '/student/courses/'
     | '/admin/panel/_protected/profile'
     | '/admin/panel/_protected/'
+    | '/student/courses/$courseSlug/'
     | '/admin/panel/_protected/blog/create'
+    | '/admin/panel/_protected/courses/create'
     | '/admin/panel/_protected/users/create'
+    | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/_protected/blog/'
+    | '/admin/panel/_protected/courses/'
     | '/admin/panel/_protected/users/'
     | '/admin/panel/_protected/blog/edit/$postId'
+    | '/admin/panel/_protected/courses/builder/$courseId'
+    | '/admin/panel/_protected/courses/edit/$courseId'
     | '/admin/panel/_protected/users/edit/$userId'
   fileRoutesById: FileRoutesById
 }
@@ -491,6 +592,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/courses/': {
+      id: '/student/courses/'
+      path: '/courses'
+      fullPath: '/student/courses/'
+      preLoaderRoute: typeof StudentCoursesIndexRouteImport
+      parentRoute: typeof StudentRouteRoute
+    }
+    '/student/courses/$courseSlug': {
+      id: '/student/courses/$courseSlug'
+      path: '/courses/$courseSlug'
+      fullPath: '/student/courses/$courseSlug'
+      preLoaderRoute: typeof StudentCoursesCourseSlugRouteImport
+      parentRoute: typeof StudentRouteRoute
+    }
     '/admin/panel/_protected/': {
       id: '/admin/panel/_protected/'
       path: '/'
@@ -505,6 +620,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedProfileRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/student/courses/$courseSlug/': {
+      id: '/student/courses/$courseSlug/'
+      path: '/'
+      fullPath: '/student/courses/$courseSlug/'
+      preLoaderRoute: typeof StudentCoursesCourseSlugIndexRouteImport
+      parentRoute: typeof StudentCoursesCourseSlugRoute
+    }
     '/admin/panel/_protected/blog/': {
       id: '/admin/panel/_protected/blog/'
       path: '/blog'
@@ -517,6 +639,20 @@ declare module '@tanstack/react-router' {
       path: '/blog/create'
       fullPath: '/admin/panel/blog/create'
       preLoaderRoute: typeof AdminPanelProtectedBlogCreateRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/courses/': {
+      id: '/admin/panel/_protected/courses/'
+      path: '/courses'
+      fullPath: '/admin/panel/courses/'
+      preLoaderRoute: typeof AdminPanelProtectedCoursesIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/courses/create': {
+      id: '/admin/panel/_protected/courses/create'
+      path: '/courses/create'
+      fullPath: '/admin/panel/courses/create'
+      preLoaderRoute: typeof AdminPanelProtectedCoursesCreateRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
     '/admin/panel/_protected/users/': {
@@ -533,11 +669,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedUsersCreateRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/student/courses/$courseSlug/lesson/$lessonId': {
+      id: '/student/courses/$courseSlug/lesson/$lessonId'
+      path: '/lesson/$lessonId'
+      fullPath: '/student/courses/$courseSlug/lesson/$lessonId'
+      preLoaderRoute: typeof StudentCoursesCourseSlugLessonLessonIdRouteImport
+      parentRoute: typeof StudentCoursesCourseSlugRoute
+    }
     '/admin/panel/_protected/blog/edit/$postId': {
       id: '/admin/panel/_protected/blog/edit/$postId'
       path: '/blog/edit/$postId'
       fullPath: '/admin/panel/blog/edit/$postId'
       preLoaderRoute: typeof AdminPanelProtectedBlogEditPostIdRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/courses/builder/$courseId': {
+      id: '/admin/panel/_protected/courses/builder/$courseId'
+      path: '/courses/builder/$courseId'
+      fullPath: '/admin/panel/courses/builder/$courseId'
+      preLoaderRoute: typeof AdminPanelProtectedCoursesBuilderCourseIdRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
+    '/admin/panel/_protected/courses/edit/$courseId': {
+      id: '/admin/panel/_protected/courses/edit/$courseId'
+      path: '/courses/edit/$courseId'
+      fullPath: '/admin/panel/courses/edit/$courseId'
+      preLoaderRoute: typeof AdminPanelProtectedCoursesEditCourseIdRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
     '/admin/panel/_protected/users/edit/$userId': {
@@ -550,14 +707,35 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StudentCoursesCourseSlugRouteChildren {
+  StudentCoursesCourseSlugIndexRoute: typeof StudentCoursesCourseSlugIndexRoute
+  StudentCoursesCourseSlugLessonLessonIdRoute: typeof StudentCoursesCourseSlugLessonLessonIdRoute
+}
+
+const StudentCoursesCourseSlugRouteChildren: StudentCoursesCourseSlugRouteChildren =
+  {
+    StudentCoursesCourseSlugIndexRoute: StudentCoursesCourseSlugIndexRoute,
+    StudentCoursesCourseSlugLessonLessonIdRoute:
+      StudentCoursesCourseSlugLessonLessonIdRoute,
+  }
+
+const StudentCoursesCourseSlugRouteWithChildren =
+  StudentCoursesCourseSlugRoute._addFileChildren(
+    StudentCoursesCourseSlugRouteChildren,
+  )
+
 interface StudentRouteRouteChildren {
   StudentProfileRoute: typeof StudentProfileRoute
   StudentIndexRoute: typeof StudentIndexRoute
+  StudentCoursesCourseSlugRoute: typeof StudentCoursesCourseSlugRouteWithChildren
+  StudentCoursesIndexRoute: typeof StudentCoursesIndexRoute
 }
 
 const StudentRouteRouteChildren: StudentRouteRouteChildren = {
   StudentProfileRoute: StudentProfileRoute,
   StudentIndexRoute: StudentIndexRoute,
+  StudentCoursesCourseSlugRoute: StudentCoursesCourseSlugRouteWithChildren,
+  StudentCoursesIndexRoute: StudentCoursesIndexRoute,
 }
 
 const StudentRouteRouteWithChildren = StudentRouteRoute._addFileChildren(
@@ -568,10 +746,14 @@ interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedProfileRoute: typeof AdminPanelProtectedProfileRoute
   AdminPanelProtectedIndexRoute: typeof AdminPanelProtectedIndexRoute
   AdminPanelProtectedBlogCreateRoute: typeof AdminPanelProtectedBlogCreateRoute
+  AdminPanelProtectedCoursesCreateRoute: typeof AdminPanelProtectedCoursesCreateRoute
   AdminPanelProtectedUsersCreateRoute: typeof AdminPanelProtectedUsersCreateRoute
   AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
+  AdminPanelProtectedCoursesIndexRoute: typeof AdminPanelProtectedCoursesIndexRoute
   AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
   AdminPanelProtectedBlogEditPostIdRoute: typeof AdminPanelProtectedBlogEditPostIdRoute
+  AdminPanelProtectedCoursesBuilderCourseIdRoute: typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
+  AdminPanelProtectedCoursesEditCourseIdRoute: typeof AdminPanelProtectedCoursesEditCourseIdRoute
   AdminPanelProtectedUsersEditUserIdRoute: typeof AdminPanelProtectedUsersEditUserIdRoute
 }
 
@@ -580,11 +762,18 @@ const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildr
     AdminPanelProtectedProfileRoute: AdminPanelProtectedProfileRoute,
     AdminPanelProtectedIndexRoute: AdminPanelProtectedIndexRoute,
     AdminPanelProtectedBlogCreateRoute: AdminPanelProtectedBlogCreateRoute,
+    AdminPanelProtectedCoursesCreateRoute:
+      AdminPanelProtectedCoursesCreateRoute,
     AdminPanelProtectedUsersCreateRoute: AdminPanelProtectedUsersCreateRoute,
     AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
+    AdminPanelProtectedCoursesIndexRoute: AdminPanelProtectedCoursesIndexRoute,
     AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
     AdminPanelProtectedBlogEditPostIdRoute:
       AdminPanelProtectedBlogEditPostIdRoute,
+    AdminPanelProtectedCoursesBuilderCourseIdRoute:
+      AdminPanelProtectedCoursesBuilderCourseIdRoute,
+    AdminPanelProtectedCoursesEditCourseIdRoute:
+      AdminPanelProtectedCoursesEditCourseIdRoute,
     AdminPanelProtectedUsersEditUserIdRoute:
       AdminPanelProtectedUsersEditUserIdRoute,
   }
