@@ -24,7 +24,7 @@ const formSchema = z
 			.min(1, "El nombre es requerido")
 			.max(100),
 		email: z
-			.email(),
+			.email("Ingresa un correo válido."),
 		password: z
 			.string()
 			.min(8, "La contraseña debe tener al menos 8 caracteres.")
@@ -51,6 +51,7 @@ export function SignupForm({
 		},
 		validators: {
 			onSubmit: formSchema,
+			onBlur: formSchema,
 		},
 
 		onSubmit: async ({ value }) => {
@@ -87,7 +88,7 @@ export function SignupForm({
 		<div className={cn("flex w-full flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden p-0">
 				<CardContent className="grid p-0 md:grid-cols-2">
-					<FieldGroup>
+					<FieldGroup className="p-6 md:p-8">
 						<div className="flex flex-col items-center gap-2 text-center">
 							<h1 className="text-2xl font-bold">Crear cuenta</h1>
 							<p className="text-balance text-muted-foreground">
@@ -215,7 +216,7 @@ export function SignupForm({
 							/>
 
 							<Field>
-								<Button type="submit">Crear cuenta</Button>
+								<Button className="mt-4" type="submit">Crear cuenta</Button>
 							</Field>
 							<FieldDescription className="text-center">
 								¿Ya tienes cuenta? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link>

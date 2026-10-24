@@ -27,7 +27,7 @@ export default function Header() {
 					className="text-lg font-bold tracking-wide uppercase"
 					aria-label="JPDH — inicio"
 				>
-					{headerContent.logo}
+				<img src="/istransparent.png" alt="JPDH" className="h-12 w-auto" />
 				</Link>
 
 				<nav aria-label="Navegación principal" className="hidden md:block">

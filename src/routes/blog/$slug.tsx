@@ -45,7 +45,7 @@ function BlogPostPage() {
                 <img
                   src={query.data.coverImage}
                   alt={query.data.title}
-                  className="w-full rounded-lg border object-cover"
+                  className="w-full max-h-72 rounded-lg border object-cover"
                 />
               )}
             </header>

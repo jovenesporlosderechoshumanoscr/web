@@ -62,15 +62,16 @@ export default function Hero() {
             {heroContent.subtitle}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-		  <a href={heroContent.primaryCta.href}>
-
             <Button
               size="lg"
+              nativeButton={false}
+              render={
+                <a href={heroContent.primaryCta.href}>
+                  {heroContent.primaryCta.label}
+                  <IconArrowRight aria-hidden="true" />
+                </a>
+              }
             />
-			{heroContent.primaryCta.label}
-			<IconArrowRight aria-hidden="true" />
-
-			</a>
 
             <Button
               size="lg"

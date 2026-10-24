@@ -8,13 +8,13 @@ export const Route = createFileRoute('/student')({
 		const session = await getSession();
 		if (!session) {
 			throw redirect({
-				to: "/login",
+				to: "/",
 				search: { redirect: location.href },
 			});
 		}
-		if (session.user.role !== "student") {
+		if (session.user.role === 'admin' || session.user.role === 'editor') {
 			throw redirect({
-				to: "/",
+				to: "/admin/panel",
 			});
 		}
 		return { user: session.user };

@@ -1,130 +1,303 @@
-import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
-import type { PostBlock } from "../validation/blog";
+import { sql } from 'drizzle-orm'
+import {
+  sqliteTable,
+  text,
+  integer,
+  index,
+  uniqueIndex,
+} from 'drizzle-orm/sqlite-core'
+import type { PostBlock } from '../validation/blog'
 
-export const user = sqliteTable("user", {
-
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
+export const user = sqliteTable('user', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: integer('email_verified', { mode: 'boolean' })
     .default(false)
     .notNull(),
-  image: text("image"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  image: text('image'),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  role: text("role"),
-  banned: integer("banned", { mode: "boolean" }).default(false),
-  banReason: text("ban_reason"),
-  banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
-});
+  role: text('role'),
+  banned: integer('banned', { mode: 'boolean' }).default(false),
+  banReason: text('ban_reason'),
+  banExpires: integer('ban_expires', { mode: 'timestamp_ms' }),
+})
 
 export const session = sqliteTable(
-  "session",
+  'session',
   {
-    id: text("id").primaryKey(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-    token: text("token").notNull().unique(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    id: text('id').primaryKey(),
+    expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-    ipAddress: text("ip_address"),
-    userAgent: text("user_agent"),
-    userId: text("user_id")
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    userId: text('user_id')
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    impersonatedBy: text("impersonated_by"),
+      .references(() => user.id, { onDelete: 'cascade' }),
+    impersonatedBy: text('impersonated_by'),
   },
-  (table) => [index("session_userId_idx").on(table.userId)],
-);
+  (table) => [index('session_userId_idx').on(table.userId)],
+)
 
 export const account = sqliteTable(
-  "account",
+  'account',
   {
-    id: text("id").primaryKey(),
-    accountId: text("account_id").notNull(),
-    providerId: text("provider_id").notNull(),
-    userId: text("user_id")
+    id: text('id').primaryKey(),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: text('user_id')
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    accessToken: text("access_token"),
-    refreshToken: text("refresh_token"),
-    idToken: text("id_token"),
-    accessTokenExpiresAt: integer("access_token_expires_at", {
-      mode: "timestamp_ms",
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: integer('access_token_expires_at', {
+      mode: 'timestamp_ms',
     }),
-    refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-      mode: "timestamp_ms",
+    refreshTokenExpiresAt: integer('refresh_token_expires_at', {
+      mode: 'timestamp_ms',
     }),
-    scope: text("scope"),
-    password: text("password"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("account_userId_idx").on(table.userId)],
-);
+  (table) => [index('account_userId_idx').on(table.userId)],
+)
 
 export const post = sqliteTable(
-  "post",
+  'post',
   {
-    id: text("id").primaryKey(),
-    title: text("title").notNull(),
-    slug: text("slug").notNull().unique(),
-    status: text("status", { enum: ["draft", "published"] })
-      .default("draft")
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    slug: text('slug').notNull().unique(),
+    status: text('status', { enum: ['draft', 'published'] })
+      .default('draft')
       .notNull(),
-    blocks: text("blocks", { mode: "json" })
-      .$type<PostBlock[]>()
-      .notNull(),
-    excerpt: text("excerpt"),
-    coverImage: text("cover_image"),
-    authorId: text("author_id").references(() => user.id, {
-      onDelete: "set null",
+    blocks: text('blocks', { mode: 'json' }).$type<PostBlock[]>().notNull(),
+    excerpt: text('excerpt'),
+    coverImage: text('cover_image'),
+    authorId: text('author_id').references(() => user.id, {
+      onDelete: 'set null',
     }),
-    publishedAt: integer("published_at", { mode: "timestamp_ms" }),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    publishedAt: integer('published_at', { mode: 'timestamp_ms' }),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
   (table) => [
-    index("post_status_idx").on(table.status),
-    index("post_publishedAt_idx").on(table.publishedAt),
+    index('post_status_idx').on(table.status),
+    index('post_publishedAt_idx').on(table.publishedAt),
   ],
-);
+)
 
-export const verification = sqliteTable(
-  "verification",
+/* ------------------------------- Cursos ------------------------------- */
+
+export const course = sqliteTable(
+  'course',
   {
-    id: text("id").primaryKey(),
-    identifier: text("identifier").notNull(),
-    value: text("value").notNull(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    slug: text('slug').notNull().unique(),
+    description: text('description'),
+    coverImage: text('cover_image'),
+    status: text('status', { enum: ['draft', 'published'] })
+      .default('draft')
+      .notNull(),
+    authorId: text('author_id').references(() => user.id, {
+      onDelete: 'set null',
+    }),
+    publishedAt: integer('published_at', { mode: 'timestamp_ms' }),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)],
-);
+  (table) => [
+    index('course_status_idx').on(table.status),
+    index('course_publishedAt_idx').on(table.publishedAt),
+  ],
+)
 
+export const courseModule = sqliteTable(
+  'course_module',
+  {
+    id: text('id').primaryKey(),
+    courseId: text('course_id')
+      .notNull()
+      .references(() => course.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    position: integer('position').notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  (table) => [index('course_module_courseId_idx').on(table.courseId)],
+)
 
+export const lesson = sqliteTable(
+  'lesson',
+  {
+    id: text('id').primaryKey(),
+    moduleId: text('module_id')
+      .notNull()
+      .references(() => courseModule.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    /** `reading`: bloques de lectura. `quiz`: preguntas con opciones. */
+    type: text('type', { enum: ['reading', 'quiz'] }).notNull(),
+    position: integer('position').notNull(),
+    /** Bloques de lectura (reutiliza PostBlock). Null para quizzes. */
+    content: text('content', { mode: 'json' }).$type<PostBlock[]>(),
+    /** Nota mínima (0-100) para aprobar el quiz. */
+    passingScore: integer('passing_score').default(70).notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  (table) => [index('lesson_moduleId_idx').on(table.moduleId)],
+)
 
+export const quizQuestion = sqliteTable(
+  'quiz_question',
+  {
+    id: text('id').primaryKey(),
+    lessonId: text('lesson_id')
+      .notNull()
+      .references(() => lesson.id, { onDelete: 'cascade' }),
+    text: text('text').notNull(),
+    position: integer('position').notNull(),
+  },
+  (table) => [index('quiz_question_lessonId_idx').on(table.lessonId)],
+)
+
+export const quizOption = sqliteTable(
+  'quiz_option',
+  {
+    id: text('id').primaryKey(),
+    questionId: text('question_id')
+      .notNull()
+      .references(() => quizQuestion.id, { onDelete: 'cascade' }),
+    text: text('text').notNull(),
+    isCorrect: integer('is_correct', { mode: 'boolean' })
+      .default(false)
+      .notNull(),
+  },
+  (table) => [index('quiz_option_questionId_idx').on(table.questionId)],
+)
+
+/* ---------------------- Progreso de los estudiantes ---------------------- */
+
+/** Una fila por (usuario, lección); ausencia = sin empezar. */
+export const lessonProgress = sqliteTable(
+  'lesson_progress',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    lessonId: text('lesson_id')
+      .notNull()
+      .references(() => lesson.id, { onDelete: 'cascade' }),
+    status: text('status', { enum: ['in_progress', 'completed'] })
+      .default('in_progress')
+      .notNull(),
+    lastAccessedAt: integer('last_accessed_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    completedAt: integer('completed_at', { mode: 'timestamp_ms' }),
+  },
+  (table) => [
+    uniqueIndex('lesson_progress_userLesson_idx').on(
+      table.userId,
+      table.lessonId,
+    ),
+    index('lesson_progress_userId_idx').on(table.userId),
+  ],
+)
+
+/** Sin límite de reintentos: cada envío de quiz crea una fila nueva. */
+export const quizAttempt = sqliteTable(
+  'quiz_attempt',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    lessonId: text('lesson_id')
+      .notNull()
+      .references(() => lesson.id, { onDelete: 'cascade' }),
+    score: integer('score').notNull(),
+    passed: integer('passed', { mode: 'boolean' }).notNull(),
+    startedAt: integer('started_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    submittedAt: integer('submitted_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  (table) => [
+    index('quiz_attempt_userLesson_idx').on(table.userId, table.lessonId),
+  ],
+)
+
+export const quizAttemptAnswer = sqliteTable(
+  'quiz_attempt_answer',
+  {
+    id: text('id').primaryKey(),
+    attemptId: text('attempt_id')
+      .notNull()
+      .references(() => quizAttempt.id, { onDelete: 'cascade' }),
+    questionId: text('question_id')
+      .notNull()
+      .references(() => quizQuestion.id, { onDelete: 'cascade' }),
+    selectedOptionId: text('selected_option_id').references(
+      () => quizOption.id,
+      {
+        onDelete: 'cascade',
+      },
+    ),
+    isCorrect: integer('is_correct', { mode: 'boolean' }).notNull(),
+  },
+  (table) => [index('quiz_attempt_answer_attemptId_idx').on(table.attemptId)],
+)
+
+export const verification = sqliteTable(
+  'verification',
+  {
+    id: text('id').primaryKey(),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index('verification_identifier_idx').on(table.identifier)],
+)
