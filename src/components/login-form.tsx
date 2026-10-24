@@ -28,7 +28,7 @@ const formSchema = z.object({
 
 export function LoginForm({
 	className,
-	redirectTo = "/admin/panel",
+	redirectTo = "/student/panel",
 	...props
 }: React.ComponentProps<"div"> & { redirectTo?: string }) {
 
@@ -131,7 +131,7 @@ export function LoginForm({
 												<FieldLabel htmlFor="password">Password</FieldLabel>
 												<Link
 													to="/forgot-password"
-													className="ml-auto text-sm underline-offset-2 hover:underline"
+													className="ml-auto text-sm text-foreground underline-offset-2 hover:underline"
 												>
 													Forgot your password?
 												</Link>
