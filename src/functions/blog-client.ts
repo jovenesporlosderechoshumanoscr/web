@@ -27,10 +27,14 @@ export function usePost(id: string | undefined) {
   });
 }
 
+// El contenido del blog cambia poco; evitamos revalidar en cada navegación.
+const PUBLIC_STALE_TIME = 5 * 60 * 1000;
+
 export function usePublicPosts(filters: GetPostsInput) {
   return useQuery({
     queryKey: ["public", POSTS_QUERY_KEY, filters],
     queryFn: () => blogPublicQueries.getPublicPosts({ data: filters }),
+    staleTime: PUBLIC_STALE_TIME,
   });
 }
 
@@ -39,6 +43,7 @@ export function usePublicPostBySlug(slug: string | undefined) {
     queryKey: ["public", POST_QUERY_KEY, slug],
     queryFn: () => blogPublicQueries.getPublicPostBySlug({ data: { slug: slug! } }),
     enabled: Boolean(slug),
+    staleTime: PUBLIC_STALE_TIME,
   });
 }
 
@@ -49,6 +54,7 @@ export function useCreatePost() {
       blogMutations.createPost({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [POSTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["public", POSTS_QUERY_KEY] });
     },
   });
 }
@@ -61,6 +67,8 @@ export function useUpdatePost() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [POSTS_QUERY_KEY] });
       queryClient.invalidateQueries({ queryKey: [POST_QUERY_KEY, data.id] });
+      queryClient.invalidateQueries({ queryKey: ["public", POSTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["public", POST_QUERY_KEY] });
     },
   });
 }
@@ -72,6 +80,7 @@ export function useDeletePost() {
       blogMutations.deletePost({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [POSTS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["public", POSTS_QUERY_KEY] });
     },
   });
 }
