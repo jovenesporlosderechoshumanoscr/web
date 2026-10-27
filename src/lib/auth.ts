@@ -29,10 +29,6 @@ export const auth = betterAuth({
 		},
 	},
 	user: {
-		// Habilita auth.api.changeEmail / authClient.changeEmail.
-		// El flujo envía un enlace de verificación al NUEVO correo y el
-		// cambio se aplica recién al hacer clic (requiere emailVerification
-		// configurado, que ya está).
 		changeEmail: {
 			enabled: true,
 		},

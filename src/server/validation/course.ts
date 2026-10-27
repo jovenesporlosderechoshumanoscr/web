@@ -159,6 +159,12 @@ export const getEditorLessonSchema = z.object({
 })
 export type GetEditorLessonInput = z.infer<typeof getEditorLessonSchema>
 
+/** Certificado: se genera para un curso completado por el estudiante. */
+export const generateCertificateSchema = z.object({
+  courseId: z.string().min(1),
+})
+export type GenerateCertificateInput = z.infer<typeof generateCertificateSchema>
+
 export const submitQuizSchema = z.object({
   lessonId: z.string().min(1),
   answers: z

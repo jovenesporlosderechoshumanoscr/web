@@ -12,22 +12,22 @@ import {
 export const headerContent = {
 	logo: 'JPDH',
 	navLinks: [
-		{ label: 'Blog', href: '/blog' },
 		{ label: 'Sobre nosotros', href: '/about' },
 		{ label: 'Contacto', href: '/contact' },
+		{ label: 'Blog', href: '/blog' }
 	],
 } as const
 
 export default function Header() {
 	return (
-		<header className="sticky top-0 z-50 h-16 border-b bg-background">
+		<header className="sticky top-0 z-50 h-19 border-b bg-background">
 			<div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
 				<Link
 					to="/"
 					className="text-lg font-bold tracking-wide uppercase"
 					aria-label="JPDH — inicio"
 				>
-				<img src="/istransparent.png" alt="JPDH" className="h-12 w-auto" />
+					<img src="/logojpdh.webp" alt="JPDH" className="h-18 w-auto" />
 				</Link>
 
 				<nav aria-label="Navegación principal" className="hidden md:block">
@@ -85,7 +85,7 @@ export default function Header() {
 									{headerContent.navLinks.map((link) => (
 										<li key={link.label}>
 											<SheetClose
-								nativeButton={false}
+												nativeButton={false}
 												render={
 													<Link
 														to={link.href}
