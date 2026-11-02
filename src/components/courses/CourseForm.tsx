@@ -105,7 +105,7 @@ export function CourseForm({
   }
 
   return (
-    <Card className="max-w-xl">
+    <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
         <CardTitle>
           {mode === 'create' ? 'Crear curso' : 'Editar curso'}

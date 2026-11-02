@@ -38,6 +38,7 @@ import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin
 import { Route as AdminPanelProtectedBlogCreateRouteImport } from './routes/admin/panel/_protected/blog/create'
 import { Route as AdminPanelProtectedCoursesIndexRouteImport } from './routes/admin/panel/_protected/courses/index'
 import { Route as AdminPanelProtectedCoursesCreateRouteImport } from './routes/admin/panel/_protected/courses/create'
+import { Route as AdminPanelProtectedNewsletterIndexRouteImport } from './routes/admin/panel/_protected/newsletter/index'
 import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
 import { Route as AdminPanelProtectedUsersCreateRouteImport } from './routes/admin/panel/_protected/users/create'
 import { Route as StudentCoursesCourseSlugLessonLessonIdRouteImport } from './routes/student/courses/$courseSlug/lesson.$lessonId'
@@ -200,6 +201,12 @@ const AdminPanelProtectedCoursesCreateRoute =
     path: '/courses/create',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const AdminPanelProtectedNewsletterIndexRoute =
+  AdminPanelProtectedNewsletterIndexRouteImport.update({
+    id: '/newsletter/',
+    path: '/newsletter/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
 const AdminPanelProtectedUsersIndexRoute =
   AdminPanelProtectedUsersIndexRouteImport.update({
     id: '/users/',
@@ -275,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/courses/': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/newsletter/': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -310,6 +318,7 @@ export interface FileRoutesByTo {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/courses': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/newsletter': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -349,6 +358,7 @@ export interface FileRoutesById {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/_protected/courses/': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/_protected/newsletter/': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/_protected/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/_protected/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -389,6 +399,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog/'
     | '/admin/panel/courses/'
+    | '/admin/panel/newsletter/'
     | '/admin/panel/users/'
     | '/admin/panel/blog/edit/$postId'
     | '/admin/panel/courses/builder/$courseId'
@@ -424,6 +435,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog'
     | '/admin/panel/courses'
+    | '/admin/panel/newsletter'
     | '/admin/panel/users'
     | '/admin/panel/blog/edit/$postId'
     | '/admin/panel/courses/builder/$courseId'
@@ -462,6 +474,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/_protected/blog/'
     | '/admin/panel/_protected/courses/'
+    | '/admin/panel/_protected/newsletter/'
     | '/admin/panel/_protected/users/'
     | '/admin/panel/_protected/blog/edit/$postId'
     | '/admin/panel/_protected/courses/builder/$courseId'
@@ -695,6 +708,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedCoursesCreateRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/admin/panel/_protected/newsletter/': {
+      id: '/admin/panel/_protected/newsletter/'
+      path: '/newsletter'
+      fullPath: '/admin/panel/newsletter/'
+      preLoaderRoute: typeof AdminPanelProtectedNewsletterIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
     '/admin/panel/_protected/users/': {
       id: '/admin/panel/_protected/users/'
       path: '/users'
@@ -790,6 +810,7 @@ interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedUsersCreateRoute: typeof AdminPanelProtectedUsersCreateRoute
   AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
   AdminPanelProtectedCoursesIndexRoute: typeof AdminPanelProtectedCoursesIndexRoute
+  AdminPanelProtectedNewsletterIndexRoute: typeof AdminPanelProtectedNewsletterIndexRoute
   AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
   AdminPanelProtectedBlogEditPostIdRoute: typeof AdminPanelProtectedBlogEditPostIdRoute
   AdminPanelProtectedCoursesBuilderCourseIdRoute: typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -807,6 +828,8 @@ const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildr
     AdminPanelProtectedUsersCreateRoute: AdminPanelProtectedUsersCreateRoute,
     AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
     AdminPanelProtectedCoursesIndexRoute: AdminPanelProtectedCoursesIndexRoute,
+    AdminPanelProtectedNewsletterIndexRoute:
+      AdminPanelProtectedNewsletterIndexRoute,
     AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
     AdminPanelProtectedBlogEditPostIdRoute:
       AdminPanelProtectedBlogEditPostIdRoute,

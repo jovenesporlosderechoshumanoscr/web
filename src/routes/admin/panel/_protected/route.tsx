@@ -1,5 +1,9 @@
 import { AdminSidebar } from '@/components/adminSidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
 import { getSession } from '@/lib/auth.functions';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
@@ -29,10 +33,14 @@ function RouteComponent() {
 	return (
 		<SidebarProvider>
 			<AdminSidebar props={user} />
-			<SidebarTrigger />
-			<Outlet />
-
+			<SidebarInset>
+				<header className="flex h-12 shrink-0 items-center gap-2 px-4">
+					<SidebarTrigger />
+				</header>
+				<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
+					<Outlet />
+				</div>
+			</SidebarInset>
 		</SidebarProvider>
-
 	)
 }

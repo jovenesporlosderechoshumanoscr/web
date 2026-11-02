@@ -41,9 +41,6 @@ export const createUserSchema = z.object({
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .max(128),
   role: userRoleSchema.default("student"),
-  banned: z.boolean().default(false),
-  banReason: z.string().trim().max(500).nullish(),
-  banExpires: banExpiresSchema,
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
@@ -56,6 +53,21 @@ export const updateUserSchema = createUserSchema
   });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+
+/** Baneo de un usuario: motivo y expiración opcionales. */
+export const banUserSchema = z.object({
+  id: z.string().min(1),
+  banReason: z.string().trim().max(500).nullish(),
+  banExpires: banExpiresSchema,
+});
+
+export type BanUserInput = z.infer<typeof banUserSchema>;
+
+export const unbanUserSchema = z.object({
+  id: z.string().min(1),
+});
+
+export type UnbanUserInput = z.infer<typeof unbanUserSchema>;
 
 export const deleteUserSchema = z.object({
   id: z.string().min(1),

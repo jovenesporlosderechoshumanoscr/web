@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useDeleteUser, useUsers } from "@/functions/user-client";
+import { BanUserDialog } from "@/components/users/BanUserDialog";
+import {
+  useBanUser,
+  useDeleteUser,
+  useUnbanUser,
+  useUsers,
+} from "@/functions/user-client";
 import { getRoleLabel } from "@/lib/roles";
 import type { UserRole } from "@/lib/roles";
 
@@ -35,6 +42,41 @@ function RouteComponent() {
     limit,
   });
   const deleteUser = useDeleteUser();
+  const banUser = useBanUser();
+  const unbanUser = useUnbanUser();
+
+  const [banTarget, setBanTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  function openBanDialog(user: { id: string; name: string }) {
+    banUser.reset();
+    setBanTarget(user);
+  }
+
+  function handleBan(values: { banReason: string | null; banExpires: Date | null }) {
+    if (!banTarget) return;
+    banUser.mutate(
+      { id: banTarget.id, ...values },
+      {
+        onSuccess: () => {
+          setBanTarget(null);
+          toast.success(`Se baneó a "${banTarget.name}"`);
+        },
+      },
+    );
+  }
+
+  function handleUnban(user: { id: string; name: string }) {
+    unbanUser.mutate(
+      { id: user.id },
+      {
+        onSuccess: () => toast.success(`Se quitó el baneo de "${user.name}"`),
+        onError: (error) => toast.error(error.message),
+      },
+    );
+  }
 
   function handleSearch() {
     setPage(1);
@@ -178,6 +220,24 @@ function RouteComponent() {
                         >
                           Editar
                         </Link>
+                        {u.banned ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={unbanUser.isPending}
+                            onClick={() => handleUnban(u)}
+                          >
+                            Desbanear
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => openBanDialog(u)}
+                          >
+                            Banear
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="destructive"
@@ -219,6 +279,21 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
+
+      {banTarget && (
+        <BanUserDialog
+          key={banTarget.id}
+          open
+          onOpenChange={(open) => {
+            if (!open) setBanTarget(null);
+          }}
+          userName={banTarget.name}
+          isPending={banUser.isPending}
+          serverError={banUser.isError ? banUser.error.message : null}
+          onConfirm={handleBan}
+          onCancel={() => setBanTarget(null)}
+        />
+      )}
     </div>
   );
 }

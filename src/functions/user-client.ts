@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userQueries } from "@/server/queries/user-server";
 import { userMutations } from "@/server/mutations/user-server";
 import type {
+  BanUserInput,
   ChangePasswordInput,
   CreateUserInput,
   DeleteUserInput,
   GetUsersInput,
   ProfileCallbackPath,
+  UnbanUserInput,
   UpdateProfileInput,
   UpdateUserInput,
 } from "@/server/validation/user";
@@ -59,6 +61,31 @@ export function useDeleteUser() {
       userMutations.deleteUser({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
+    },
+  });
+}
+
+/** Banea a un usuario (motivo y expiración opcionales). */
+export function useBanUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: BanUserInput) => userMutations.banUser({ data: input }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY, data.id] });
+    },
+  });
+}
+
+/** Quita el baneo de un usuario. */
+export function useUnbanUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UnbanUserInput) =>
+      userMutations.unbanUser({ data: input }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY, data.id] });
     },
   });
 }

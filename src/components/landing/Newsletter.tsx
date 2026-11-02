@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useSubscribeNewsletter } from '@/functions/newsletter-client'
 
 export const newsletterContent = {
   title: 'Boletín informativo',
@@ -12,8 +13,9 @@ export const newsletterContent = {
   emailLabel: 'Correo electrónico',
   emailPlaceholder: 'tu@correo.org',
   submitLabel: 'Suscribirme',
-  successMessage: '¡Gracias por suscribirte! Revisa tu correo.',
-  privacyNote: 'Respetamos tu privacidad. Puedes darte de baja en cualquier momento.',
+  successMessage: 'Revisa tu correo para confirmar la suscripción.',
+  privacyNote:
+    'Respetamos tu privacidad. Puedes darte de baja en cualquier momento.',
 } as const
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -22,6 +24,7 @@ export default function Newsletter() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [subscribed, setSubscribed] = useState(false)
+  const subscribe = useSubscribeNewsletter()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -32,8 +35,21 @@ export default function Newsletter() {
       return
     }
     setError(null)
-    setSubscribed(true)
-    toast.success(newsletterContent.successMessage)
+    subscribe.mutate(
+      { email: value },
+      {
+        onSuccess: () => {
+          setSubscribed(true)
+          toast.success(newsletterContent.successMessage)
+        },
+        onError: () => {
+          setSubscribed(false)
+          toast.error(
+            'No se pudo completar la suscripción. Inténtalo de nuevo.',
+          )
+        },
+      },
+    )
   }
 
   return (
@@ -69,7 +85,7 @@ export default function Newsletter() {
               }
               className="flex-1"
             />
-            <Button type="submit">
+            <Button type="submit" disabled={subscribe.isPending}>
               {newsletterContent.submitLabel}
               <IconSend aria-hidden="true" />
             </Button>
@@ -86,7 +102,10 @@ export default function Newsletter() {
             </p>
           ) : null}
         </form>
-        <p id="newsletter-privacy" className="mt-4 text-xs text-muted-foreground">
+        <p
+          id="newsletter-privacy"
+          className="mt-4 text-xs text-muted-foreground"
+        >
           {newsletterContent.privacyNote}
         </p>
       </div>
