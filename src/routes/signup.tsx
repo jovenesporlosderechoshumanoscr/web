@@ -26,7 +26,6 @@ return (
 				<SignupForm />
 			</div>
 		</main>
-		<Footer />
 	</div>
 )
 

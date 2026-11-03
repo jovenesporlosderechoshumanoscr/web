@@ -18,8 +18,9 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StudentRouteRouteImport } from './routes/student/route'
-import { Route as TeermsServiceRouteImport } from './routes/teerms-service'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -92,14 +93,19 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentRouteRoute = StudentRouteRouteImport.update({
   id: '/student',
   path: '/student',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TeermsServiceRoute = TeermsServiceRouteImport.update({
-  id: '/teerms-service',
-  path: '/teerms-service',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -261,7 +267,8 @@ export interface FileRoutesByFullPath {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -299,7 +306,8 @@ export interface FileRoutesByTo {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -337,7 +345,8 @@ export interface FileRoutesById {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -378,7 +387,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -416,7 +426,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -453,7 +464,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -493,7 +505,8 @@ export interface RootRouteChildren {
   ResendVerificationRoute: typeof ResendVerificationRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
-  TeermsServiceRoute: typeof TeermsServiceRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -568,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student': {
       id: '/student'
       path: '/student'
@@ -575,11 +595,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/teerms-service': {
-      id: '/teerms-service'
-      path: '/teerms-service'
-      fullPath: '/teerms-service'
-      preLoaderRoute: typeof TeermsServiceRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-email': {
@@ -857,7 +877,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResendVerificationRoute: ResendVerificationRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
-  TeermsServiceRoute: TeermsServiceRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,

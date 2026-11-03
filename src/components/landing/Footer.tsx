@@ -14,6 +14,8 @@ export const footerContent = {
     { label: 'Conctacto', href: '/contact' },
     { label: 'blog', href: '/blog' },
     { label: 'Zona estudiantes', href: '/student' },
+	{ label: 'Terminos', href: '/terms'},
+	{ label: 'Privacidad', href: '/privacy'}
   ],
   socials: [
     { label: 'X', href: '#', Icon: IconBrandX },
