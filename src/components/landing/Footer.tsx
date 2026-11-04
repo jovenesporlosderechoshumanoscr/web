@@ -10,12 +10,12 @@ export const footerContent = {
   logo: 'JPDH',
   tagline: 'Justicia, comunidad y dignidad.',
   links: [
-    { label: 'Trabajo', href: '#trabajo' },
-    { label: 'Historias', href: '#historias' },
-    { label: 'Voces', href: '#voces' },
-    { label: 'Centro de acción', href: '#accion' },
-    { label: 'Nosotros', href: '/about' },
-    { label: 'Contacto', href: '/contact' },
+    { label: 'Sobre nosotros', href: '/about' },
+    { label: 'Conctacto', href: '/contact' },
+    { label: 'blog', href: '/blog' },
+    { label: 'Zona estudiantes', href: '/student' },
+	{ label: 'Terminos', href: '/terms'},
+	{ label: 'Privacidad', href: '/privacy'}
   ],
   socials: [
     { label: 'X', href: '#', Icon: IconBrandX },
@@ -32,9 +32,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-lg font-bold tracking-wide uppercase">
-              {footerContent.logo}
-            </p>
+		  	<img src="/logojpdh.webp" alt="JPDH" className="h-18 w-auto" />
             <p className="mt-2 text-sm text-muted-foreground">
               {footerContent.tagline}
             </p>

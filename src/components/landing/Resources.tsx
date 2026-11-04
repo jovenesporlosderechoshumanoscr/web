@@ -16,7 +16,7 @@ export const resourcesContent = {
     {
       title: 'Curso en línea',
       description: 'Formación introductoria en derechos y acción comunitaria.',
-      cta: { label: 'Ir al curso', href: '/curso' },
+      cta: { label: 'Ir al curso', href: '/student/courses' },
       Icon: IconBook,
     },
     {

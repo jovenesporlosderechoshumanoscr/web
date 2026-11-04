@@ -2,9 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { UserForm } from "@/components/users/UserForm";
 import { useUpdateUser, useUser } from "@/functions/user-client";
 
-export const Route = createFileRoute(
-  "/admin/panel/_protected/users/edit/$userId",
-)({
+export const Route = createFileRoute("/admin/panel/_protected/users/edit/$userId")({
   component: RouteComponent,
 });
 
@@ -32,9 +30,6 @@ function RouteComponent() {
           name: user.name,
           email: user.email,
           role: user.role,
-          banned: user.banned,
-          banReason: user.banReason,
-          banExpires: user.banExpires,
         }}
         isSubmitting={updateUser.isPending}
         serverError={

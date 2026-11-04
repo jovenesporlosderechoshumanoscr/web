@@ -18,8 +18,9 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StudentRouteRouteImport } from './routes/student/route'
-import { Route as TeermsServiceRouteImport } from './routes/teerms-service'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -38,6 +39,7 @@ import { Route as AdminPanelProtectedBlogIndexRouteImport } from './routes/admin
 import { Route as AdminPanelProtectedBlogCreateRouteImport } from './routes/admin/panel/_protected/blog/create'
 import { Route as AdminPanelProtectedCoursesIndexRouteImport } from './routes/admin/panel/_protected/courses/index'
 import { Route as AdminPanelProtectedCoursesCreateRouteImport } from './routes/admin/panel/_protected/courses/create'
+import { Route as AdminPanelProtectedNewsletterIndexRouteImport } from './routes/admin/panel/_protected/newsletter/index'
 import { Route as AdminPanelProtectedUsersIndexRouteImport } from './routes/admin/panel/_protected/users/index'
 import { Route as AdminPanelProtectedUsersCreateRouteImport } from './routes/admin/panel/_protected/users/create'
 import { Route as StudentCoursesCourseSlugLessonLessonIdRouteImport } from './routes/student/courses/$courseSlug/lesson.$lessonId'
@@ -91,14 +93,19 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentRouteRoute = StudentRouteRouteImport.update({
   id: '/student',
   path: '/student',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TeermsServiceRoute = TeermsServiceRouteImport.update({
-  id: '/teerms-service',
-  path: '/teerms-service',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -200,6 +207,12 @@ const AdminPanelProtectedCoursesCreateRoute =
     path: '/courses/create',
     getParentRoute: () => AdminPanelProtectedRouteRoute,
   } as any)
+const AdminPanelProtectedNewsletterIndexRoute =
+  AdminPanelProtectedNewsletterIndexRouteImport.update({
+    id: '/newsletter/',
+    path: '/newsletter/',
+    getParentRoute: () => AdminPanelProtectedRouteRoute,
+  } as any)
 const AdminPanelProtectedUsersIndexRoute =
   AdminPanelProtectedUsersIndexRouteImport.update({
     id: '/users/',
@@ -254,7 +267,8 @@ export interface FileRoutesByFullPath {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -275,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/courses/': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/newsletter/': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -291,7 +306,8 @@ export interface FileRoutesByTo {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -310,6 +326,7 @@ export interface FileRoutesByTo {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/blog': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/courses': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/newsletter': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/users': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -328,7 +345,8 @@ export interface FileRoutesById {
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/teerms-service': typeof TeermsServiceRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -349,6 +367,7 @@ export interface FileRoutesById {
   '/student/courses/$courseSlug/lesson/$lessonId': typeof StudentCoursesCourseSlugLessonLessonIdRoute
   '/admin/panel/_protected/blog/': typeof AdminPanelProtectedBlogIndexRoute
   '/admin/panel/_protected/courses/': typeof AdminPanelProtectedCoursesIndexRoute
+  '/admin/panel/_protected/newsletter/': typeof AdminPanelProtectedNewsletterIndexRoute
   '/admin/panel/_protected/users/': typeof AdminPanelProtectedUsersIndexRoute
   '/admin/panel/_protected/blog/edit/$postId': typeof AdminPanelProtectedBlogEditPostIdRoute
   '/admin/panel/_protected/courses/builder/$courseId': typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -368,7 +387,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -389,6 +409,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog/'
     | '/admin/panel/courses/'
+    | '/admin/panel/newsletter/'
     | '/admin/panel/users/'
     | '/admin/panel/blog/edit/$postId'
     | '/admin/panel/courses/builder/$courseId'
@@ -405,7 +426,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -424,6 +446,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/blog'
     | '/admin/panel/courses'
+    | '/admin/panel/newsletter'
     | '/admin/panel/users'
     | '/admin/panel/blog/edit/$postId'
     | '/admin/panel/courses/builder/$courseId'
@@ -441,7 +464,8 @@ export interface FileRouteTypes {
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
-    | '/teerms-service'
+    | '/sitemap.xml'
+    | '/terms'
     | '/verify-email'
     | '/admin/login'
     | '/blog/$slug'
@@ -462,6 +486,7 @@ export interface FileRouteTypes {
     | '/student/courses/$courseSlug/lesson/$lessonId'
     | '/admin/panel/_protected/blog/'
     | '/admin/panel/_protected/courses/'
+    | '/admin/panel/_protected/newsletter/'
     | '/admin/panel/_protected/users/'
     | '/admin/panel/_protected/blog/edit/$postId'
     | '/admin/panel/_protected/courses/builder/$courseId'
@@ -480,7 +505,8 @@ export interface RootRouteChildren {
   ResendVerificationRoute: typeof ResendVerificationRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
-  TeermsServiceRoute: typeof TeermsServiceRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -555,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student': {
       id: '/student'
       path: '/student'
@@ -562,11 +595,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/teerms-service': {
-      id: '/teerms-service'
-      path: '/teerms-service'
-      fullPath: '/teerms-service'
-      preLoaderRoute: typeof TeermsServiceRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-email': {
@@ -695,6 +728,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelProtectedCoursesCreateRouteImport
       parentRoute: typeof AdminPanelProtectedRouteRoute
     }
+    '/admin/panel/_protected/newsletter/': {
+      id: '/admin/panel/_protected/newsletter/'
+      path: '/newsletter'
+      fullPath: '/admin/panel/newsletter/'
+      preLoaderRoute: typeof AdminPanelProtectedNewsletterIndexRouteImport
+      parentRoute: typeof AdminPanelProtectedRouteRoute
+    }
     '/admin/panel/_protected/users/': {
       id: '/admin/panel/_protected/users/'
       path: '/users'
@@ -790,6 +830,7 @@ interface AdminPanelProtectedRouteRouteChildren {
   AdminPanelProtectedUsersCreateRoute: typeof AdminPanelProtectedUsersCreateRoute
   AdminPanelProtectedBlogIndexRoute: typeof AdminPanelProtectedBlogIndexRoute
   AdminPanelProtectedCoursesIndexRoute: typeof AdminPanelProtectedCoursesIndexRoute
+  AdminPanelProtectedNewsletterIndexRoute: typeof AdminPanelProtectedNewsletterIndexRoute
   AdminPanelProtectedUsersIndexRoute: typeof AdminPanelProtectedUsersIndexRoute
   AdminPanelProtectedBlogEditPostIdRoute: typeof AdminPanelProtectedBlogEditPostIdRoute
   AdminPanelProtectedCoursesBuilderCourseIdRoute: typeof AdminPanelProtectedCoursesBuilderCourseIdRoute
@@ -807,6 +848,8 @@ const AdminPanelProtectedRouteRouteChildren: AdminPanelProtectedRouteRouteChildr
     AdminPanelProtectedUsersCreateRoute: AdminPanelProtectedUsersCreateRoute,
     AdminPanelProtectedBlogIndexRoute: AdminPanelProtectedBlogIndexRoute,
     AdminPanelProtectedCoursesIndexRoute: AdminPanelProtectedCoursesIndexRoute,
+    AdminPanelProtectedNewsletterIndexRoute:
+      AdminPanelProtectedNewsletterIndexRoute,
     AdminPanelProtectedUsersIndexRoute: AdminPanelProtectedUsersIndexRoute,
     AdminPanelProtectedBlogEditPostIdRoute:
       AdminPanelProtectedBlogEditPostIdRoute,
@@ -834,7 +877,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResendVerificationRoute: ResendVerificationRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
-  TeermsServiceRoute: TeermsServiceRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,

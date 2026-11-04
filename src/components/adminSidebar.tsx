@@ -5,7 +5,12 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from '@/components/ui/sidebar'
-import { IconBook, IconCategory, IconSchool } from '@tabler/icons-react'
+import {
+  IconBook,
+  IconCategory,
+  IconMail,
+  IconSchool,
+} from '@tabler/icons-react'
 import { AdminSidebarMain } from './adminSidebarMain'
 import { NavUser } from './adminSidebarUser'
 
@@ -20,6 +25,12 @@ const data = {
       title: 'Blog',
       url: '/admin/panel/blog',
       icon: <IconCategory />,
+    },
+    {
+      title: 'Boletín',
+      url: '/admin/panel/newsletter',
+      roles: ['admin'],
+      icon: <IconMail />,
     },
     {
       title: 'usuarios',

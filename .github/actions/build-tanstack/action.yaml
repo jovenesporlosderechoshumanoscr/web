@@ -1,0 +1,36 @@
+name: Build tanstack
+description: Install dependencies with npm cache, build the tanstack site, and upload the dist artifact.
+
+inputs:
+  node-version:
+    description: Node.js version (e.g. `24.14`) to use for the build.
+    required: false
+    default: '24.14'
+  artifact-name:
+    description: Name to give the uploaded build artifact.
+    required: false
+    default: dist
+
+runs:
+  using: composite
+  steps:
+    - name: Setup PNPM
+      uses: pnpm/setup@v1
+      with:
+        version: 11
+        runtime: node@24.14.0
+        cache: true
+
+    - name: Install
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Build
+      run: pnpm build
+      shell: bash
+
+    - name: Upload dist
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: dist/

@@ -11,6 +11,7 @@ import type {
   DeleteCourseInput,
   DeleteLessonInput,
   DeleteModuleInput,
+  GenerateCertificateInput,
   MoveInput,
   SaveProgressInput,
   SubmitQuizInput,
@@ -246,5 +247,33 @@ export function useSubmitQuiz() {
     mutationFn: (input: SubmitQuizInput) =>
       courseMutations.submitQuiz({ data: input }),
     onSuccess: () => invalidate(),
+  })
+}
+
+/**
+ * Genera y descarga el certificado en PDF de un curso completado.
+ * El servidor devuelve el PDF en base64; aquí se decodifica y se dispara
+ * la descarga con un enlace temporal.
+ */
+export function useGenerateCertificate() {
+  return useMutation({
+    mutationFn: async (input: GenerateCertificateInput) => {
+      const { filename, base64 } = await courseMutations.generateCertificate({
+        data: input,
+      })
+
+      const blob = new Blob(
+        [Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))],
+        { type: 'application/pdf' },
+      )
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      link.click()
+      URL.revokeObjectURL(url)
+
+      return filename
+    },
   })
 }

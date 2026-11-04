@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { getRequestHeaders } from '@tanstack/react-start/server'
 import { and, asc, eq, inArray, sql } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
+import { generarCertificado } from '@/lib/certificate'
 import { db } from '@/server/db'
 import {
   course,
@@ -20,6 +21,7 @@ import {
   deleteCourseSchema,
   deleteLessonSchema,
   deleteModuleSchema,
+  generateCertificateSchema,
   moveSchema,
   saveProgressSchema,
   submitQuizSchema,
@@ -589,6 +591,57 @@ async function saveLessonProgressInternal(
   }
 }
 
+/**
+ * Genera el certificado en PDF de un curso completado. Valida en el servidor
+ * que el curso esté publicado y que el usuario haya terminado TODAS las
+ * lecciones antes de dibujar sobre la plantilla de R2.
+ * El PDF se cachea en R2 (MEDIA) con clave `certificados/{userId}/{courseId}.pdf`:
+ * si ya existe se devuelve directamente y solo se genera la primera vez,
+ * reduciendo el consumo de compute de Cloudflare.
+ * Devuelve el PDF en base64 para que el cliente lo descargue.
+ */
+const generateCertificate = createServerFn({ method: 'POST' })
+  .validator(generateCertificateSchema)
+  .handler(async ({ data }) => {
+    const session = await ensureSession()
+
+    const item = (
+      await db.select().from(course).where(eq(course.id, data.courseId))
+    ).at(0)
+    if (!item || item.status !== 'published') {
+      throw new Error('Curso no encontrado')
+    }
+
+    const state = await courseCompletionState(item.id, session.user.id)
+    if (!state.completed) {
+      throw new Error('Aún no has completado todas las lecciones del curso')
+    }
+
+    const { env } = await import('cloudflare:workers')
+    const key = `certificados/${session.user.id}/${item.id}.pdf`
+    const filename = `certificado-${item.slug}.pdf`
+
+    // Si el certificado ya fue generado para este usuario y curso, se
+    // devuelve el objeto almacenado sin volver a dibujar el PDF.
+    const cached = await env.MEDIA.get(key)
+    if (cached) {
+      return {
+        filename,
+        base64: Buffer.from(await cached.arrayBuffer()).toString('base64'),
+      }
+    }
+
+    const pdf = await generarCertificado(session.user.name, item.title)
+    await env.MEDIA.put(key, pdf, {
+      httpMetadata: { contentType: 'application/pdf' },
+    })
+
+    return {
+      filename,
+      base64: Buffer.from(pdf).toString('base64'),
+    }
+  })
+
 export const courseMutations = {
   createCourse,
   updateCourse,
@@ -603,4 +656,5 @@ export const courseMutations = {
   moveLesson,
   saveLessonProgress,
   submitQuiz,
+  generateCertificate,
 }

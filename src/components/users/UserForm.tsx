@@ -11,9 +11,6 @@ export type UserFormValues = {
   email: string;
   password: string;
   role: UserRole;
-  banned: boolean;
-  banReason: string;
-  banExpires: string;
 };
 
 type UserFormProps = {
@@ -22,9 +19,6 @@ type UserFormProps = {
     name: string | null;
     email: string;
     role: string | null;
-    banned: boolean | null;
-    banReason: string | null;
-    banExpires: Date | string | null;
   }>;
   isSubmitting?: boolean;
   serverError?: string | null;
@@ -33,19 +27,9 @@ type UserFormProps = {
     email: string;
     password?: string;
     role: UserRole;
-    banned: boolean;
-    banReason: string | null;
-    banExpires: Date | null;
   }) => void;
   onCancel?: () => void;
 };
-
-function toDateInputValue(value: Date | string | null | undefined): string {
-  if (!value) return "";
-  const d = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toISOString().slice(0, 10);
-}
 
 export function UserForm({
   mode,
@@ -60,9 +44,6 @@ export function UserForm({
     email: "",
     password: "",
     role: "student",
-    banned: false,
-    banReason: "",
-    banExpires: "",
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -73,12 +54,9 @@ export function UserForm({
         email: initialValues.email ?? "",
         password: "",
         role: (initialValues.role ?? "student") as UserRole,
-        banned: initialValues.banned ?? false,
-        banReason: initialValues.banReason ?? "",
-        banExpires: toDateInputValue(initialValues.banExpires),
       });
     }
-  }, [initialValues?.name, initialValues?.email, initialValues?.role, initialValues?.banned, initialValues?.banReason, initialValues?.banExpires]);
+  }, [initialValues?.name, initialValues?.email, initialValues?.role]);
 
   function set<TKey extends keyof UserFormValues>(
     key: TKey,
@@ -107,14 +85,11 @@ export function UserForm({
       email: values.email.trim(),
       ...(mode === "create" ? { password: values.password } : {}),
       role: values.role,
-      banned: values.banned,
-      banReason: values.banReason.trim() ? values.banReason.trim() : null,
-      banExpires: values.banExpires ? new Date(values.banExpires) : null,
     });
   }
 
   return (
-    <Card className="max-w-xl">
+    <Card className="mx-auto max-w-xl w-full">
       <CardHeader>
         <CardTitle>
           {mode === "create" ? "Crear usuario" : "Editar usuario"}
@@ -171,36 +146,6 @@ export function UserForm({
                 </option>
               ))}
             </select>
-          </div>
-
-          <label className="flex items-center gap-2 text-sm font-medium">
-            <input
-              type="checkbox"
-              checked={values.banned}
-              onChange={(e) => set("banned", e.target.checked)}
-              className="size-4"
-            />
-            Baneado
-          </label>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="banReason">Motivo del baneo (opcional)</Label>
-            <Input
-              id="banReason"
-              value={values.banReason}
-              onChange={(e) => set("banReason", e.target.value)}
-              placeholder="Motivo"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="banExpires">Expiración del baneo (opcional)</Label>
-            <Input
-              id="banExpires"
-              type="date"
-              value={values.banExpires}
-              onChange={(e) => set("banExpires", e.target.value)}
-            />
           </div>
 
           {(error || serverError) && (

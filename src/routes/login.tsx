@@ -1,5 +1,4 @@
 import { LoginForm } from '@/components/login-form'
-import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import { getSession } from '@/lib/auth.functions';
 import { createFileRoute, redirect } from '@tanstack/react-router'
@@ -26,7 +25,6 @@ return (
 				<LoginForm redirectTo="/student" />
 			</div>
 		</main>
-		<Footer />
 	</div>
 )
 

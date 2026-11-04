@@ -1,8 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { IconTrophy } from '@tabler/icons-react'
+import { IconCertificate, IconTrophy } from '@tabler/icons-react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useMyCourses } from '@/functions/course-client'
+import { useGenerateCertificate, useMyCourses } from '@/functions/course-client'
 
 export const Route = createFileRoute('/student/courses/')({
   component: RouteComponent,
@@ -11,6 +13,22 @@ export const Route = createFileRoute('/student/courses/')({
 function RouteComponent() {
   const query = useMyCourses()
   const items = query.data?.items ?? []
+  const certificate = useGenerateCertificate()
+
+  function handleGenerateCertificate(courseId: string) {
+    certificate.mutate(
+      { courseId },
+      {
+        onSuccess: () => toast.success('Certificado descargado'),
+        onError: (error) =>
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : 'No se pudo generar el certificado',
+          ),
+      },
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -61,6 +79,31 @@ function RouteComponent() {
                       </span>
                     )}
                   </div>
+                  {course.completed && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="self-start"
+                      disabled={certificate.isPending}
+                      onClick={(e) => {
+                        // Evita que el <Link> que envuelve la tarjeta navegue.
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleGenerateCertificate(course.id)
+                      }}
+                    >
+                      {certificate.isPending &&
+                      certificate.variables.courseId === course.id ? (
+                        'Generando…'
+                      ) : (
+                        <>
+                          <IconCertificate className="size-4" />
+                          Generar certificado
+                        </>
+                      )}
+                    </Button>
+                  )}
                   {course.description && (
                     <p className="line-clamp-2 text-sm text-muted-foreground">
                       {course.description}

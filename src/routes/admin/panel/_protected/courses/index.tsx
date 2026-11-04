@@ -165,28 +165,24 @@ function RouteComponent() {
                     <tr key={c.id} className="border-b last:border-0">
                       <td className="py-2 pr-4">{c.title}</td>
                       <td className="py-2 pr-4">
-                        <div className="flex items-center gap-1">
-                          <span>
-                            {c.status === 'published'
-                              ? 'Publicado'
-                              : 'Borrador'}
-                          </span>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            disabled={updateCourse.isPending}
-                            onClick={() => handleToggleStatus(c.id, c.status)}
-                          >
-                            {c.status === 'published'
-                              ? 'Despublicar'
-                              : 'Publicar'}
-                          </Button>
-                        </div>
+                        {c.status === 'published'
+                          ? 'Publicado'
+                          : 'Borrador'}
                       </td>
                       <td className="py-2 pr-4">
                         {new Date(c.updatedAt).toLocaleDateString()}
                       </td>
                       <td className="flex gap-2 py-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={updateCourse.isPending}
+                          onClick={() => handleToggleStatus(c.id, c.status)}
+                        >
+                          {c.status === 'published'
+                            ? 'Despublicar'
+                            : 'Publicar'}
+                        </Button>
                         <Link
                           to="/admin/panel/courses/builder/$courseId"
                           params={{ courseId: c.id }}
@@ -209,7 +205,14 @@ function RouteComponent() {
                         </Link>
                         <Button
                           size="sm"
-                          variant="destructive"
+                          variant={
+                            c.status === 'published' ? 'ghost' : 'destructive'
+                          }
+                          className={
+                            c.status === 'published'
+                              ? 'text-muted-foreground hover:text-destructive'
+                              : undefined
+                          }
                           disabled={deleteCourse.isPending}
                           onClick={() => handleDelete(c.id, c.title)}
                         >

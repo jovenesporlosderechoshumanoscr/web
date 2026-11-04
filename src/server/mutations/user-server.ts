@@ -2,10 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "@/lib/auth";
 import {
+  banUserSchema,
   changeEmailSchema,
   changePasswordSchema,
   createUserSchema,
   deleteUserSchema,
+  unbanUserSchema,
   updateProfileSchema,
   updateUserSchema,
 } from "@/server/validation/user";
@@ -91,9 +93,6 @@ const createUser = createServerFn({ method: "POST" })
         role: data.role,
         data: {
           emailVerified: true,
-          banned: data.banned,
-          banReason: data.banReason ?? null,
-          banExpires: data.banExpires,
         },
       },
     });
@@ -111,9 +110,6 @@ const updateUser = createServerFn({ method: "POST" })
     if (fields.name !== undefined) updateData.name = fields.name;
     if (fields.email !== undefined) updateData.email = fields.email;
     if (fields.role !== undefined) updateData.role = fields.role;
-    if (fields.banned !== undefined) updateData.banned = fields.banned;
-    if (fields.banReason !== undefined) updateData.banReason = fields.banReason;
-    if (fields.banExpires !== undefined) updateData.banExpires = fields.banExpires;
 
     if (Object.keys(updateData).length === 0) {
       throw new Error("Sin cambios para guardar");
@@ -125,6 +121,47 @@ const updateUser = createServerFn({ method: "POST" })
     });
 
     return result;
+  });
+
+/**
+ * Banea a un usuario. better-auth recibe la expiración como número de
+ * segundos (`banExpiresIn`); convertimos la fecha del modal.
+ */
+const banUser = createServerFn({ method: "POST" })
+  .validator(banUserSchema)
+  .handler(async ({ data }) => {
+    const headers = await ensureAdmin();
+
+    const banExpiresIn = data.banExpires
+      ? Math.max(
+          1,
+          Math.floor((data.banExpires.getTime() - Date.now()) / 1000),
+        )
+      : undefined;
+
+    await auth.api.banUser({
+      headers,
+      body: {
+        userId: data.id,
+        banReason: data.banReason ?? undefined,
+        banExpiresIn,
+      },
+    });
+
+    return { id: data.id };
+  });
+
+const unbanUser = createServerFn({ method: "POST" })
+  .validator(unbanUserSchema)
+  .handler(async ({ data }) => {
+    const headers = await ensureAdmin();
+
+    await auth.api.unbanUser({
+      headers,
+      body: { userId: data.id },
+    });
+
+    return { id: data.id };
   });
 
 const deleteUser = createServerFn({ method: "POST" })
@@ -204,6 +241,8 @@ export const userMutations = {
   createUser,
   updateUser,
   deleteUser,
+  banUser,
+  unbanUser,
   updateProfile,
   changeEmail,
   changePassword,
