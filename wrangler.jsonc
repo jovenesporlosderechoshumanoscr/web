@@ -7,7 +7,7 @@
 	],
 	"main": "@tanstack/react-start/server-entry",
 	"vars": {
-		"BETTER_AUTH_URL": "http://localhost:3000",
+		"BETTER_AUTH_URL": "https://jovenesporlosderechoshumanoscr.org",
 		"EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
 	},
 	"send_email": [

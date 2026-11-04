@@ -24,4 +24,4 @@ export const relations = defineRelations(schema, (r) => ({
 
 
 
-export const db = drizzle(env.test_jpdh, { relations });
+export const db = drizzle(env.jpdhdb, { relations });
