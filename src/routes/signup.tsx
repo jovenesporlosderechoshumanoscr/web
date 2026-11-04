@@ -1,5 +1,4 @@
 import { SignupForm } from '@/components/signup-form'
-import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import { getSession } from '@/lib/auth.functions';
 import { createFileRoute, redirect } from '@tanstack/react-router'
