@@ -21,9 +21,7 @@ export async function sendEmail({ to, from, subject, body, text, attachment }:
 		return response
 	}
 
-	// Se lee como opcional: en local la var puede no estar definida aunque el tipado generado la marque requerida.
-	const EMAIL_FROM: string = (process.env as Record<string, string | undefined>).EMAIL_FROM
-		?? "JPDH <no-reply@jpdh.com>"
+	const EMAIL_FROM = process.env.BETTER_AUTH_URL
 
 	export async function sendVerificationEmail({
 		to,
