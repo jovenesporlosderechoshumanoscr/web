@@ -53,7 +53,7 @@ export const Route = createFileRoute('/sitemap.xml')({
     .map(
       (post) => `
   <url>
-    <loc>https://myapp.com/posts/${post.slug}</loc>
+    <loc>https://myapp.com/blog/${post.slug}</loc>
     <lastmod>${post.updatedAt}</lastmod>
     <changefreq>weekly</changefreq>
   </url>`,
