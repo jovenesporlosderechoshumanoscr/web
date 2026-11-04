@@ -23,8 +23,8 @@
 	],
 	"d1_databases": [
 		{
-			"binding": "test_jpdh",
-			"database_name": "test-jpdh",
+			"binding": "jpdhdb",
+			"database_name": "jpdhdb",
 			"database_id": "16efb987-7543-4ca6-895a-1cc9e29ab2cd",
 			"migrations_dir": "drizzle",
 			"migrations_pattern": "drizzle/*/migration.sql"

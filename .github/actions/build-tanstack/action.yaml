@@ -1,5 +1,5 @@
 name: Build tanstack
-description: Install dependencies with npm cache, build the tanstack site, and upload the dist artifact.
+description: Install dependencies with pnpm cache, build the tanstack site, and upload the dist artifact.
 
 inputs:
   node-version:
