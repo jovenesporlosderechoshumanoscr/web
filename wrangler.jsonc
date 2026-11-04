@@ -10,7 +10,11 @@
 		"BETTER_AUTH_URL": "http://localhost:3000",
 		"EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
 	},
-	"send_email": [{"name":"EMAIL"}],
+	"send_email": [
+		{
+			"name": "EMAIL"
+		}
+	],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
@@ -25,7 +29,7 @@
 		{
 			"binding": "jpdhdb",
 			"database_name": "jpdhdb",
-			"database_id": "16efb987-7543-4ca6-895a-1cc9e29ab2cd",
+			"database_id": "e525603f-0a8f-45bd-a33b-d8a618512328",
 			"migrations_dir": "drizzle",
 			"migrations_pattern": "drizzle/*/migration.sql"
 		}
