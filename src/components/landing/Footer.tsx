@@ -8,14 +8,19 @@ import {
 
 export const footerContent = {
   logo: 'JPDH',
-  tagline: 'Justicia, comunidad y dignidad.',
+  tagline:
+    '«No basta con que los derechos humanos estén escritos. Es necesario que las personas los conozcan, los comprendan y los hagan parte de su vida».',
   links: [
-    { label: 'Sobre nosotros', href: '/about' },
-    { label: 'Conctacto', href: '/contact' },
-    { label: 'blog', href: '/blog' },
+    { label: 'Inicio', href: '/' },
+    { label: 'Quiénes somos', href: '/about' },
+    { label: 'Nuestro propósito', href: '/purpose' },
+    { label: 'Qué hacemos', href: '/what-we-do' },
+    { label: 'Ley 10030', href: '/ley-10030' },
+    { label: 'Noticias', href: '/blog' },
+    { label: 'Contacto', href: '/contact' },
     { label: 'Zona estudiantes', href: '/student' },
-	{ label: 'Terminos', href: '/terms'},
-	{ label: 'Privacidad', href: '/privacy'}
+    { label: 'Términos', href: '/terms' },
+    { label: 'Privacidad', href: '/privacy' },
   ],
   socials: [
     { label: 'X', href: '#', Icon: IconBrandX },
@@ -23,7 +28,8 @@ export const footerContent = {
     { label: 'Facebook', href: '#', Icon: IconBrandFacebook },
     { label: 'YouTube', href: '#', Icon: IconBrandYoutube },
   ],
-  legal: '© 2026 JPDH. Todos los derechos reservados.',
+  legal:
+    '© 2026 Jóvenes por los Derechos Humanos Costa Rica. Todos los derechos reservados.',
 } as const
 
 export default function Footer() {
@@ -32,7 +38,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-		  	<img src="/logojpdh.webp" alt="JPDH" className="h-18 w-auto" />
+            <img src="/logojpdh.webp" alt="JPDH" className="h-18 w-auto" />
             <p className="mt-2 text-sm text-muted-foreground">
               {footerContent.tagline}
             </p>

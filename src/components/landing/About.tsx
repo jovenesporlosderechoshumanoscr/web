@@ -3,15 +3,15 @@ import { IconArrowRight } from '@tabler/icons-react'
 
 export const aboutContent = {
   eyebrow: 'Quiénes somos',
-  title: 'Una comunidad que defiende la dignidad',
+  title:
+    'Una organización sin fines de lucro dedicada a la educación en derechos humanos',
   paragraphs: [
-    'Somos una organización dedicada a acompañar procesos comunitarios de justicia social, fortaleciendo liderazgos locales y creando redes de apoyo mutuo en cada territorio donde trabajamos.',
-    'Creemos que la transformación sostenible nace de la escucha, la memoria y la acción colectiva. Por eso articulamos formación, incidencia y cuidado comunitario.',
+    'Somos parte del movimiento mundial Youth for Human Rights International (YHRI), fundado en 2001 por la Dra. Mary Shuttleworth, con 15 años de trabajo en Costa Rica.',
   ],
-  link: { label: 'Conoce más', href: '/about' },
+  link: { label: 'Conoce quiénes somos', href: '/about' },
   image: {
     src: 'https://placehold.co/800x1000',
-    alt: 'Integrantes de la comunidad reunidos en asamblea',
+    alt: 'Integrantes de Jóvenes por los Derechos Humanos Costa Rica en una actividad educativa',
   },
 } as const
 
@@ -34,7 +34,10 @@ export default function About() {
             {aboutContent.title}
           </h2>
           {aboutContent.paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)} className="mt-5 text-muted-foreground">
+            <p
+              key={paragraph.slice(0, 24)}
+              className="mt-5 text-muted-foreground"
+            >
               {paragraph}
             </p>
           ))}

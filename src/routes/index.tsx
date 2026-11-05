@@ -3,9 +3,12 @@ import About from '@/components/landing/About'
 import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import Hero from '@/components/landing/Hero'
-import Newsletter from '@/components/landing/Newsletter'
-import Resources from '@/components/landing/Resources'
+import JoinUs from '@/components/landing/JoinUs'
+import Law from '@/components/landing/Law'
+import NewsSummary from '@/components/landing/NewsSummary'
+import Purpose from '@/components/landing/Purpose'
 import Stats from '@/components/landing/Stats'
+import WhatWeDo from '@/components/landing/WhatWeDo'
 
 export const Route = createFileRoute('/')({ component: LandingPage })
 
@@ -15,10 +18,13 @@ function LandingPage() {
       <Header />
       <main>
         <Hero />
-        <Stats />
         <About />
-        <Resources />
-        <Newsletter />
+        <Purpose />
+        <WhatWeDo />
+        <Law />
+        <Stats />
+        <NewsSummary />
+        <JoinUs />
       </main>
       <Footer />
     </div>

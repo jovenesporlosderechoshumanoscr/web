@@ -1,20 +1,21 @@
+import { Link } from '@tanstack/react-router'
 import { IconArrowRight } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 
 export const heroContent = {
-  titleLead: 'Centrando la',
-  titleBoldA: 'experiencia local',
-  titleMid: 'para crear',
-  titleBoldB: 'justicia sostenible',
+  titleLead: '15 años',
+  titleBoldA: 'educando',
+  titleMid: 'para hacer de los',
+  titleBoldB: 'derechos humanos',
+  titleEnd: 'una realidad en Costa Rica',
   subtitle:
-    'Acompañamos a comunidades y organizaciones en la defensa de sus derechos con formación, acción colectiva y memoria.',
-  primaryCta: { label: 'Conoce nuestro trabajo', href: '#trabajo' },
-  secondaryCta: { label: 'Centro de acción', href: '#accion' },
+    'Trabajamos para que cada persona conozca, comprenda y ejerza sus derechos humanos. A través de la educación, inspiramos a niños, jóvenes y adultos a construir una sociedad donde la dignidad, el respeto, la libertad y la paz sean parte de nuestra vida cotidiana.',
+  primaryCta: { label: 'Qué hacemos', href: '/what-we-do' },
   image: {
     src: '/heroimg.webp',
-    alt: 'Retrato de una lideresa comunitaria sonriendo',
+    alt: 'Niños y jóvenes participantes de una actividad educativa de Jóvenes por los Derechos Humanos Costa Rica',
   },
-  stampText: 'JUSTICIA • COMUNIDAD • DIGNIDAD • ',
+  stampText: 'EDUCACIÓN • DIGNIDAD • PAZ • ',
 } as const
 
 function Stamp() {
@@ -56,7 +57,8 @@ export default function Hero() {
             {heroContent.titleLead}{' '}
             <strong className="font-bold">{heroContent.titleBoldA}</strong>{' '}
             {heroContent.titleMid}{' '}
-            <strong className="font-bold">{heroContent.titleBoldB}</strong>
+            <strong className="font-bold">{heroContent.titleBoldB}</strong>{' '}
+            {heroContent.titleEnd}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
             {heroContent.subtitle}
@@ -66,21 +68,10 @@ export default function Hero() {
               size="lg"
               nativeButton={false}
               render={
-                <a href={heroContent.primaryCta.href}>
+                <Link to={heroContent.primaryCta.href}>
                   {heroContent.primaryCta.label}
                   <IconArrowRight aria-hidden="true" />
-                </a>
-              }
-            />
-
-            <Button
-              size="lg"
-              variant="outline"
-              nativeButton={false}
-              render={
-                <a href={heroContent.secondaryCta.href}>
-                  {heroContent.secondaryCta.label}
-                </a>
+                </Link>
               }
             />
           </div>
