@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AprendeRouteImport } from './routes/aprende'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ImpactoRouteImport } from './routes/impacto'
@@ -60,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AprendeRoute = AprendeRouteImport.update({
+  id: '/aprende',
+  path: '/aprende',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -284,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/aprende': typeof AprendeRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/impacto': typeof ImpactoRoute
@@ -327,6 +334,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/aprende': typeof AprendeRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/impacto': typeof ImpactoRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/aprende': typeof AprendeRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/impacto': typeof ImpactoRoute
@@ -416,6 +425,7 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
+    | '/aprende'
     | '/contact'
     | '/forgot-password'
     | '/impacto'
@@ -459,6 +469,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/aprende'
     | '/contact'
     | '/forgot-password'
     | '/impacto'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
+    | '/aprende'
     | '/contact'
     | '/forgot-password'
     | '/impacto'
@@ -546,6 +558,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudentRouteRoute: typeof StudentRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AprendeRoute: typeof AprendeRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   ImpactoRoute: typeof ImpactoRoute
@@ -582,6 +595,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aprende': {
+      id: '/aprende'
+      path: '/aprende'
+      fullPath: '/aprende'
+      preLoaderRoute: typeof AprendeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -950,6 +970,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudentRouteRoute: StudentRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AprendeRoute: AprendeRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   ImpactoRoute: ImpactoRoute,

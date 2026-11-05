@@ -5,6 +5,7 @@ import Header from '@/components/landing/Header'
 import Hero from '@/components/landing/Hero'
 import JoinUs from '@/components/landing/JoinUs'
 import Law from '@/components/landing/Law'
+import Learn from '@/components/landing/Learn'
 import NewsSummary from '@/components/landing/NewsSummary'
 import Purpose from '@/components/landing/Purpose'
 import Stats from '@/components/landing/Stats'
@@ -22,6 +23,7 @@ function LandingPage() {
         <Purpose />
         <WhatWeDo />
         <Law />
+        <Learn />
         <Stats />
         <NewsSummary />
         <JoinUs />
