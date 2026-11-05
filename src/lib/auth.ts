@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/server/email";
-import { betterAuth } from "better-auth";
+import { betterAuth } from "better-auth/minimal";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin as adminPlugin } from "better-auth/plugins/admin";
 import { ac, admin, editor, student } from "@/lib/permission";

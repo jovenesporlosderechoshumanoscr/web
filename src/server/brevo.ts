@@ -3,15 +3,16 @@ import { EmailCampaignsClient } from '@getbrevo/brevo/emailCampaigns'
 import { env } from 'cloudflare:workers'
 
 /**
- * Cliente de la API de Brevo (SDK oficial @getbrevo/brevo v6).
+ * Integración con la API de Brevo usando el SDK oficial `@getbrevo/brevo`.
  *
- * - Usa `fetch` nativo y no tiene dependencias: funciona en Workers.
- * - Subpaths (`/contacts`, `/emailCampaigns`) para no bundlear el resto.
- * - Retries automáticos (2 por defecto) con timeout de 30s.
+ * - Solo funciones: cada llamada crea su cliente bajo demanda, sin clases
+ *   ni estado compartido.
+ * - Subpaths (`/contacts`, `/emailCampaigns`) para no bundlear el resto del SDK.
+ * - Los errores de la API se traducen a `Error` con `status` (código HTTP) y
+ *   mensaje en español; los problemas de configuración llevan `code`.
  *
- * En desarrollo no se contacta con Brevo (ver `withDevGuard`).
- * En producción la API key se guarda como secreto:
- *   wrangler secret put BREVO_API_KEY
+ * La API key va como secreto en producción (`wrangler secret put BREVO_API_KEY`)
+ * y el resto de variables (lista, remitente, plantilla DOI...) en `.env`.
  */
 
 interface BrevoConfig {
@@ -22,13 +23,23 @@ interface BrevoConfig {
   replyTo: string
   doiTemplateId: number
   doiRedirectUrl: string
-  dailyLimit: number
 }
-const isProduction = import.meta.env.PROD
 
-export function getBrevoConfig(): BrevoConfig | null {
-  const apiKey = env.BREVO_API_KEY
-  if (!apiKey) return null
+/** `Error` enriquecido: `status` = código HTTP de Brevo, `code` = variable de entorno faltante. */
+export type BrevoApiError = Error & { status?: number; code?: string }
+
+function configError(code: string, message: string): Error {
+  const error = new Error(message) as BrevoApiError
+  error.code = code
+  return error
+}
+
+/** Lee la configuración del boletín desde el entorno. Lanza si falta la API key. */
+function getBrevoConfig(): BrevoConfig {
+  const apiKey = env.BREVO_API_KEY || process.env.BREVO_API_KEY
+  if (!apiKey) {
+    throw configError('BREVO_API_KEY', 'BREVO_API_KEY no está configurada.')
+  }
 
   return {
     apiKey,
@@ -39,36 +50,53 @@ export function getBrevoConfig(): BrevoConfig | null {
     doiTemplateId: Number(process.env.BREVO_DOI_TEMPLATE_ID ?? 0),
     doiRedirectUrl:
       process.env.BREVO_DOI_REDIRECT_URL ?? 'https://jpdh.com/?newsletter=ok',
-    dailyLimit: Number(process.env.BREVO_DAILY_LIMIT ?? 300),
   }
 }
 
-export class BrevoError extends Error {
-  status: number
-
-  constructor(status: number, message: string) {
-    super(message)
-    this.status = status
+/** Devuelve el id de la lista del boletín o lanza si no está configurada. */
+function requireListId(config: BrevoConfig): number {
+  if (config.listId === 0) {
+    throw configError('BREVO_LIST_ID', 'BREVO_LIST_ID no está configurada.')
   }
+  return config.listId
 }
 
-/**
- * Traduce errores HTTP de Brevo a mensajes comprensibles.
- * El SDK lanza su propia `BrevoError` con `statusCode` y `body`;
- * se detecta por duck-typing para no importar la entrada principal del SDK.
- */
-function toBrevoError(error: unknown): BrevoError {
-  if (error instanceof BrevoError) return error
+/** Código HTTP de un error traducido por este módulo (`status`), o null. */
+function brevoErrorStatus(error: unknown): number | null {
+  const status = (error as { status?: unknown } | null)?.status
+  return typeof status === 'number' ? status : null
+}
 
-  const statusCode =
+/** ¿El error indica que la lista del boletín no existe o no está configurada? */
+export function isMissingBrevoList(error: unknown): boolean {
+  return (
+    (error as { code?: string } | null)?.code === 'BREVO_LIST_ID' ||
+    brevoErrorStatus(error) === 404
+  )
+}
+
+/** Traduce un error del SDK a `Error` con mensaje comprensible y `status`. */
+function toBrevoError(error: unknown): Error {
+  const status =
     (error as { statusCode?: number } | null)?.statusCode ?? 500
   let message = 'error desconocido'
-  const body = (error as { body?: { message?: string } } | null)?.body
-  if (body && 'message' in body) {
-    message = body.message ?? message
+  const body = (error as { body?: unknown } | null)?.body
+  if (body && typeof body === 'object' && 'message' in body) {
+    message = (body as { message?: string }).message ?? message
   }
-  console.error('[brevo] Error HTTP:', statusCode, message)
-  return new BrevoError(statusCode, describeBrevoError(statusCode, message))
+  console.error('[brevo] Error HTTP:', status, message)
+  const translated = new Error(describeBrevoError(status, message)) as BrevoApiError
+  translated.status = status
+  return translated
+}
+
+/** Ejecuta una llamada a la API y traduce sus errores. */
+async function withBrevoErrors<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run()
+  } catch (error) {
+    throw toBrevoError(error)
+  }
 }
 
 function describeBrevoError(status: number, message: string): string {
@@ -91,7 +119,7 @@ function describeBrevoError(status: number, message: string): string {
   }
 }
 
-/** Clientes del SDK, uno por recurso, creados bajo demanda. */
+/** Clientes del SDK, creados por llamada: usan `fetch` nativo y sirven en Workers. */
 function contactsClient(config: BrevoConfig): ContactsClient {
   return new ContactsClient({
     apiKey: config.apiKey,
@@ -104,34 +132,6 @@ function campaignsClient(config: BrevoConfig): EmailCampaignsClient {
     apiKey: config.apiKey,
     timeoutInSeconds: 30,
   })
-}
-
-/**
- * Guard de entorno: en desarrollo no se contacta con Brevo.
- * Devuelve el resultado simulado en dev, o ejecuta la acción real en prod.
- */
-export async function withDevGuard<T>(
-  payload: Record<string, unknown>,
-  simulated: () => T,
-  real: (config: BrevoConfig) => Promise<T>,
-): Promise<T> {
-  if (!isProduction) {
-    console.info(
-      '[brevo] Modo desarrollo: no se contacta con Brevo.',
-      JSON.stringify(payload),
-    )
-    return simulated()
-  }
-
-  const config = getBrevoConfig()
-  if (!config) {
-    throw new BrevoError(500, 'BREVO_API_KEY no está configurada.')
-  }
-  try {
-    return await real(config)
-  } catch (error) {
-    throw toBrevoError(error)
-  }
 }
 
 /* ------------------------------- Tipos ------------------------------- */
@@ -163,13 +163,109 @@ export interface BrevoCampaign {
   recipients?: { lists?: number[] }
 }
 
-/* ------------------------- Listas y estadísticas ------------------------- */
+/* --------------------------- Suscripción --------------------------- */
 
-export async function fetchListInfo(
+/**
+ * Doble opt-in: Brevo envía el correo de confirmación desde una plantilla
+ * configurada en su panel y añade el contacto a la lista al confirmar.
+ */
+export async function sendDoubleOptInEmail(email: string): Promise<void> {
+  const config = getBrevoConfig()
+  const listId = requireListId(config)
+  if (config.doiTemplateId === 0) {
+    throw configError(
+      'BREVO_DOI_TEMPLATE_ID',
+      'BREVO_DOI_TEMPLATE_ID no está configurada.',
+    )
+  }
+
+  await withBrevoErrors(() =>
+    contactsClient(config).createDoiContact({
+      email,
+      includeListIds: [listId],
+      templateId: config.doiTemplateId,
+      redirectionUrl: config.doiRedirectUrl,
+    }),
+  )
+}
+
+/* ----------------------------- Campañas ----------------------------- */
+
+/** Crea un borrador de campaña para la lista del boletín y devuelve su id. */
+async function createDraft(
   config: BrevoConfig,
-  listId: number,
-): Promise<BrevoListInfo> {
-  const response = await contactsClient(config).getList({ listId })
+  params: { subject: string; previewText: string; htmlContent: string },
+): Promise<number> {
+  const response = await campaignsClient(config).createEmailCampaign({
+    name: `Boletín - ${new Date().toISOString().slice(0, 10)} - ${params.subject}`.slice(
+      0,
+      120,
+    ),
+    sender: {
+      name: config.senderName,
+      email: config.senderEmail,
+    },
+    replyTo: config.replyTo,
+    subject: params.subject,
+    previewText: params.previewText,
+    htmlContent: params.htmlContent,
+    recipients: config.listId === 0 ? undefined : { listIds: [config.listId] },
+  })
+  return response.id
+}
+
+/**
+ * Envío de prueba: crea un borrador, lo envía al email indicado
+ * (máx. 50/día según Brevo) y borra el borrador para no acumular campañas.
+ */
+export async function sendNewsletterTest(params: {
+  subject: string
+  previewText: string
+  htmlContent: string
+  to: string
+}): Promise<void> {
+  const config = getBrevoConfig()
+
+  await withBrevoErrors(async () => {
+    const campaignId = await createDraft(config, params)
+    try {
+      await campaignsClient(config).sendTestEmail({
+        campaignId,
+        body: { emailTo: [params.to] },
+      })
+    } finally {
+      // El borrador de prueba no tiene valor una vez enviada la prueba.
+      await campaignsClient(config)
+        .deleteEmailCampaign({ campaignId })
+        .catch(() => undefined)
+    }
+  })
+}
+
+/** Envío real a la lista del boletín. */
+export async function sendNewsletter(params: {
+  subject: string
+  previewText: string
+  htmlContent: string
+}): Promise<void> {
+  const config = getBrevoConfig()
+  requireListId(config)
+
+  await withBrevoErrors(async () => {
+    const campaignId = await createDraft(config, params)
+    await campaignsClient(config).sendEmailCampaignNow({ campaignId })
+  })
+}
+
+/* ------------------------- Lecturas (panel admin) ------------------------- */
+
+export async function fetchListInfo(): Promise<BrevoListInfo> {
+  const config = getBrevoConfig()
+  const listId = requireListId(config)
+
+  const response = await withBrevoErrors(() =>
+    contactsClient(config).getList({ listId }),
+  )
   return {
     id: response.id,
     name: response.name,
@@ -178,27 +274,18 @@ export async function fetchListInfo(
   }
 }
 
-export async function fetchRecentCampaigns(
-  config: BrevoConfig,
-): Promise<BrevoCampaign[]> {
-  const response = await campaignsClient(config).getEmailCampaigns({
-    limit: 10,
-    offset: 0,
-    sort: 'desc',
-    excludeHtmlContent: true,
-  })
-  return (response.campaigns ?? []).map(mapCampaign)
-}
+export async function fetchRecentCampaigns(): Promise<BrevoCampaign[]> {
+  const config = getBrevoConfig()
 
-export async function fetchCampaignById(
-  config: BrevoConfig,
-  campaignId: number,
-): Promise<BrevoCampaign> {
-  const response = await campaignsClient(config).getEmailCampaign({
-    campaignId,
-    excludeHtmlContent: true,
-  })
-  return mapCampaign(response)
+  const response = await withBrevoErrors(() =>
+    campaignsClient(config).getEmailCampaigns({
+      limit: 10,
+      offset: 0,
+      sort: 'desc',
+      excludeHtmlContent: true,
+    }),
+  )
+  return (response.campaigns ?? []).map(mapCampaign)
 }
 
 function mapCampaign(campaign: {
@@ -230,103 +317,4 @@ function mapCampaign(campaign: {
     statistics: campaign.statistics,
     recipients: campaign.recipients,
   }
-}
-
-/* ------------------------------- Contactos ------------------------------- */
-
-/**
- * Doble opt-in. El endpoint `/contacts/doubleOptinConfirmation` está
- * implementado en el SDK pero no aparece en sus tipos, así que se llama
- * con `fetch` directamente.
- */
-export async function sendDoubleOptInEmail(
-  config: BrevoConfig,
-  email: string,
-): Promise<void> {
-  const response = await fetch(
-    'https://api.brevo.com/v3/contacts/doubleOptinConfirmation',
-    {
-      method: 'POST',
-      headers: {
-        'api-key': config.apiKey,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        includeListIds: [config.listId],
-        templateId: config.doiTemplateId,
-        redirectionUrl: config.doiRedirectUrl,
-      }),
-    },
-  )
-
-  if (!response.ok) {
-    let message = 'error desconocido'
-    try {
-      const payload: { message?: string } = await response.json()
-      message = payload.message ?? message
-    } catch {
-      // Respuesta sin cuerpo JSON.
-    }
-    console.error('[brevo] Error HTTP:', response.status, message)
-    throw new BrevoError(
-      response.status,
-      describeBrevoError(response.status, message),
-    )
-  }
-}
-
-/* ------------------------------- Campañas ------------------------------- */
-
-export async function createCampaign(
-  config: BrevoConfig,
-  params: {
-    subject: string
-    previewText: string
-    htmlContent: string
-    listId: number
-  },
-): Promise<{ id: number }> {
-  const response = await campaignsClient(config).createEmailCampaign({
-    name: `Boletín - ${new Date().toISOString().slice(0, 10)} - ${params.subject}`.slice(
-      0,
-      120,
-    ),
-    sender: {
-      name: config.senderName,
-      email: config.senderEmail,
-    },
-    replyTo: config.replyTo,
-    subject: params.subject,
-    previewText: params.previewText,
-    htmlContent: params.htmlContent,
-    recipients: { listIds: [params.listId] },
-  })
-  return { id: response.id }
-}
-
-export async function sendTestCampaign(
-  config: BrevoConfig,
-  campaignId: number,
-  emailTo: string[],
-): Promise<void> {
-  await campaignsClient(config).sendTestEmail({
-    campaignId,
-    body: { emailTo },
-  })
-}
-
-export async function sendCampaignNow(
-  config: BrevoConfig,
-  campaignId: number,
-): Promise<void> {
-  await campaignsClient(config).sendEmailCampaignNow({ campaignId })
-}
-
-export async function deleteCampaign(
-  config: BrevoConfig,
-  campaignId: number,
-): Promise<void> {
-  await campaignsClient(config).deleteEmailCampaign({ campaignId })
 }

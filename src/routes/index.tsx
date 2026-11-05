@@ -7,6 +7,7 @@ import JoinUs from '@/components/landing/JoinUs'
 import Law from '@/components/landing/Law'
 import Learn from '@/components/landing/Learn'
 import NewsSummary from '@/components/landing/NewsSummary'
+import Newsletter from '@/components/landing/Newsletter'
 import Purpose from '@/components/landing/Purpose'
 import Stats from '@/components/landing/Stats'
 import WhatWeDo from '@/components/landing/WhatWeDo'
@@ -28,6 +29,7 @@ function LandingPage() {
         <NewsSummary />
         <JoinUs />
       </main>
+      <Newsletter />
       <Footer />
     </div>
   )
