@@ -10,16 +10,11 @@ export const subscribeSchema = z.object({
 
 export type SubscribeInput = z.infer<typeof subscribeSchema>
 
-export const sendTestSchema = z.object({
+export const sendCampaignSchema = z.object({
   subject: z.string().trim().min(3, 'El asunto es muy corto').max(150),
   previewText: z.string().trim().max(150),
   content: z.string().trim().min(10, 'El cuerpo es muy corto').max(20_000),
-  testEmail: z.string().trim().email('Email de prueba inválido').max(255),
 })
-
-export type SendTestInput = z.infer<typeof sendTestSchema>
-
-export const sendCampaignSchema = sendTestSchema.omit({ testEmail: true })
 
 export type SendCampaignInput = z.infer<typeof sendCampaignSchema>
 

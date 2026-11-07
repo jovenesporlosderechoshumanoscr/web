@@ -214,34 +214,6 @@ async function createDraft(
   return response.id
 }
 
-/**
- * Envío de prueba: crea un borrador, lo envía al email indicado
- * (máx. 50/día según Brevo) y borra el borrador para no acumular campañas.
- */
-export async function sendNewsletterTest(params: {
-  subject: string
-  previewText: string
-  htmlContent: string
-  to: string
-}): Promise<void> {
-  const config = getBrevoConfig()
-
-  await withBrevoErrors(async () => {
-    const campaignId = await createDraft(config, params)
-    try {
-      await campaignsClient(config).sendTestEmail({
-        campaignId,
-        body: { emailTo: [params.to] },
-      })
-    } finally {
-      // El borrador de prueba no tiene valor una vez enviada la prueba.
-      await campaignsClient(config)
-        .deleteEmailCampaign({ campaignId })
-        .catch(() => undefined)
-    }
-  })
-}
-
 /** Envío real a la lista del boletín. */
 export async function sendNewsletter(params: {
   subject: string

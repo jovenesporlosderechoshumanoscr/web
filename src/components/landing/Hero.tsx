@@ -3,12 +3,12 @@ import { IconArrowRight } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 
 export const heroContent = {
-  titleLead: '15 años',
-  titleBoldA: 'educando',
-  titleMid: 'para hacer de los',
-  titleBoldB: 'derechos humanos',
-  titleEnd: 'una realidad en Costa Rica',
+  titleLead: 'Jóvenes por los',
+  titleBoldA: 'Derechos Humanos',
+  titleEnd: 'Costa Rica',
   subtitle:
+    '15 años educando para hacer de los derechos humanos una realidad en Costa Rica.',
+  description:
     'Trabajamos para que cada persona conozca, comprenda y ejerza sus derechos humanos. A través de la educación, inspiramos a niños, jóvenes y adultos a construir una sociedad donde la dignidad, el respeto, la libertad y la paz sean parte de nuestra vida cotidiana.',
   primaryCta: { label: 'Qué hacemos', href: '/what-we-do' },
   image: {
@@ -55,13 +55,14 @@ export default function Hero() {
             className="text-4xl leading-tight font-light tracking-tight uppercase sm:text-5xl lg:text-6xl"
           >
             {heroContent.titleLead}{' '}
-            <strong className="font-bold">{heroContent.titleBoldA}</strong>{' '}
-            {heroContent.titleMid}{' '}
-            <strong className="font-bold">{heroContent.titleBoldB}</strong>{' '}
-            {heroContent.titleEnd}
+            <strong className="font-bold">{heroContent.titleBoldA}</strong>
+            , {heroContent.titleEnd}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
+          <p className="mt-6 max-w-xl text-base text-foreground sm:text-lg">
             {heroContent.subtitle}
+          </p>
+          <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
+            {heroContent.description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button

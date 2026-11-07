@@ -1,18 +1,13 @@
 import { createServerFn } from '@tanstack/react-start'
 import { getRequestHeaders } from '@tanstack/react-start/server'
 import { auth } from '@/lib/auth'
-import {
-	sendDoubleOptInEmail,
-	sendNewsletter,
-	sendNewsletterTest,
-} from '@/server/brevo'
+import { sendDoubleOptInEmail, sendNewsletter } from '@/server/brevo'
 import {
 	renderNewsletterHtml,
 	validateNewsletterInput,
 } from '@/server/newsletter-template'
 import {
 	sendCampaignSchema,
-	sendTestSchema,
 	subscribeSchema,
 } from '@/server/validation/newsletter'
 
@@ -37,39 +32,6 @@ const subscribe = createServerFn({ method: 'POST' })
 		} catch (err) {
 			console.log(err)
 		}
-		return { ok: true as const }
-	})
-
-/**
- * Envío de prueba al email indicado (máx. 50/día según Brevo).
- */
-const sendTest = createServerFn({ method: 'POST' })
-	.validator(sendTestSchema)
-	.handler(async ({ data }) => {
-		const session = await ensureAdmin()
-		const invalid = validateNewsletterInput(data)
-		if (invalid) throw new Error(invalid)
-
-		const html = renderNewsletterHtml({
-			content: data.content,
-			previewText: data.previewText,
-		})
-
-		await sendNewsletterTest({
-			subject: data.subject,
-			previewText: data.previewText,
-			htmlContent: html,
-			to: data.testEmail,
-		})
-
-		console.info(
-			'[brevo] Prueba enviada:',
-			data.subject,
-			'→',
-			data.testEmail,
-			'por',
-			session.user.email,
-		)
 		return { ok: true as const }
 	})
 
@@ -109,6 +71,5 @@ async function ensureAdmin() {
 
 export const newsletterMutations = {
 	subscribe,
-	sendTest,
 	sendCampaign,
 }

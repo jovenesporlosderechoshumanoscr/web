@@ -30,6 +30,21 @@ export const Route = createFileRoute('/sitemap.xml')({
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://jovenesporlosderechoshumanoscr.org/purpose</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jovenesporlosderechoshumanoscr.org/what-we-do</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jovenesporlosderechoshumanoscr.org/ley-10030</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jovenesporlosderechoshumanoscr.org/contact</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>

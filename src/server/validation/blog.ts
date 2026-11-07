@@ -25,11 +25,22 @@ export const slugSchema = z
 
 export const postStatusSchema = z.enum(POST_STATUSES)
 
+/** Opciones de espaciado vertical de un bloque (margen inferior). */
+export const BLOCK_SPACINGS = ['none', 'sm', 'md', 'lg', 'xl'] as const
+export type BlockSpacing = (typeof BLOCK_SPACINGS)[number]
+
+const blockSpacingSchema = z.enum(BLOCK_SPACINGS).default('md')
+
 export type PostBlock =
-  | { type: 'heading'; text: string; level: 'h2' | 'h3' }
-  | { type: 'paragraph'; text: string }
-  | { type: 'image'; url: string; alt: string }
-  | { type: 'video'; url: string }
+  | {
+      type: 'heading'
+      text: string
+      level: 'h2' | 'h3'
+      spacing?: BlockSpacing
+    }
+  | { type: 'paragraph'; text: string; spacing?: BlockSpacing }
+  | { type: 'image'; url: string; alt: string; spacing?: BlockSpacing }
+  | { type: 'video'; url: string; spacing?: BlockSpacing }
 
 export const postBlockSchema: z.ZodType<PostBlock> = z.discriminatedUnion(
   'type',
@@ -42,15 +53,18 @@ export const postBlockSchema: z.ZodType<PostBlock> = z.discriminatedUnion(
         .min(1, 'El título del bloque es requerido')
         .max(200),
       level: z.enum(['h2', 'h3']).default('h2'),
+      spacing: blockSpacingSchema,
     }),
     z.object({
       type: z.literal('paragraph'),
       text: z.string().trim().min(1, 'El párrafo es requerido').max(5000),
+      spacing: blockSpacingSchema,
     }),
     z.object({
       type: z.literal('image'),
       url: z.string().trim().min(1, 'La imagen es requerida').max(2000),
       alt: z.string().trim().max(300).default(''),
+      spacing: blockSpacingSchema,
     }),
     z.object({
       type: z.literal('video'),
@@ -66,6 +80,7 @@ export const postBlockSchema: z.ZodType<PostBlock> = z.discriminatedUnion(
             ),
           'URL de YouTube inválida',
         ),
+      spacing: blockSpacingSchema,
     }),
   ],
 )

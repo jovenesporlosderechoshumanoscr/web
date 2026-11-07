@@ -7,11 +7,12 @@ import {
   IconPhoto,
   IconPlayerPlay,
   IconPlus,
+  IconSpacingVertical,
   IconTrash,
   IconUpload,
   IconX,
 } from '@tabler/icons-react'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,9 +23,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from 'cn'
 import { useUploadImage } from '@/functions/blog-client'
+import { spacingClass } from '@/components/blog/PostRenderer'
 import { youtubeEmbedUrl } from '@/lib/youtube'
-import { IMAGE_ACCEPT } from '@/server/validation/blog'
-import type { PostBlock } from '@/server/validation/blog'
+import { BLOCK_SPACINGS, IMAGE_ACCEPT } from '@/server/validation/blog'
+import type { BlockSpacing, PostBlock } from '@/server/validation/blog'
 
 const BLOCK_TYPES = ['heading', 'paragraph', 'image', 'video'] as const
 
@@ -38,16 +40,24 @@ const TYPE_META: Record<
   video: { label: 'Video', Icon: IconPlayerPlay },
 }
 
+const SPACING_META: Record<BlockSpacing, string> = {
+  none: 'Ninguno',
+  sm: 'Pequeño',
+  md: 'Normal',
+  lg: 'Grande',
+  xl: 'Muy grande',
+}
+
 function newBlock(type: PostBlock['type']): PostBlock {
   switch (type) {
     case 'heading':
-      return { type: 'heading', text: '', level: 'h2' }
+      return { type: 'heading', text: '', level: 'h2', spacing: 'md' }
     case 'paragraph':
-      return { type: 'paragraph', text: '' }
+      return { type: 'paragraph', text: '', spacing: 'md' }
     case 'image':
-      return { type: 'image', url: '', alt: '' }
+      return { type: 'image', url: '', alt: '', spacing: 'md' }
     case 'video':
-      return { type: 'video', url: '' }
+      return { type: 'video', url: '', spacing: 'md' }
   }
 }
 
@@ -110,7 +120,13 @@ export function BlockCanvas({ blocks, onChange }: BlockCanvasProps) {
   return (
     <div className="flex flex-col gap-1">
       {blocks.map((block, index) => (
-        <div key={index} className="flex flex-col gap-1">
+        <div
+          key={index}
+          className={cn(
+            'flex flex-col gap-1',
+            index < blocks.length - 1 && spacingClass(block.spacing),
+          )}
+        >
           {renderInsertZone(index)}
           <BlockWrapper
             block={block}
@@ -268,6 +284,36 @@ function BlockWrapper({
             {block.level.toUpperCase()}
           </Button>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <button
+                type="button"
+                aria-label="Espaciado del bloque"
+                className={buttonVariants({ variant: 'ghost', size: 'xs' })}
+              >
+                <IconSpacingVertical />
+                <span className="hidden sm:inline">
+                  {SPACING_META[block.spacing ?? 'md']}
+                </span>
+              </button>
+            }
+          />
+          <DropdownMenuContent align="center">
+            {BLOCK_SPACINGS.map((spacing) => (
+              <DropdownMenuItem
+                key={spacing}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUpdate({ ...block, spacing })
+                }}
+              >
+                <IconSpacingVertical />
+                {SPACING_META[spacing]}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button
           type="button"
           size="icon-xs"

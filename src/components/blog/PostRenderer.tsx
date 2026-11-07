@@ -1,5 +1,19 @@
 import { youtubeEmbedUrl } from '@/lib/youtube'
-import type { PostBlock } from '@/server/validation/blog'
+import type { BlockSpacing, PostBlock } from '@/server/validation/blog'
+
+/** Clase Tailwind del margen inferior según el espaciado configurado. */
+export const SPACING_CLASS: Record<BlockSpacing, string> = {
+  none: 'mb-0',
+  sm: 'mb-2',
+  md: 'mb-6',
+  lg: 'mb-10',
+  xl: 'mb-16',
+}
+
+/** Margen inferior de un bloque; `md` es el valor por defecto. */
+export function spacingClass(spacing?: BlockSpacing): string {
+  return SPACING_CLASS[spacing ?? 'md']
+}
 
 /** Render de un bloque individual, igual que se ve en la página publicada. */
 export function BlockView({ block }: { block: PostBlock }) {
@@ -52,9 +66,16 @@ export function BlockView({ block }: { block: PostBlock }) {
 
 export function PostRenderer({ blocks }: { blocks: PostBlock[] }) {
   return (
-    <div className="mx-auto flex w-full min-w-0 max-w-3xl flex-col gap-6">
+    <div className="mx-auto flex w-full min-w-0 max-w-3xl flex-col">
       {blocks.map((block, index) => (
-        <BlockView key={index} block={block} />
+        <div
+          key={index}
+          className={
+            index < blocks.length - 1 ? spacingClass(block.spacing) : undefined
+          }
+        >
+          <BlockView block={block} />
+        </div>
       ))}
     </div>
   )
