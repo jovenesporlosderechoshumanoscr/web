@@ -9,6 +9,7 @@
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
     "build": "vite build",
+	"test": "vitest",
     "preview": "vite preview",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
@@ -19,8 +20,6 @@
     "@base-ui/react": "^1.8.0",
     "@fontsource-variable/figtree": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
-    "@fontsource-variable/outfit": "^5.3.0",
-    "@fontsource-variable/raleway": "^5.3.0",
     "@getbrevo/brevo": "^6.2.0",
     "@tabler/icons-react": "^3.48.0",
     "@tailwindcss/vite": "^4.1.18",
@@ -63,14 +62,6 @@
     "vite": "^8.0.0",
     "vitest": "^5.1.0",
     "wrangler": "^4.147.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss",
-      "sharp",
-      "workerd"
-    ]
   },
   "intent": {
     "skills": [
