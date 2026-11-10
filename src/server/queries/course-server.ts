@@ -508,22 +508,25 @@ const getMyCourses = createServerFn({ method: 'GET' }).handler(async () => {
     .where(inArray(courseModule.courseId, courseIds))
     .orderBy(asc(courseModule.position), asc(lesson.position))
 
-  const allProgress = await db
-    .select({
-      lessonId: lessonProgress.lessonId,
-      status: lessonProgress.status,
-      lastAccessedAt: lessonProgress.lastAccessedAt,
-    })
-    .from(lessonProgress)
-    .where(
-      and(
-        eq(lessonProgress.userId, session.user.id),
-        inArray(
-          lessonProgress.lessonId,
-          lessons.map((l) => l.id),
-        ),
-      ),
-    )
+  const allProgress =
+    lessons.length > 0
+      ? await db
+          .select({
+            lessonId: lessonProgress.lessonId,
+            status: lessonProgress.status,
+            lastAccessedAt: lessonProgress.lastAccessedAt,
+          })
+          .from(lessonProgress)
+          .where(
+            and(
+              eq(lessonProgress.userId, session.user.id),
+              inArray(
+                lessonProgress.lessonId,
+                lessons.map((l) => l.id),
+              ),
+            ),
+          )
+      : []
 
   const progressByLesson = new Map(allProgress.map((p) => [p.lessonId, p]))
   const lessonsByCourse = new Map<string, typeof lessons>()
