@@ -8,7 +8,7 @@ export const Route = createFileRoute('/login')({
 		const session = await getSession();
 		if (session) {
 			throw redirect({
-				to: session.user.role === 'student' ? '/student' : '/',
+				to: session.user.role === 'student' ? '/student' : '/admin/panel',
 			});
 		}
 	},

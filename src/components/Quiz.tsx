@@ -6,8 +6,10 @@ import {
   IconBulb,
   IconCircleCheck,
   IconCheck,
+  IconRotate,
 } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
+import Confetti from '@/components/Confetti'
 import {
   Card,
   CardContent,
@@ -25,6 +27,7 @@ type EstadoQuiz = {
   eleccion: number | null
   fase: Fase
   completados: number[]
+  finalizado: boolean
 }
 
 type AccionQuiz =
@@ -33,12 +36,14 @@ type AccionQuiz =
   | { tipo: 'continuar' }
   | { tipo: 'anterior' }
   | { tipo: 'siguiente' }
+  | { tipo: 'reiniciar' }
 
 const estadoInicial: EstadoQuiz = {
   indice: 0,
   eleccion: null,
   fase: 'respondiendo',
   completados: [],
+  finalizado: false,
 }
 
 function reducer(estado: EstadoQuiz, accion: AccionQuiz): EstadoQuiz {
@@ -56,14 +61,16 @@ function reducer(estado: EstadoQuiz, accion: AccionQuiz): EstadoQuiz {
       return { ...estado, eleccion: null, fase: 'respondiendo' }
     case 'continuar': {
       const articulo = articulos[estado.indice]
-      return {
-        ...estado,
-        fase: 'reflexion',
-        completados: estado.completados.includes(articulo.id)
-          ? estado.completados
-          : [...estado.completados, articulo.id],
-      }
+      const completados = estado.completados.includes(articulo.id)
+        ? estado.completados
+        : [...estado.completados, articulo.id]
+      // Al completar el último artículo, la actividad termina.
+      const finalizado =
+        estado.indice === articulos.length - 1 ? true : estado.finalizado
+      return { ...estado, fase: 'reflexion', completados, finalizado }
     }
+    case 'reiniciar':
+      return estadoInicial
     case 'anterior':
       if (estado.indice === 0) return estado
       return {
@@ -88,7 +95,7 @@ export default function Quiz() {
   const retroRef = useRef<HTMLDivElement>(null)
   const esPrimeraRenderRef = useRef(true)
 
-  const { indice, eleccion, fase, completados } = estado
+  const { indice, eleccion, fase, completados, finalizado } = estado
   const articulo = articulos[indice]
   const esUltimo = indice === articulos.length - 1
   const yaCompletado = completados.includes(articulo.id)
@@ -102,6 +109,35 @@ export default function Quiz() {
       retroRef.current?.focus()
     }
   }, [fase, indice])
+
+  if (finalizado) {
+    return (
+      <>
+        <Confetti />
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-14 text-center">
+            <span className="flex size-16 items-center justify-center rounded-full bg-green-50 dark:bg-green-950/40">
+              <IconCircleCheck
+                className="size-10 text-green-600"
+                aria-hidden="true"
+              />
+            </span>
+            <CardTitle className="text-2xl font-bold tracking-tight sm:text-3xl">
+              ¡Actividad completada!
+            </CardTitle>
+            <p className="max-w-md text-muted-foreground">
+              Respondiste correctamente los {articulos.length} artículos de la
+              Declaración Universal de Derechos Humanos.
+            </p>
+            <Button onClick={() => dispatch({ tipo: 'reiniciar' })}>
+              <IconRotate data-icon="inline-start" />
+              Volver a empezar
+            </Button>
+          </CardContent>
+        </Card>
+      </>
+    )
+  }
 
   return (
     <Card>
@@ -146,21 +182,41 @@ export default function Quiz() {
         >
           <legend className="text-base font-medium">{articulo.pregunta}</legend>
           <div className="mt-3 grid gap-2">
-            {articulo.opciones.map((opcion, i) => (
-              <label
-                key={opcion}
-                className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border bg-background p-3 text-sm transition-colors hover:bg-muted has-checked:border-primary/40 has-checked:bg-primary/5 has-focus-visible:border-ring has-focus-visible:ring-3 has-focus-visible:ring-ring/30"
-              >
-                <input
-                  type="radio"
-                  name={`quiz-articulo-${articulo.id}`}
-                  checked={eleccion === i}
-                  onChange={() => dispatch({ tipo: 'elegir', opcion: i })}
-                  className="size-4 shrink-0 accent-primary"
-                />
-                <span>{opcion}</span>
-              </label>
-            ))}
+            {articulo.opciones.map((opcion, i) => {
+              const esCorrecta = i === articulo.correcta
+              const marcadaVerde =
+                ((fase === 'correcto' || fase === 'reflexion') &&
+                  eleccion === i) ||
+                (fase === 'incorrecto' && esCorrecta)
+              const marcadaRoja = fase === 'incorrecto' && eleccion === i
+              return (
+                <label
+                  key={opcion}
+                  className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 text-sm transition-colors has-focus-visible:border-ring has-focus-visible:ring-3 has-focus-visible:ring-ring/30 ${
+                    marcadaVerde
+                      ? 'border-green-600/60 bg-green-50 has-checked:border-green-600/60 has-checked:bg-green-50 dark:bg-green-950/40 dark:has-checked:bg-green-950/40'
+                      : marcadaRoja
+                        ? 'border-destructive/60 bg-destructive/5 has-checked:border-destructive/60 has-checked:bg-destructive/5'
+                        : 'border-border bg-background hover:bg-muted has-checked:border-primary/40 has-checked:bg-primary/5'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name={`quiz-articulo-${articulo.id}`}
+                    checked={eleccion === i}
+                    onChange={() => dispatch({ tipo: 'elegir', opcion: i })}
+                    className="size-4 shrink-0 accent-primary"
+                  />
+                  <span className="flex-1">{opcion}</span>
+                  {marcadaVerde && (
+                    <IconCheck
+                      className="size-4 shrink-0 text-green-600"
+                      aria-hidden="true"
+                    />
+                  )}
+                </label>
+              )
+            })}
           </div>
         </fieldset>
 
@@ -172,15 +228,12 @@ export default function Quiz() {
             className="mt-4 flex items-start gap-3 rounded-2xl bg-muted p-4 outline-none"
           >
             <IconCircleCheck
-              className="mt-0.5 size-5 shrink-0 text-primary"
+              className="mt-0.5 size-5 shrink-0 text-green-600"
               aria-hidden="true"
             />
-            <div>
-              <p className="text-sm font-semibold">¡Correcto! Muy bien.</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {articulo.explicacion}
-              </p>
-            </div>
+            <p className="text-sm font-semibold text-green-700 dark:text-green-400">
+              ¡Correcto! Muy bien.
+            </p>
           </div>
         )}
 

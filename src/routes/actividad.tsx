@@ -3,30 +3,31 @@ import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import Quiz from '@/components/Quiz'
 
-export const Route = createFileRoute('/aprende')({
+export const Route = createFileRoute('/actividad')({
   head: () => ({
-    meta: [{ title: 'Aprende tus derechos — JPDH' }],
+    meta: [{ title: 'Actividad interactiva — JPDH' }],
   }),
-  component: AprendePage,
+  component: ActividadPage,
 })
 
-function AprendePage() {
+function ActividadPage() {
   return (
     <div className="min-h-svh bg-background text-foreground">
       <Header />
       <main>
         <section
-          aria-labelledby="aprende-page-title"
+          aria-labelledby="actividad-page-title"
           className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24"
         >
           <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
-            Aprende
+            Actividad interactiva
           </p>
           <h1
-            id="aprende-page-title"
+            id="actividad-page-title"
             className="mt-3 text-4xl leading-tight font-light tracking-tight uppercase sm:text-5xl"
           >
-            Aprende tus <strong className="font-bold">derechos</strong>
+            Pon en práctica lo{' '}
+            <strong className="font-bold">aprendido</strong>
           </h1>
           <p className="mt-4 text-muted-foreground">
             Un quiz sencillo para conocer la Declaración Universal de Derechos

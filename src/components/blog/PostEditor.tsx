@@ -16,6 +16,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { cn } from 'cn'
+import { toast } from 'sonner'
 import { useUploadImage } from '@/functions/blog-client'
 import { IMAGE_ACCEPT, slugify } from '@/server/validation/blog'
 import type { PostBlock, PostStatus } from '@/server/validation/blog'
@@ -94,7 +95,7 @@ export function PostEditor({
           onSuccess: (result) =>
             setValues((prev) => ({ ...prev, coverImage: result.url })),
           onError: () =>
-            alert(uploadImage.error?.message ?? 'Error al subir imagen'),
+            toast.error(uploadImage.error?.message ?? 'Error al subir imagen'),
         })
       }
     }

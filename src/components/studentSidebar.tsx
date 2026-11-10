@@ -20,7 +20,7 @@ export function StudentSidebar({
   return (
     <Sidebar>
       <SidebarHeader className="py-2">
-        <h1 className="text-2xl font-bold">JPDH</h1>
+        <img src="/logojpdh.webp" alt="JPDH" className="size-12 shrink-0 object-contain" />
         <p className="text-sm">Bienvenido {user.name}</p>
       </SidebarHeader>
       <SidebarContent>

@@ -55,7 +55,7 @@ export function AdminSidebar({ props }: { props: any }) {
   return (
     <Sidebar>
       <SidebarHeader className="py-2">
-        <h1 className="text-2xl font-bold">JPDH</h1>
+        <img src="/logojpdh.webp" alt="JPDH" className="size-24 shrink-0 object-contain" />
         <p className="text-sm">Bienvenido {props.name}</p>
       </SidebarHeader>
       <SidebarContent>

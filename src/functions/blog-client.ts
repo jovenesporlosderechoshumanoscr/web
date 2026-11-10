@@ -38,15 +38,6 @@ export function usePublicPosts(filters: GetPostsInput) {
   });
 }
 
-export function usePublicPostBySlug(slug: string | undefined) {
-  return useQuery({
-    queryKey: ["public", POST_QUERY_KEY, slug],
-    queryFn: () => blogPublicQueries.getPublicPostBySlug({ data: { slug: slug! } }),
-    enabled: Boolean(slug),
-    staleTime: PUBLIC_STALE_TIME,
-  });
-}
-
 export function useCreatePost() {
   const queryClient = useQueryClient();
   return useMutation({

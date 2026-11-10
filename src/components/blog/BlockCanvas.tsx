@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from 'cn'
+import { toast } from 'sonner'
 import { useUploadImage } from '@/functions/blog-client'
 import { spacingClass } from '@/components/blog/PostRenderer'
 import { youtubeEmbedUrl } from '@/lib/youtube'
@@ -448,7 +449,7 @@ function ImageBlock({
     uploadImage.mutate(file, {
       onSuccess: (result) => onUpdate({ ...block, url: result.url }),
       onError: () =>
-        alert(uploadImage.error?.message ?? 'Error al subir imagen'),
+        toast.error(uploadImage.error?.message ?? 'Error al subir imagen'),
     })
     e.target.value = ''
   }

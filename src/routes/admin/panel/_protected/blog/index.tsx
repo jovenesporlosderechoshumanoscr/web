@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { useDeletePost, usePosts, useUpdatePost } from '@/functions/blog-client'
 import { POST_STATUSES } from '@/server/validation/blog'
 import type { PostStatus } from '@/server/validation/blog'
@@ -61,9 +63,27 @@ function RouteComponent() {
     setApplied({})
   }
 
-  function handleDelete(id: string, title: string) {
-    if (!window.confirm(`¿Eliminar la página "${title}"?`)) return
-    deletePost.mutate({ id })
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+
+  function openDeleteDialog(post: { id: string; title: string }) {
+    deletePost.reset()
+    setDeleteTarget(post)
+  }
+
+  function handleDeleteConfirm() {
+    if (!deleteTarget) return
+    deletePost.mutate(
+      { id: deleteTarget.id },
+      {
+        onSuccess: () => {
+          setDeleteTarget(null)
+          toast.success(`Se eliminó la página "${deleteTarget.title}"`)
+        },
+      },
+    )
   }
 
   const items = query.data?.items ?? []
@@ -150,60 +170,69 @@ function RouteComponent() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">Título</th>
-                    <th className="py-2 pr-4 font-medium">Estado</th>
-                    <th className="py-2 pr-4 font-medium">Actualizado</th>
-                    <th className="py-2 font-medium">Acciones</th>
+                    <th className="w-full px-3 py-2 text-center font-medium">Título</th>
+                    <th className="px-3 py-2 text-center font-medium">Estado</th>
+                    <th className="px-3 py-2 text-center font-medium">Actualizado</th>
+                    <th className="px-3 py-2 text-center font-medium">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((p) => (
                     <tr key={p.id} className="border-b last:border-0">
-                      <td className="py-2 pr-4">{p.title}</td>
-                      <td className="py-2 pr-4">
+                      <td className="px-3 py-2">{p.title}</td>
+                      <td className="px-3 py-2">
                         {p.status === 'published'
                           ? 'Publicado'
                           : 'Borrador'}
                       </td>
-                      <td className="py-2 pr-4">
+                      <td className="px-3 py-2">
                         {new Date(p.updatedAt).toLocaleDateString()}
                       </td>
-                      <td className="flex gap-2 py-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={updatePost.isPending}
-                          onClick={() => handleToggleStatus(p.id, p.status)}
-                        >
-                          {p.status === 'published'
-                            ? 'Despublicar'
-                            : 'Publicar'}
-                        </Button>
-                        <Link
-                          to="/admin/panel/blog/edit/$postId"
-                          params={{ postId: p.id }}
-                          className={buttonVariants({
-                            size: 'sm',
-                            variant: 'outline',
-                          })}
-                        >
-                          Editar
-                        </Link>
-                        <Button
-                          size="sm"
-                          variant={
-                            p.status === 'published' ? 'ghost' : 'destructive'
-                          }
-                          className={
-                            p.status === 'published'
-                              ? 'text-muted-foreground hover:text-destructive'
-                              : undefined
-                          }
-                          disabled={deletePost.isPending}
-                          onClick={() => handleDelete(p.id, p.title)}
-                        >
-                          Eliminar
-                        </Button>
+                      <td className="px-3 py-2">
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={updatePost.isPending}
+                            onClick={() => handleToggleStatus(p.id, p.status)}
+                          >
+                            {p.status === 'published'
+                              ? 'Despublicar'
+                              : 'Publicar'}
+                          </Button>
+                          <Link
+                            to="/admin/panel/blog/edit/$postId"
+                            params={{ postId: p.id }}
+                            className={buttonVariants({
+                              size: 'sm',
+                              variant: 'outline',
+                            })}
+                          >
+                            Editar
+                          </Link>
+                          <Button
+                            size="sm"
+                            variant={
+                              p.status === 'published' ? 'ghost' : 'destructive'
+                            }
+                            className={
+                              p.status === 'published'
+                                ? 'text-muted-foreground hover:text-destructive'
+                                : undefined
+                            }
+                            disabled={
+                              deletePost.isPending || p.status === 'published'
+                            }
+                            title={
+                              p.status === 'published'
+                                ? 'Despublica la página para poder eliminarla'
+                                : undefined
+                            }
+                            onClick={() => openDeleteDialog(p)}
+                          >
+                            Eliminar
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -237,6 +266,24 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
+
+      {deleteTarget && (
+        <ConfirmDialog
+          key={deleteTarget.id}
+          open
+          onOpenChange={(open) => {
+            if (!open) setDeleteTarget(null)
+          }}
+          title={`Eliminar la página "${deleteTarget.title}"`}
+          description="Esta acción es permanente y no podrá recuperarse."
+          confirmLabel="Eliminar"
+          pendingLabel="Eliminando…"
+          isPending={deletePost.isPending}
+          destructive
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
     </div>
   )
 }

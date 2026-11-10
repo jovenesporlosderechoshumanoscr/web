@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import {
   useCreateLesson,
   useCreateModule,
@@ -150,19 +151,17 @@ function ModuleCard({
 
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(module.title)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     setTitle(module.title)
   }, [module.title])
 
   function handleDelete() {
-    if (
-      !window.confirm(
-        `¿Eliminar el módulo "${module.title}" y TODAS sus lecciones?`,
-      )
+    deleteModule.mutate(
+      { id: module.id },
+      { onSuccess: () => setConfirmDelete(false) },
     )
-      return
-    deleteModule.mutate({ id: module.id })
   }
 
   return (
@@ -224,7 +223,7 @@ function ModuleCard({
               variant="ghost"
               aria-label="Eliminar módulo"
               className="text-destructive hover:text-destructive"
-              onClick={handleDelete}
+              onClick={() => setConfirmDelete(true)}
             >
               <IconTrash />
             </Button>
@@ -246,6 +245,19 @@ function ModuleCard({
         ))}
         <AddLessonButton moduleId={module.id} />
       </div>
+
+      <ConfirmDialog
+        open={confirmDelete}
+        onOpenChange={setConfirmDelete}
+        title={`Eliminar el módulo "${module.title}"`}
+        description="Se borrarán el módulo y TODAS sus lecciones. Esta acción es permanente."
+        confirmLabel="Eliminar"
+        pendingLabel="Eliminando…"
+        isPending={deleteModule.isPending}
+        destructive
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmDelete(false)}
+      />
     </div>
   )
 }
@@ -737,13 +749,18 @@ function LessonRow({
 }) {
   const deleteLesson = useDeleteLesson()
   const moveLesson = useMoveLesson()
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const { Icon } = LESSON_TYPE_META[lesson.type]
 
   function handleDelete() {
-    if (!window.confirm(`¿Eliminar la lección "${lesson.title}"?`)) return
     deleteLesson.mutate(
       { id: lesson.id },
-      { onSuccess: selected ? onDeleted : undefined },
+      {
+        onSuccess: () => {
+          setConfirmDelete(false)
+          if (selected) onDeleted()
+        },
+      },
     )
   }
 
@@ -787,10 +804,23 @@ function LessonRow({
           selected ? '' : 'opacity-0 group-hover/lesson:opacity-100'
         }`}
         disabled={deleteLesson.isPending}
-        onClick={handleDelete}
+        onClick={() => setConfirmDelete(true)}
       >
         <IconTrash />
       </Button>
+
+      <ConfirmDialog
+        open={confirmDelete}
+        onOpenChange={setConfirmDelete}
+        title={`Eliminar la lección "${lesson.title}"`}
+        description="Esta acción es permanente y no podrá recuperarse."
+        confirmLabel="Eliminar"
+        pendingLabel="Eliminando…"
+        isPending={deleteLesson.isPending}
+        destructive
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmDelete(false)}
+      />
     </div>
   )
 }

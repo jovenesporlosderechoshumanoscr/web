@@ -21,6 +21,7 @@ import {
 import { authClient } from "@/lib/auth-client"
 import { IconSelector, IconRosetteDiscountCheck, IconLogout } from "@tabler/icons-react"
 import { Link, useNavigate } from "@tanstack/react-router"
+import { ThemeModeIcon, useThemeMode } from "@/components/ThemeToggle"
 
 export function StudentSidebarUser({
 	user,
@@ -32,6 +33,7 @@ export function StudentSidebarUser({
 }) {
 	const { isMobile } = useSidebar()
 	const navigate = useNavigate()
+	const { mode, toggleMode } = useThemeMode()
 	const handleLogout = async () => {
 		await authClient.signOut()
 		navigate({ to: '/login' })
@@ -83,6 +85,16 @@ export function StudentSidebarUser({
 								<IconRosetteDiscountCheck
 								/>
 								Mi cuenta
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuItem
+								onClick={toggleMode}
+								closeOnClick={false}
+							>
+								<ThemeModeIcon mode={mode} />
+								Tema: {mode === "auto" ? "Automático" : mode === "dark" ? "Oscuro" : "Claro"}
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />

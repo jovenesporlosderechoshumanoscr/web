@@ -11,10 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AprendeRouteImport } from './routes/aprende'
+import { Route as ActividadRouteImport } from './routes/actividad'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as ImpactoRouteImport } from './routes/impacto'
 import { Route as Ley10030RouteImport } from './routes/ley-10030'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -63,9 +62,9 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AprendeRoute = AprendeRouteImport.update({
-  id: '/aprende',
-  path: '/aprende',
+const ActividadRoute = ActividadRouteImport.update({
+  id: '/actividad',
+  path: '/actividad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -76,11 +75,6 @@ const ContactRoute = ContactRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpactoRoute = ImpactoRouteImport.update({
-  id: '/impacto',
-  path: '/impacto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Ley10030Route = Ley10030RouteImport.update({
@@ -290,10 +284,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/aprende': typeof AprendeRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/impacto': typeof ImpactoRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -334,10 +327,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/aprende': typeof AprendeRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/impacto': typeof ImpactoRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -378,10 +370,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/aprende': typeof AprendeRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/impacto': typeof ImpactoRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -425,10 +416,9 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
-    | '/aprende'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
-    | '/impacto'
     | '/ley-10030'
     | '/login'
     | '/privacy'
@@ -469,10 +459,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/aprende'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
-    | '/impacto'
     | '/ley-10030'
     | '/login'
     | '/privacy'
@@ -512,10 +501,9 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
-    | '/aprende'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
-    | '/impacto'
     | '/ley-10030'
     | '/login'
     | '/privacy'
@@ -558,10 +546,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudentRouteRoute: typeof StudentRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AprendeRoute: typeof AprendeRoute
+  ActividadRoute: typeof ActividadRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  ImpactoRoute: typeof ImpactoRoute
   Ley10030Route: typeof Ley10030Route
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -597,11 +584,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/aprende': {
-      id: '/aprende'
-      path: '/aprende'
-      fullPath: '/aprende'
-      preLoaderRoute: typeof AprendeRouteImport
+    '/actividad': {
+      id: '/actividad'
+      path: '/actividad'
+      fullPath: '/actividad'
+      preLoaderRoute: typeof ActividadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -616,13 +603,6 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impacto': {
-      id: '/impacto'
-      path: '/impacto'
-      fullPath: '/impacto'
-      preLoaderRoute: typeof ImpactoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ley-10030': {
@@ -970,10 +950,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudentRouteRoute: StudentRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AprendeRoute: AprendeRoute,
+  ActividadRoute: ActividadRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  ImpactoRoute: ImpactoRoute,
   Ley10030Route: Ley10030Route,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,

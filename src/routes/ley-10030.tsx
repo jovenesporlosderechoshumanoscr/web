@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { IconFileText } from '@tabler/icons-react'
 import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import { lawContent } from '@/components/landing/Law'
@@ -47,14 +48,28 @@ function LeyPage() {
             >
               {lawContent.title}
             </h2>
-            {paragraphs.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 24)}
-                className="mt-5 text-muted-foreground"
-              >
-                {paragraph}
-              </p>
-            ))}
+            {paragraphs.map((paragraph) => {
+              const esEnlaceLey = paragraph.startsWith('Conoce la Ley')
+              return esEnlaceLey ? (
+                <a
+                  key={paragraph.slice(0, 24)}
+                  href="/la-gaceta-ley-10030.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 inline-flex items-center gap-1.5 font-semibold text-foreground underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
+                >
+                  {paragraph}
+                  <IconFileText aria-hidden="true" className="size-4" />
+                </a>
+              ) : (
+                <p
+                  key={paragraph.slice(0, 24)}
+                  className="mt-5 text-muted-foreground"
+                >
+                  {paragraph}
+                </p>
+              )
+            })}
           </div>
         </section>
       </main>

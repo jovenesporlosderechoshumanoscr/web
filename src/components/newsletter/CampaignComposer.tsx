@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { useSendNewsletter } from '@/functions/newsletter-client'
 import {
   NEWSLETTER_LIMITS,
@@ -37,6 +38,7 @@ export function CampaignComposer({
   const [previewText, setPreviewText] = useState('')
   const [content, setContent] = useState('')
   const [showPreview, setShowPreview] = useState(true)
+  const [confirmSend, setConfirmSend] = useState(false)
 
   const sendAll = useSendNewsletter()
 
@@ -57,13 +59,6 @@ export function CampaignComposer({
     content.length <= NEWSLETTER_LIMITS.content
 
   function handleSendAll() {
-    const confirmed = window.confirm(
-      `${composerContent.confirmSendTitle}\n\n` +
-        `Asunto: ${subject.trim()}\n` +
-        `Destinatarios: ${subscriberCount} contactos de la lista del boletín.\n\n` +
-        '¿Quieres continuar?',
-    )
-    if (!confirmed) return
     sendAll.mutate(
       {
         subject: subject.trim(),
@@ -135,7 +130,7 @@ export function CampaignComposer({
               <Button
                 type="button"
                 disabled={!isFormValid || sendAll.isPending}
-                onClick={handleSendAll}
+                onClick={() => setConfirmSend(true)}
               >
                 <IconSend aria-hidden="true" />
                 {composerContent.sendAllLabel}
@@ -170,6 +165,18 @@ export function CampaignComposer({
           ) : null}
         </div>
       </CardContent>
+
+      <ConfirmDialog
+        open={confirmSend}
+        onOpenChange={setConfirmSend}
+        title={composerContent.confirmSendTitle}
+        description={`Asunto: ${subject.trim()}. Destinatarios: ${subscriberCount} contactos de la lista del boletín. ¿Quieres continuar?`}
+        confirmLabel="Enviar"
+        pendingLabel="Enviando…"
+        isPending={sendAll.isPending}
+        onConfirm={handleSendAll}
+        onCancel={() => setConfirmSend(false)}
+      />
     </Card>
   )
 }

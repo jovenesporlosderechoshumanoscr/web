@@ -5,6 +5,7 @@ import {
   IconBrandX,
   IconBrandYoutube,
 } from '@tabler/icons-react'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export const footerContent = {
   logo: 'JPDH',
@@ -66,19 +67,22 @@ export default function Footer() {
               ))}
             </ul>
           </nav>
-          <ul aria-label="Redes sociales" className="flex items-center gap-2">
-            {footerContent.socials.map(({ label, href, Icon }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  aria-label={label}
-                  className="flex size-9 items-center justify-center rounded-xl border border-border transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
-                >
-                  <Icon aria-hidden="true" className="size-4" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="flex items-center gap-3">
+            <ul aria-label="Redes sociales" className="flex items-center gap-2">
+              {footerContent.socials.map(({ label, href, Icon }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    aria-label={label}
+                    className="flex size-9 items-center justify-center rounded-xl border border-border transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+                  >
+                    <Icon aria-hidden="true" className="size-4" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <ThemeToggle />
+          </div>
         </div>
         <p className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground sm:text-left">
           {footerContent.legal}
