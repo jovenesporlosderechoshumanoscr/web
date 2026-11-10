@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import {
   useCourses,
   useDeleteCourse,
@@ -65,14 +67,27 @@ function RouteComponent() {
     setApplied({})
   }
 
-  function handleDelete(id: string, title: string) {
-    if (
-      !window.confirm(
-        `¿Eliminar el curso "${title}" con todos sus módulos y lecciones?`,
-      )
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+
+  function openDeleteDialog(course: { id: string; title: string }) {
+    deleteCourse.reset()
+    setDeleteTarget(course)
+  }
+
+  function handleDeleteConfirm() {
+    if (!deleteTarget) return
+    deleteCourse.mutate(
+      { id: deleteTarget.id },
+      {
+        onSuccess: () => {
+          setDeleteTarget(null)
+          toast.success(`Se eliminó el curso "${deleteTarget.title}"`)
+        },
+      },
     )
-      return
-    deleteCourse.mutate({ id })
   }
 
   const items = query.data?.items ?? []
@@ -154,70 +169,79 @@ function RouteComponent() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">Título</th>
-                    <th className="py-2 pr-4 font-medium">Estado</th>
-                    <th className="py-2 pr-4 font-medium">Actualizado</th>
-                    <th className="py-2 font-medium">Acciones</th>
+                    <th className="w-full px-3 py-2 text-center font-medium">Título</th>
+                    <th className="px-3 py-2 text-center font-medium">Estado</th>
+                    <th className="px-3 py-2 text-center font-medium">Actualizado</th>
+                    <th className="px-3 py-2 text-center font-medium">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((c) => (
                     <tr key={c.id} className="border-b last:border-0">
-                      <td className="py-2 pr-4">{c.title}</td>
-                      <td className="py-2 pr-4">
+                      <td className="px-3 py-2">{c.title}</td>
+                      <td className="px-3 py-2">
                         {c.status === 'published'
                           ? 'Publicado'
                           : 'Borrador'}
                       </td>
-                      <td className="py-2 pr-4">
+                      <td className="px-3 py-2">
                         {new Date(c.updatedAt).toLocaleDateString()}
                       </td>
-                      <td className="flex gap-2 py-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={updateCourse.isPending}
-                          onClick={() => handleToggleStatus(c.id, c.status)}
-                        >
-                          {c.status === 'published'
-                            ? 'Despublicar'
-                            : 'Publicar'}
-                        </Button>
-                        <Link
-                          to="/admin/panel/courses/builder/$courseId"
-                          params={{ courseId: c.id }}
-                          className={buttonVariants({
-                            size: 'sm',
-                            variant: 'outline',
-                          })}
-                        >
-                          Módulos
-                        </Link>
-                        <Link
-                          to="/admin/panel/courses/edit/$courseId"
-                          params={{ courseId: c.id }}
-                          className={buttonVariants({
-                            size: 'sm',
-                            variant: 'outline',
-                          })}
-                        >
-                          Editar
-                        </Link>
-                        <Button
-                          size="sm"
-                          variant={
-                            c.status === 'published' ? 'ghost' : 'destructive'
-                          }
-                          className={
-                            c.status === 'published'
-                              ? 'text-muted-foreground hover:text-destructive'
-                              : undefined
-                          }
-                          disabled={deleteCourse.isPending}
-                          onClick={() => handleDelete(c.id, c.title)}
-                        >
-                          Eliminar
-                        </Button>
+                      <td className="px-3 py-2">
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={updateCourse.isPending}
+                            onClick={() => handleToggleStatus(c.id, c.status)}
+                          >
+                            {c.status === 'published'
+                              ? 'Despublicar'
+                              : 'Publicar'}
+                          </Button>
+                          <Link
+                            to="/admin/panel/courses/builder/$courseId"
+                            params={{ courseId: c.id }}
+                            className={buttonVariants({
+                              size: 'sm',
+                              variant: 'outline',
+                            })}
+                          >
+                            Módulos
+                          </Link>
+                          <Link
+                            to="/admin/panel/courses/edit/$courseId"
+                            params={{ courseId: c.id }}
+                            className={buttonVariants({
+                              size: 'sm',
+                              variant: 'outline',
+                            })}
+                          >
+                            Editar
+                          </Link>
+                          <Button
+                            size="sm"
+                            variant={
+                              c.status === 'published' ? 'ghost' : 'destructive'
+                            }
+                            className={
+                              c.status === 'published'
+                                ? 'text-muted-foreground hover:text-destructive'
+                                : undefined
+                            }
+                            disabled={
+                              deleteCourse.isPending || c.status === 'published'
+                            }
+                            title={
+                              c.status === 'published'
+                                ? 'Despublica el curso para poder eliminarlo'
+                                : undefined
+                            }
+                            onClick={() => openDeleteDialog(c)}
+                          >
+                            Eliminar
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -251,6 +275,24 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
+
+      {deleteTarget && (
+        <ConfirmDialog
+          key={deleteTarget.id}
+          open
+          onOpenChange={(open) => {
+            if (!open) setDeleteTarget(null)
+          }}
+          title={`Eliminar el curso "${deleteTarget.title}"`}
+          description="Se borrarán también todos sus módulos y lecciones. Esta acción es permanente."
+          confirmLabel="Eliminar"
+          pendingLabel="Eliminando…"
+          isPending={deleteCourse.isPending}
+          destructive
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
     </div>
   )
 }

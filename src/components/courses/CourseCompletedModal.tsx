@@ -1,20 +1,28 @@
 import { Link } from '@tanstack/react-router'
-import { IconTrophy } from '@tabler/icons-react'
+import { IconDownload, IconTrophy } from '@tabler/icons-react'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { useGenerateCertificate } from '@/functions/course-client'
+import { useState } from 'react'
 
 /**
  * Popup de celebración: se muestra cuando el estudiante completa la ÚLTIMA
- * lección del curso (el servidor devuelve `courseJustCompleted`).
+ * lección del curso (el servidor devuelve `courseJustCompleted`). Incluye
+ * la descarga del certificado (antes vivía en el listado de cursos).
  */
 export function CourseCompletedModal({
   open,
+  courseId,
   courseTitle,
   onClose,
 }: {
   open: boolean
+  courseId: string
   courseTitle: string
   onClose: () => void
 }) {
+  const generateCertificate = useGenerateCertificate()
+  const [downloadError, setDownloadError] = useState(false)
+
   if (!open) return null
 
   return (
@@ -26,13 +34,16 @@ export function CourseCompletedModal({
       onClick={onClose}
     >
       <div
-        className="flex w-full max-w-sm flex-col items-center gap-4 rounded-2xl border bg-card p-8 text-center shadow-lg animate-in fade-in zoom-in-95"
+        className="flex w-full max-w-sm flex-col items-center gap-4 rounded-3xl border bg-card p-8 text-center shadow-lg animate-in fade-in zoom-in-95"
         onClick={(e) => e.stopPropagation()}
       >
-        <span className="flex size-16 items-center justify-center rounded-full bg-amber-100 text-4xl dark:bg-amber-400/20">
-          <IconTrophy className="size-8 text-amber-500" />
+        <span className="flex size-16 items-center justify-center rounded-full bg-warning/15 text-4xl">
+          <IconTrophy className="size-8 text-warning" />
         </span>
-        <h2 id="course-completed-title" className="text-xl font-bold">
+        <h2
+          id="course-completed-title"
+          className="font-heading text-xl font-bold"
+        >
           ¡Curso completado! 🎉
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -40,18 +51,39 @@ export function CourseCompletedModal({
           <span className="font-medium text-foreground">{courseTitle}</span>.
           ¡Excelente trabajo!
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           <Button type="button" onClick={onClose} variant="outline">
             Seguir revisando
           </Button>
-          <Link
-            to="/student/courses"
-            className={buttonVariants()}
-            onClick={onClose}
+          <Button
+            type="button"
+            onClick={() => {
+              setDownloadError(false)
+              generateCertificate.mutate(
+                { courseId },
+                { onError: () => setDownloadError(true) },
+              )
+            }}
+            disabled={generateCertificate.isPending}
           >
-            Ir a mis cursos
-          </Link>
+            <IconDownload />
+            {generateCertificate.isPending
+              ? 'Generando…'
+              : 'Descargar certificado'}
+          </Button>
         </div>
+        {downloadError && (
+          <p className="text-sm text-destructive">
+            No se pudo generar el certificado. Inténtalo de nuevo.
+          </p>
+        )}
+        <Link
+          to="/student"
+          className={buttonVariants({ variant: 'link' })}
+          onClick={onClose}
+        >
+          Ir al inicio
+        </Link>
       </div>
     </div>
   )

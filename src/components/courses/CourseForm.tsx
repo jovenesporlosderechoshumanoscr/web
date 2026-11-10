@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { IconUpload } from '@tabler/icons-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -81,7 +82,7 @@ export function CourseForm({
           onSuccess: (result) =>
             setValues((prev) => ({ ...prev, coverImage: result.url })),
           onError: () =>
-            alert(uploadImage.error?.message ?? 'Error al subir imagen'),
+            toast.error(uploadImage.error?.message ?? 'Error al subir imagen'),
         })
       }
     }

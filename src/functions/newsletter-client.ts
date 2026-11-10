@@ -4,7 +4,6 @@ import { newsletterMutations } from '@/server/mutations/newsletter-server'
 import type {
   GetCampaignsInput,
   SendCampaignInput,
-  SendTestInput,
   SubscribeInput,
 } from '@/server/validation/newsletter'
 
@@ -32,18 +31,6 @@ export function useSubscribeNewsletter() {
   return useMutation({
     mutationFn: (input: SubscribeInput) =>
       newsletterMutations.subscribe({ data: input }),
-  })
-}
-
-/** Envío de prueba a un correo concreto. */
-export function useSendTestNewsletter() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (input: SendTestInput) =>
-      newsletterMutations.sendTest({ data: input }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [NEWSLETTER_CAMPAIGNS_KEY] })
-    },
   })
 }
 

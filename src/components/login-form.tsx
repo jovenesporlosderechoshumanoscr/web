@@ -28,7 +28,7 @@ const formSchema = z.object({
 
 export function LoginForm({
 	className,
-	redirectTo = "/student/panel",
+	redirectTo = "/student",
 	...props
 }: React.ComponentProps<"div"> & { redirectTo?: string }) {
 

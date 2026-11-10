@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BanUserDialog } from "@/components/users/BanUserDialog";
+import { DeleteUserDialog } from "@/components/users/DeleteUserDialog";
 import {
   useBanUser,
   useDeleteUser,
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/admin/panel/_protected/users/")({
 type BannedFilter = "all" | "true" | "false";
 
 function RouteComponent() {
+  const { user: currentUser } = Route.useRouteContext();
   const [nameInput, setNameInput] = useState("");
   const [roleInput, setRoleInput] = useState<"" | UserRole>("");
   const [bannedInput, setBannedInput] = useState<BannedFilter>("all");
@@ -49,6 +51,16 @@ function RouteComponent() {
     id: string;
     name: string;
   } | null>(null);
+
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  function openDeleteDialog(user: { id: string; name: string }) {
+    deleteUser.reset();
+    setDeleteTarget(user);
+  }
 
   function openBanDialog(user: { id: string; name: string }) {
     banUser.reset();
@@ -96,9 +108,17 @@ function RouteComponent() {
     setApplied({});
   }
 
-  function handleDelete(id: string, name: string) {
-    if (!window.confirm(`¿Eliminar al usuario "${name}"?`)) return;
-    deleteUser.mutate({ id });
+  function handleDeleteConfirm() {
+    if (!deleteTarget) return;
+    deleteUser.mutate(
+      { id: deleteTarget.id },
+      {
+        onSuccess: () => {
+          setDeleteTarget(null);
+          toast.success(`Se eliminó a "${deleteTarget.name}"`);
+        },
+      },
+    );
   }
 
   const items = query.data?.items ?? [];
@@ -191,64 +211,97 @@ function RouteComponent() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">Nombre</th>
-                    <th className="py-2 pr-4 font-medium">Email</th>
-                    <th className="py-2 pr-4 font-medium">Rol</th>
-                    <th className="py-2 pr-4 font-medium">Baneado</th>
-                    <th className="py-2 pr-4 font-medium">Creado</th>
-                    <th className="py-2 font-medium">Acciones</th>
+                    <th className="w-full px-3 py-2 text-center font-medium">Nombre</th>
+                    <th className="px-3 py-2 text-center font-medium">Email</th>
+                    <th className="px-3 py-2 text-center font-medium">Rol</th>
+                    <th className="px-3 py-2 text-center font-medium">Baneado</th>
+                    <th className="px-3 py-2 text-center font-medium">Creado</th>
+                    <th className="px-3 py-2 text-center font-medium">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map((u) => (
-                    <tr key={u.id} className="border-b last:border-0">
-                      <td className="py-2 pr-4">{u.name}</td>
-                      <td className="py-2 pr-4">{u.email}</td>
-                      <td className="py-2 pr-4">{getRoleLabel(u.role)}</td>
-                      <td className="py-2 pr-4">{u.banned ? "Sí" : "No"}</td>
-                      <td className="py-2 pr-4">
-                        {new Date(u.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="flex gap-2 py-2">
-                        <Link
-                          to="/admin/panel/users/edit/$userId"
-                          params={{ userId: u.id }}
-                          className={buttonVariants({
-                            size: "sm",
-                            variant: "outline",
-                          })}
-                        >
-                          Editar
-                        </Link>
-                        {u.banned ? (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={unbanUser.isPending}
-                            onClick={() => handleUnban(u)}
-                          >
-                            Desbanear
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => openBanDialog(u)}
-                          >
-                            Banear
-                          </Button>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          disabled={deleteUser.isPending}
-                          onClick={() => handleDelete(u.id, u.name)}
-                        >
-                          Eliminar
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                  {items.map((u) => {
+                    const esMismo = u.id === currentUser.id;
+                    const esAdmin = u.role === "admin";
+                    return (
+                      <tr key={u.id} className="border-b last:border-0">
+                        <td className="px-3 py-2">{u.name}</td>
+                        <td className="px-3 py-2">{u.email}</td>
+                        <td className="px-3 py-2">{getRoleLabel(u.role)}</td>
+                        <td className="px-3 py-2">{u.banned ? "Sí" : "No"}</td>
+                        <td className="px-3 py-2">
+                          {new Date(u.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-3 py-2">
+                          <div className="flex gap-2">
+                            <Link
+                              to="/admin/panel/users/edit/$userId"
+                              params={{ userId: u.id }}
+                              className={buttonVariants({
+                                size: "sm",
+                                variant: "outline",
+                              })}
+                            >
+                              Editar
+                            </Link>
+                            {u.banned ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={esMismo || unbanUser.isPending}
+                                title={
+                                  esMismo
+                                    ? "No puedes quitar el baneo de tu propia cuenta"
+                                    : undefined
+                                }
+                                onClick={() => handleUnban(u)}
+                              >
+                                Desbanear
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                disabled={esMismo}
+                                title={
+                                  esMismo
+                                    ? "No puedes banear tu propia cuenta"
+                                    : undefined
+                                }
+                                onClick={() => openBanDialog(u)}
+                              >
+                                Banear
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant={
+                                esMismo || esAdmin ? "ghost" : "destructive"
+                              }
+                              className={
+                                esMismo || esAdmin
+                                  ? "text-muted-foreground hover:text-destructive"
+                                  : undefined
+                              }
+                              disabled={
+                                esMismo || esAdmin || deleteUser.isPending
+                              }
+                              title={
+                                esMismo
+                                  ? "No puedes eliminar tu propia cuenta"
+                                  : esAdmin
+                                    ? "No puedes eliminar a otros administradores"
+                                    : undefined
+                              }
+                              onClick={() => openDeleteDialog(u)}
+                            >
+                              Eliminar
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -292,6 +345,21 @@ function RouteComponent() {
           serverError={banUser.isError ? banUser.error.message : null}
           onConfirm={handleBan}
           onCancel={() => setBanTarget(null)}
+        />
+      )}
+
+      {deleteTarget && (
+        <DeleteUserDialog
+          key={deleteTarget.id}
+          open
+          onOpenChange={(open) => {
+            if (!open) setDeleteTarget(null);
+          }}
+          userName={deleteTarget.name}
+          isPending={deleteUser.isPending}
+          serverError={deleteUser.isError ? deleteUser.error.message : null}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTarget(null)}
         />
       )}
     </div>

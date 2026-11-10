@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ActividadRouteImport } from './routes/actividad'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as Ley10030RouteImport } from './routes/ley-10030'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PurposeRouteImport } from './routes/purpose'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -22,6 +25,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StudentRouteRouteImport } from './routes/student/route'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as WhatWeDoRouteImport } from './routes/what-we-do'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
@@ -58,6 +62,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActividadRoute = ActividadRouteImport.update({
+  id: '/actividad',
+  path: '/actividad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -68,6 +77,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Ley10030Route = Ley10030RouteImport.update({
+  id: '/ley-10030',
+  path: '/ley-10030',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -76,6 +90,11 @@ const LoginRoute = LoginRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PurposeRoute = PurposeRouteImport.update({
+  id: '/purpose',
+  path: '/purpose',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResendVerificationRoute = ResendVerificationRouteImport.update({
@@ -111,6 +130,11 @@ const TermsRoute = TermsRouteImport.update({
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhatWeDoRoute = WhatWeDoRouteImport.update({
+  id: '/what-we-do',
+  path: '/what-we-do',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -260,16 +284,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/what-we-do': typeof WhatWeDoRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
@@ -299,16 +327,20 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/what-we-do': typeof WhatWeDoRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
@@ -338,16 +370,20 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/student': typeof StudentRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/actividad': typeof ActividadRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/what-we-do': typeof WhatWeDoRoute
   '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/media/$': typeof MediaSplatRoute
@@ -380,16 +416,20 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
+    | '/ley-10030'
     | '/login'
     | '/privacy'
+    | '/purpose'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
     | '/verify-email'
+    | '/what-we-do'
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
@@ -419,16 +459,20 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
+    | '/ley-10030'
     | '/login'
     | '/privacy'
+    | '/purpose'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
     | '/verify-email'
+    | '/what-we-do'
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
@@ -457,16 +501,20 @@ export interface FileRouteTypes {
     | '/'
     | '/student'
     | '/about'
+    | '/actividad'
     | '/contact'
     | '/forgot-password'
+    | '/ley-10030'
     | '/login'
     | '/privacy'
+    | '/purpose'
     | '/resend-verification'
     | '/reset-password'
     | '/signup'
     | '/sitemap.xml'
     | '/terms'
     | '/verify-email'
+    | '/what-we-do'
     | '/admin/login'
     | '/blog/$slug'
     | '/media/$'
@@ -498,16 +546,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudentRouteRoute: typeof StudentRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ActividadRoute: typeof ActividadRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  Ley10030Route: typeof Ley10030Route
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
+  PurposeRoute: typeof PurposeRoute
   ResendVerificationRoute: typeof ResendVerificationRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  WhatWeDoRoute: typeof WhatWeDoRoute
   AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
   MediaSplatRoute: typeof MediaSplatRoute
@@ -532,6 +584,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/actividad': {
+      id: '/actividad'
+      path: '/actividad'
+      fullPath: '/actividad'
+      preLoaderRoute: typeof ActividadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -546,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ley-10030': {
+      id: '/ley-10030'
+      path: '/ley-10030'
+      fullPath: '/ley-10030'
+      preLoaderRoute: typeof Ley10030RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -558,6 +624,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/purpose': {
+      id: '/purpose'
+      path: '/purpose'
+      fullPath: '/purpose'
+      preLoaderRoute: typeof PurposeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resend-verification': {
@@ -607,6 +680,13 @@ declare module '@tanstack/react-router' {
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/what-we-do': {
+      id: '/what-we-do'
+      path: '/what-we-do'
+      fullPath: '/what-we-do'
+      preLoaderRoute: typeof WhatWeDoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -870,16 +950,20 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudentRouteRoute: StudentRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  ActividadRoute: ActividadRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  Ley10030Route: Ley10030Route,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
+  PurposeRoute: PurposeRoute,
   ResendVerificationRoute: ResendVerificationRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  WhatWeDoRoute: WhatWeDoRoute,
   AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,
   MediaSplatRoute: MediaSplatRoute,

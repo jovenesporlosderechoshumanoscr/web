@@ -1,6 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
+import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
+import { db } from "@/server/db";
+import { user } from "@/server/db/schema";
 import {
   banUserSchema,
   changeEmailSchema,
@@ -19,6 +22,26 @@ async function ensureAdmin() {
     throw new Error("Unauthorized");
   }
   return headers;
+}
+
+/** Igual que `ensureAdmin`, pero devuelve también la sesión (id, rol). */
+async function ensureAdminSession() {
+  const headers = getRequestHeaders();
+  const session = await auth.api.getSession({ headers });
+  if (!session || session.user.role !== "admin") {
+    throw new Error("Unauthorized");
+  }
+  return { headers, session };
+}
+
+/** Rol del usuario objetivo (null si no existe). */
+async function getTargetRole(id: string): Promise<string | null> {
+  const rows = await db
+    .select({ role: user.role })
+    .from(user)
+    .where(eq(user.id, id))
+    .limit(1);
+  return rows[0]?.role ?? null;
 }
 
 /** Roles que pueden editar su propio perfil (nombre, correo, contraseña). */
@@ -130,7 +153,11 @@ const updateUser = createServerFn({ method: "POST" })
 const banUser = createServerFn({ method: "POST" })
   .validator(banUserSchema)
   .handler(async ({ data }) => {
-    const headers = await ensureAdmin();
+    const { headers, session } = await ensureAdminSession();
+
+    if (data.id === session.user.id) {
+      throw new Error("No puedes banearte a ti mismo");
+    }
 
     const banExpiresIn = data.banExpires
       ? Math.max(
@@ -167,7 +194,16 @@ const unbanUser = createServerFn({ method: "POST" })
 const deleteUser = createServerFn({ method: "POST" })
   .validator(deleteUserSchema)
   .handler(async ({ data }) => {
-    const headers = await ensureAdmin();
+    const { headers, session } = await ensureAdminSession();
+
+    if (data.id === session.user.id) {
+      throw new Error("No puedes eliminar tu propia cuenta");
+    }
+
+    const targetRole = await getTargetRole(data.id);
+    if (targetRole === "admin") {
+      throw new Error("No puedes eliminar a otros administradores");
+    }
 
     await auth.api.removeUser({
       headers,

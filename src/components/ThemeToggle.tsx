@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react'
+import {
+  IconDeviceDesktop,
+  IconMoonStars,
+  IconSun,
+} from '@tabler/icons-react'
 
 type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -31,7 +36,8 @@ function applyThemeMode(mode: ThemeMode) {
   document.documentElement.style.colorScheme = resolved
 }
 
-export default function ThemeToggle() {
+/** Lógica compartida del tema: modo actual + ciclo light → dark → auto. */
+export function useThemeMode() {
   const [mode, setMode] = useState<ThemeMode>('auto')
 
   useEffect(() => {
@@ -62,10 +68,31 @@ export default function ThemeToggle() {
     window.localStorage.setItem('theme', nextMode)
   }
 
-  const label =
-    mode === 'auto'
-      ? 'Theme mode: auto (system). Click to switch to light mode.'
-      : `Theme mode: ${mode}. Click to switch mode.`
+  return { mode, toggleMode }
+}
+
+const MODE_ICONS = {
+  light: IconSun,
+  dark: IconMoonStars,
+  auto: IconDeviceDesktop,
+} as const
+
+const MODE_LABELS: Record<ThemeMode, string> = {
+  light: 'Claro',
+  dark: 'Oscuro',
+  auto: 'Automático',
+}
+
+/** Icono del modo actual, para reutilizar en menús. */
+export function ThemeModeIcon({ mode }: { mode: ThemeMode }) {
+  const Icon = MODE_ICONS[mode]
+  return <Icon aria-hidden="true" />
+}
+
+/** Botón circular (píldora) para usar fuera de menús, p. ej. en el footer. */
+export default function ThemeToggle() {
+  const { mode, toggleMode } = useThemeMode()
+  const label = `Tema: ${MODE_LABELS[mode]}. Haz clic para cambiar.`
 
   return (
     <button
@@ -73,9 +100,10 @@ export default function ThemeToggle() {
       onClick={toggleMode}
       aria-label={label}
       title={label}
-      className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink)] shadow-[0_8px_22px_rgba(30,90,72,0.08)] transition hover:-translate-y-0.5"
+      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-medium shadow-sm transition-colors hover:bg-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none"
     >
-      {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light'}
+      <ThemeModeIcon mode={mode} />
+      {MODE_LABELS[mode]}
     </button>
   )
 }
