@@ -2,14 +2,16 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { ProgressRing } from '@/components/student/ProgressRing'
 import { formatMinutes } from '@/lib/lesson-duration'
 import { cn } from 'cn'
+import { useGenerateCertificate } from '@/functions/course-client'
 import {
   IconBook,
-  IconCheck,
+  IconDownload,
   IconPlayerPlay,
   IconRotate,
   IconTrophy,
 } from '@tabler/icons-react'
 import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import type { CourseListItem } from './dashboard-types'
 
 type CourseStatus = 'not-started' | 'in-progress' | 'completed'
@@ -27,7 +29,7 @@ const STATUS_LABEL: Record<
 > = {
   'not-started': { text: 'Empezar', icon: IconPlayerPlay },
   'in-progress': { text: 'Continuar', icon: IconRotate },
-  completed: { text: 'Repasar', icon: IconCheck },
+  completed: { text: 'Descargar certificado', icon: IconDownload },
 }
 
 const STATUS_BADGE: Record<CourseStatus, string> = {
@@ -62,11 +64,14 @@ export function CourseCard({
       ? Math.round((course.completedLessons / course.totalLessons) * 100)
       : 0
   const CtaIcon = STATUS_LABEL[status].icon
+  const generateCertificate = useGenerateCertificate()
+  const [downloadError, setDownloadError] = useState(false)
+  const isCompleted = status === 'completed'
 
   return (
     <article
       className={cn(
-        'group relative flex overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl',
+        'group relative flex overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-shadow duration-200 hover:shadow-xl',
         featured ? 'flex-col md:flex-row' : 'flex-col',
         className,
       )}
@@ -84,7 +89,7 @@ export function CourseCard({
           <img
             src={course.coverImage}
             alt={`Portada del curso ${course.title}`}
-            className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="absolute inset-0 size-full object-cover"
           />
         ) : (
           <div aria-hidden="true" className="absolute inset-0">
@@ -145,18 +150,37 @@ export function CourseCard({
         </div>
 
         <div className="mt-auto flex items-center gap-3 pt-2">
-          <Button
-            size={featured ? 'lg' : 'default'}
-            render={
-              <Link
-                to="/student/courses/$courseSlug"
-                params={{ courseSlug: course.slug }}
-              />
-            }
-          >
-            <CtaIcon />
-            {STATUS_LABEL[status].text}
-          </Button>
+          {isCompleted ? (
+            <Button
+              size={featured ? 'lg' : 'default'}
+              onClick={() => {
+                setDownloadError(false)
+                generateCertificate.mutate(
+                  { courseId: course.id },
+                  { onError: () => setDownloadError(true) },
+                )
+              }}
+              disabled={generateCertificate.isPending}
+            >
+              <CtaIcon />
+              {generateCertificate.isPending
+                ? 'Generando…'
+                : STATUS_LABEL[status].text}
+            </Button>
+          ) : (
+            <Button
+              size={featured ? 'lg' : 'default'}
+              render={
+                <Link
+                  to="/student/courses/$courseSlug"
+                  params={{ courseSlug: course.slug }}
+                />
+              }
+            >
+              <CtaIcon />
+              {STATUS_LABEL[status].text}
+            </Button>
+          )}
           <Link
             to="/student/courses/$courseSlug"
             params={{ courseSlug: course.slug }}
@@ -165,6 +189,11 @@ export function CourseCard({
             Ver temario
           </Link>
         </div>
+        {downloadError && (
+          <p className="text-sm text-destructive">
+            No se pudo descargar el certificado. Inténtalo de nuevo.
+          </p>
+        )}
       </div>
     </article>
   )

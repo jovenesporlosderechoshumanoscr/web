@@ -31,7 +31,7 @@ export function PlatformLayout({
             <img
               src="/logojpdh.webp"
               alt="Jóvenes por los Derechos Humanos Costa Rica"
-              className="h-11 w-auto"
+              className="h-16 w-auto"
             />
           </Link>
           <div className="flex items-center gap-2">
@@ -41,14 +41,13 @@ export function PlatformLayout({
         </div>
       </header>
 
-      {/* Motivos de marca muy sutiles: diagonales del hero + punto violeta */}
+      {/* Motivos de marca muy sutiles: diagonales del hero */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-72 overflow-hidden"
       >
         <div className="absolute top-0 right-0 h-40 w-1/3 bg-primary/8 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
         <div className="absolute top-0 right-8 h-24 w-1/4 bg-secondary/6 [clip-path:polygon(0_0,100%_0,100%_60%)]" />
-        <div className="absolute top-16 left-[8%] size-3 rounded-full bg-accent/30" />
         <div className="absolute top-40 left-[16%] size-1.5 rounded-full bg-secondary/30" />
       </div>
 

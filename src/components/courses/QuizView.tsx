@@ -117,7 +117,7 @@ export function QuizView({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto flex w-full max-w-3xl flex-col gap-8"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-12"
     >
       {previousAttempt && (
         <div className="rounded-2xl border bg-muted/50 p-3 text-sm text-muted-foreground">
@@ -128,7 +128,7 @@ export function QuizView({
       )}
 
       {questions.map((question, qi) => (
-        <fieldset key={question.id} className="flex flex-col gap-3">
+        <fieldset key={question.id} className="flex flex-col gap-5">
           <legend className="rounded-2xl border bg-card px-5 py-4 text-base font-semibold shadow-sm">
             <span className="mr-2 text-primary">{qi + 1}.</span>
             {question.text}

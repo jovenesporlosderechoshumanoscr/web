@@ -638,6 +638,21 @@ async function saveLessonProgressInternal(
 }
 
 /**
+ * Suma los minutos estimados de todas las lecciones de un curso (para el
+ * campo de horas del certificado).
+ */
+function totalCourseMinutes(courseId: string): Promise<number> {
+  return db
+    .select({
+      value: sql<number>`coalesce(sum(${lesson.estimatedMinutes}), 0)`,
+    })
+    .from(lesson)
+    .innerJoin(courseModule, eq(lesson.moduleId, courseModule.id))
+    .where(eq(courseModule.courseId, courseId))
+    .then((rows) => Number(rows.at(0)?.value ?? 0))
+}
+
+/**
  * Genera el certificado en PDF de un curso completado. Valida en el servidor
  * que el curso esté publicado y que el usuario haya terminado TODAS las
  * lecciones antes de dibujar sobre la plantilla de R2.
@@ -677,7 +692,11 @@ const generateCertificate = createServerFn({ method: 'POST' })
       }
     }
 
-    const pdf = await generarCertificado(session.user.name, item.title)
+    const pdf = await generarCertificado(
+      session.user.name,
+      item.title,
+      Math.ceil((await totalCourseMinutes(item.id)) / 60),
+    )
     await env.MEDIA.put(key, pdf, {
       httpMetadata: { contentType: 'application/pdf' },
     })
