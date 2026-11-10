@@ -1,9 +1,8 @@
-
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/manrope";
-@import "@fontsource-variable/figtree";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/figtree';
 
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
@@ -24,9 +23,16 @@
   --secondary: #ff3d3d;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  /* Elevado de 0.556 a 0.44 para cumplir contraste AA sobre --background. */
+  --muted-foreground: oklch(0.44 0.02 255);
   --accent: #624dea;
   --accent-foreground: oklch(0.205 0 0);
+  /* Logros y progreso (insignias, checks, barras). */
+  --success: oklch(0.55 0.13 155);
+  --success-foreground: oklch(0.985 0 0);
+  /* Avisos suaves (duración estimada, estados intermedios). */
+  --warning: oklch(0.68 0.13 70);
+  --warning-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -47,8 +53,6 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-
-
 .dark {
   --background: #010409;
   --foreground: #f6f9fe;
@@ -61,9 +65,15 @@
   --secondary: #c20000;
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.72 0.01 255);
   --accent: #2a15b2;
   --accent-foreground: oklch(0.985 0 0);
+  /* Logros y progreso (insignias, checks, barras). */
+  --success: oklch(0.72 0.15 155);
+  --success-foreground: oklch(0.205 0 0);
+  /* Avisos suaves (duración estimada, estados intermedios). */
+  --warning: oklch(0.78 0.13 75);
+  --warning-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -103,6 +113,10 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -132,13 +146,51 @@
     opacity: 1;
   }
   100% {
-    transform: translate3d(
-      var(--confetti-drift, 0px),
-      100vh,
-      0
-    )
+    transform: translate3d(var(--confetti-drift, 0px), 100vh, 0)
       rotate(var(--confetti-rotation, 540deg));
     opacity: 0;
+  }
+}
+
+/* Entrada escalonada de tarjetas y elementos de la plataforma. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Pulso sutil del anillo de progreso al montar. */
+@keyframes ring-fill {
+  from {
+    stroke-dashoffset: var(--ring-circumference, 100);
+  }
+}
+
+.animate-ring {
+  animation: ring-fill 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-ring {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

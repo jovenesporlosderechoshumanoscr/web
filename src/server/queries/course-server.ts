@@ -159,6 +159,35 @@ type LessonTreeNode = {
   title: string
   type: 'reading' | 'quiz'
   position: number
+  estimatedMinutes: number | null
+}
+
+/**
+ * Lección donde continuar: la última visitada sin completar (por
+ * lastAccessedAt) o, si no hay ninguna en progreso, la primera sin
+ * completar; si todo está completado, la última lección.
+ */
+function pickContinueLesson(
+  lessons: Array<{ id: string }>,
+  progressByLesson: Map<string, { status: string; lastAccessedAt: Date }>,
+): string | null {
+  if (lessons.length === 0) return null
+
+  const inProgress = lessons
+    .filter((l) => progressByLesson.get(l.id)?.status === 'in_progress')
+    .sort(
+      (a, b) =>
+        (progressByLesson.get(b.id)?.lastAccessedAt.getTime() ?? 0) -
+        (progressByLesson.get(a.id)?.lastAccessedAt.getTime() ?? 0),
+    )
+  if (inProgress[0]) return inProgress[0].id
+
+  const firstPending = lessons.find(
+    (l) => progressByLesson.get(l.id)?.status !== 'completed',
+  )
+  if (firstPending) return firstPending.id
+
+  return lessons[lessons.length - 1].id
 }
 
 /**
@@ -194,6 +223,7 @@ const getStudentCourse = createServerFn({ method: 'GET' })
               title: lesson.title,
               type: lesson.type,
               position: lesson.position,
+              estimatedMinutes: lesson.estimatedMinutes,
             })
             .from(lesson)
             .where(inArray(lesson.moduleId, moduleIds))
@@ -218,6 +248,11 @@ const getStudentCourse = createServerFn({ method: 'GET' })
     const completedLessons = progressRows.filter(
       (p) => p.status === 'completed',
     ).length
+    const totalMinutes = lessons.reduce(
+      (sum, l) => sum + (l.estimatedMinutes ?? 0),
+      0,
+    )
+    const continueLessonId = pickContinueLesson(lessons, progressByLesson)
 
     return {
       ...item,
@@ -235,8 +270,57 @@ const getStudentCourse = createServerFn({ method: 'GET' })
         totalLessons: lessons.length,
         completedLessons,
         completed: lessons.length > 0 && completedLessons === lessons.length,
+        totalMinutes,
+        continueLessonId,
       },
     }
+  })
+
+/** Lección donde continuar dentro de un curso (para el redirect de la raíz). */
+const getCourseContinuePoint = createServerFn({ method: 'GET' })
+  .validator(getCourseBySlugSchema)
+  .handler(async ({ data }) => {
+    const session = await ensureSession()
+
+    const item = (
+      await db
+        .select({ id: course.id, slug: course.slug })
+        .from(course)
+        .where(and(eq(course.slug, data.slug), eq(course.status, 'published')))
+    ).at(0)
+    if (!item) return null
+
+    const lessons = await db
+      .select({ id: lesson.id })
+      .from(lesson)
+      .innerJoin(courseModule, eq(lesson.moduleId, courseModule.id))
+      .where(eq(courseModule.courseId, item.id))
+      .orderBy(asc(courseModule.position), asc(lesson.position))
+
+    const progressRows =
+      lessons.length > 0
+        ? await db
+            .select({
+              lessonId: lessonProgress.lessonId,
+              status: lessonProgress.status,
+              lastAccessedAt: lessonProgress.lastAccessedAt,
+            })
+            .from(lessonProgress)
+            .where(
+              and(
+                eq(lessonProgress.userId, session.user.id),
+                inArray(
+                  lessonProgress.lessonId,
+                  lessons.map((l) => l.id),
+                ),
+              ),
+            )
+        : []
+
+    const progressByLesson = new Map(progressRows.map((p) => [p.lessonId, p]))
+    const lessonId = pickContinueLesson(lessons, progressByLesson)
+
+    return lessonId ? { courseSlug: item.slug, lessonId } : null
   })
 
 /**
@@ -333,9 +417,9 @@ const getStudentLesson = createServerFn({ method: 'GET' })
         .limit(1)
     ).at(0)
 
-    // Anterior/siguiente en el orden del curso.
+    // Anterior/siguiente en el orden del curso (con título para la navegación).
     const siblings = await db
-      .select({ id: lesson.id })
+      .select({ id: lesson.id, title: lesson.title })
       .from(lesson)
       .where(eq(lesson.moduleId, item.moduleId))
       .orderBy(asc(lesson.position))
@@ -346,6 +430,7 @@ const getStudentLesson = createServerFn({ method: 'GET' })
       title: item.title,
       type: item.type,
       passingScore: item.passingScore,
+      estimatedMinutes: item.estimatedMinutes,
       content: item.type === 'reading' ? item.content : null,
       course: {
         id: itemCourse.id,
@@ -356,7 +441,10 @@ const getStudentLesson = createServerFn({ method: 'GET' })
       progress: progress ?? null,
       lastAttempt: lastAttempt ?? null,
       prevLessonId: index > 0 ? siblings[index - 1].id : null,
+      prevLessonTitle: index > 0 ? siblings[index - 1].title : null,
       nextLessonId: index < siblings.length - 1 ? siblings[index + 1].id : null,
+      nextLessonTitle:
+        index < siblings.length - 1 ? siblings[index + 1].title : null,
       questions: questions.map((q) => ({
         id: q.id,
         text: q.text,
@@ -406,6 +494,45 @@ const getMyCourses = createServerFn({ method: 'GET' }).handler(async () => {
     )
     .groupBy(courseModule.courseId)
 
+  // Duración total por curso y lección donde continuar (la última visitada
+  // sin completar, o la primera sin completar).
+  const lessons = await db
+    .select({
+      id: lesson.id,
+      courseId: courseModule.courseId,
+      title: lesson.title,
+      estimatedMinutes: lesson.estimatedMinutes,
+    })
+    .from(lesson)
+    .innerJoin(courseModule, eq(lesson.moduleId, courseModule.id))
+    .where(inArray(courseModule.courseId, courseIds))
+    .orderBy(asc(courseModule.position), asc(lesson.position))
+
+  const allProgress = await db
+    .select({
+      lessonId: lessonProgress.lessonId,
+      status: lessonProgress.status,
+      lastAccessedAt: lessonProgress.lastAccessedAt,
+    })
+    .from(lessonProgress)
+    .where(
+      and(
+        eq(lessonProgress.userId, session.user.id),
+        inArray(
+          lessonProgress.lessonId,
+          lessons.map((l) => l.id),
+        ),
+      ),
+    )
+
+  const progressByLesson = new Map(allProgress.map((p) => [p.lessonId, p]))
+  const lessonsByCourse = new Map<string, typeof lessons>()
+  for (const l of lessons) {
+    const list = lessonsByCourse.get(l.courseId) ?? []
+    list.push(l)
+    lessonsByCourse.set(l.courseId, list)
+  }
+
   const totalsByCourse = new Map(totals.map((t) => [t.courseId, t.value]))
   const progressByCourse = new Map(progress.map((p) => [p.courseId, p]))
 
@@ -413,6 +540,14 @@ const getMyCourses = createServerFn({ method: 'GET' }).handler(async () => {
     items: items.map((c) => {
       const total = totalsByCourse.get(c.id) ?? 0
       const p = progressByCourse.get(c.id)
+      const courseLessons = lessonsByCourse.get(c.id) ?? []
+      const continueLessonId = pickContinueLesson(
+        courseLessons,
+        progressByLesson,
+      )
+      const continueLesson = continueLessonId
+        ? (courseLessons.find((l) => l.id === continueLessonId) ?? null)
+        : null
       return {
         ...c,
         totalLessons: total,
@@ -420,6 +555,13 @@ const getMyCourses = createServerFn({ method: 'GET' }).handler(async () => {
         lastActivityAt: p?.lastActivity ?? null,
         completedAt: p?.lastCompleted ?? null,
         completed: total > 0 && (p?.completed ?? 0) === total,
+        totalMinutes: courseLessons.reduce(
+          (sum, l) => sum + (l.estimatedMinutes ?? 0),
+          0,
+        ),
+        continueLesson: continueLesson
+          ? { id: continueLesson.id, title: continueLesson.title }
+          : null,
       }
     }),
   }
@@ -430,62 +572,7 @@ export const courseQueries = {
   getCourseById,
   getEditorLesson,
   getStudentCourse,
+  getCourseContinuePoint,
   getStudentLesson,
   getMyCourses,
-}
-
-/** Queries de navegación del sidebar: títulos/ids de cursos publicados. */
-const getSidebarCourses = createServerFn({ method: 'GET' }).handler(
-  async () => {
-    await ensureSession()
-
-    const items = await db
-      .select({ id: course.id, slug: course.slug, title: course.title })
-      .from(course)
-      .where(eq(course.status, 'published'))
-      .orderBy(desc(course.publishedAt))
-
-    const courseIds = items.map((c) => c.id)
-    if (courseIds.length === 0) return { courses: [] }
-
-    const modules = await db
-      .select({
-        id: courseModule.id,
-        courseId: courseModule.courseId,
-        title: courseModule.title,
-      })
-      .from(courseModule)
-      .where(inArray(courseModule.courseId, courseIds))
-      .orderBy(asc(courseModule.position))
-
-    const moduleIds = modules.map((m) => m.id)
-    const lessons =
-      moduleIds.length > 0
-        ? await db
-            .select({
-              id: lesson.id,
-              moduleId: lesson.moduleId,
-              title: lesson.title,
-            })
-            .from(lesson)
-            .where(inArray(lesson.moduleId, moduleIds))
-            .orderBy(asc(lesson.position))
-        : []
-
-    return {
-      courses: items.map((c) => ({
-        ...c,
-        modules: modules
-          .filter((m) => m.courseId === c.id)
-          .map((m) => ({
-            ...m,
-            lessons: lessons.filter((l) => l.moduleId === m.id),
-          })),
-      })),
-    }
-  },
-)
-
-export const coursePublicQueries = {
-  getSidebarCourses,
 }

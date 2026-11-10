@@ -132,6 +132,11 @@ export const updateLessonSchema = z
     /** Solo para lecciones de quiz: reemplaza todas las preguntas. */
     questions: quizQuestionsSchema.optional(),
     passingScore: z.coerce.number().int().min(0).max(100).optional(),
+    /**
+     * Duración estimada en minutos. Número = override manual; null = volver
+     * al cálculo automático (se recalcula al guardar). Ausente = no tocar.
+     */
+    estimatedMinutes: z.coerce.number().int().min(1).max(600).nullish(),
   })
   .refine((data) => Object.keys(data).length > 1, {
     message: 'Sin cambios para guardar',

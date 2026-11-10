@@ -1,8 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  coursePublicQueries,
-  courseQueries,
-} from '@/server/queries/course-server'
+import { courseQueries } from '@/server/queries/course-server'
 import { courseMutations } from '@/server/mutations/course-server'
 import type {
   CreateCourseInput,
@@ -26,7 +23,7 @@ export const MY_COURSES_QUERY_KEY = 'my-courses'
 export const STUDENT_COURSE_KEY = 'student-course'
 export const STUDENT_LESSON_KEY = 'student-lesson'
 export const EDITOR_LESSON_KEY = 'editor-lesson'
-export const SIDEBAR_COURSES_KEY = 'sidebar-courses'
+export const CONTINUE_POINT_KEY = 'course-continue-point'
 
 /* ------------------------------- Admin ------------------------------- */
 
@@ -186,18 +183,20 @@ export function useMoveLesson() {
 
 /* ----------------------------- Estudiantes ----------------------------- */
 
-/** Sidebar de la zona de estudiantes: cursos publicados + lecciones. */
-export function useSidebarCourses() {
-  return useQuery({
-    queryKey: [SIDEBAR_COURSES_KEY],
-    queryFn: () => coursePublicQueries.getSidebarCourses(),
-  })
-}
-
 export function useMyCourses() {
   return useQuery({
     queryKey: [MY_COURSES_QUERY_KEY],
     queryFn: () => courseQueries.getMyCourses(),
+  })
+}
+
+/** Lección donde continuar dentro de un curso (para el redirect de la raíz). */
+export function useCourseContinuePoint(slug: string | undefined) {
+  return useQuery({
+    queryKey: [CONTINUE_POINT_KEY, slug],
+    queryFn: () =>
+      courseQueries.getCourseContinuePoint({ data: { slug: slug! } }),
+    enabled: Boolean(slug),
   })
 }
 
@@ -224,7 +223,7 @@ function useInvalidateStudent() {
     queryClient.invalidateQueries({ queryKey: [MY_COURSES_QUERY_KEY] })
     queryClient.invalidateQueries({ queryKey: [STUDENT_COURSE_KEY] })
     queryClient.invalidateQueries({ queryKey: [STUDENT_LESSON_KEY] })
-    queryClient.invalidateQueries({ queryKey: [SIDEBAR_COURSES_KEY] })
+    queryClient.invalidateQueries({ queryKey: [CONTINUE_POINT_KEY] })
   }
 }
 

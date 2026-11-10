@@ -367,6 +367,7 @@ function LessonEditorPanel({ lessonId }: { lessonId: string }) {
           lessonId={lesson.id}
           initialTitle={lesson.title}
           initialContent={lesson.content ?? []}
+          initialEstimatedMinutes={lesson.estimatedMinutes}
         />
       ) : (
         <QuizEditor key={lesson.id} lesson={lesson} />
@@ -379,16 +380,21 @@ type ReadingEditorProps = {
   lessonId: string
   initialTitle: string
   initialContent: PostBlock[]
+  initialEstimatedMinutes: number | null
 }
 
 function ReadingEditor({
   lessonId,
   initialTitle,
   initialContent,
+  initialEstimatedMinutes,
 }: ReadingEditorProps) {
   const updateLesson = useUpdateLesson()
   const [title, setTitle] = useState(initialTitle)
   const [blocks, setBlocks] = useState<PostBlock[]>(initialContent)
+  const [estimatedMinutes, setEstimatedMinutes] = useState(
+    initialEstimatedMinutes?.toString() ?? '',
+  )
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
@@ -398,8 +404,16 @@ function ReadingEditor({
 
   function handleSave() {
     setSaved(false)
+    const trimmed = estimatedMinutes.trim()
+    const parsed = trimmed === '' ? null : Number(trimmed)
     updateLesson.mutate(
-      { id: lessonId, title: title.trim(), content: blocks },
+      {
+        id: lessonId,
+        title: title.trim(),
+        content: blocks,
+        estimatedMinutes:
+          parsed == null || Number.isNaN(parsed) ? null : parsed,
+      },
       { onSuccess: () => setSaved(true) },
     )
   }
@@ -413,18 +427,35 @@ function ReadingEditor({
           className="h-9 max-w-md text-base font-semibold"
           placeholder="Título de la lección"
         />
-        <div className="flex items-center gap-2">
-          {saved && (
-            <span className="text-sm text-muted-foreground">Guardado</span>
-          )}
-          <Button
-            type="button"
-            size="sm"
-            onClick={handleSave}
-            disabled={updateLesson.isPending}
-          >
-            {updateLesson.isPending ? 'Guardando…' : 'Guardar lectura'}
-          </Button>
+        <div className="flex items-end gap-2">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="estimatedMinutes" className="text-xs">
+              Min estimados
+            </Label>
+            <Input
+              id="estimatedMinutes"
+              type="number"
+              min={1}
+              max={600}
+              value={estimatedMinutes}
+              onChange={(e) => setEstimatedMinutes(e.target.value)}
+              placeholder="Auto"
+              className="h-9 w-24"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            {saved && (
+              <span className="text-sm text-muted-foreground">Guardado</span>
+            )}
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleSave}
+              disabled={updateLesson.isPending}
+            >
+              {updateLesson.isPending ? 'Guardando…' : 'Guardar lectura'}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -461,6 +492,7 @@ function QuizEditor({
     id: string
     title: string
     passingScore: number
+    estimatedMinutes: number | null
     questions: Array<{
       id: string
       text: string
@@ -471,6 +503,9 @@ function QuizEditor({
   const updateLesson = useUpdateLesson()
   const [title, setTitle] = useState(lesson.title)
   const [passingScore, setPassingScore] = useState(String(lesson.passingScore))
+  const [estimatedMinutes, setEstimatedMinutes] = useState(
+    lesson.estimatedMinutes?.toString() ?? '',
+  )
   const [questions, setQuestions] = useState<QuestionDraft[]>(
     lesson.questions.map((q) => ({
       text: q.text,
@@ -542,6 +577,11 @@ function QuizEditor({
             isCorrect: o.isCorrect,
           })),
         })),
+        estimatedMinutes:
+          estimatedMinutes.trim() === '' ||
+          Number.isNaN(Number(estimatedMinutes))
+            ? null
+            : Number(estimatedMinutes),
       },
       {
         onSuccess: () => setSaved(true),
@@ -572,6 +612,21 @@ function QuizEditor({
               max={100}
               value={passingScore}
               onChange={(e) => setPassingScore(e.target.value)}
+              className="h-9 w-24"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="quizEstimatedMinutes" className="text-xs">
+              Min estimados
+            </Label>
+            <Input
+              id="quizEstimatedMinutes"
+              type="number"
+              min={1}
+              max={600}
+              value={estimatedMinutes}
+              onChange={(e) => setEstimatedMinutes(e.target.value)}
+              placeholder="Auto"
               className="h-9 w-24"
             />
           </div>

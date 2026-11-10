@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { IconCheck, IconRotate, IconX } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import { useSubmitQuiz } from '@/functions/course-client'
+import { cn } from 'cn'
 
 type SubmitResult = {
   attemptId: string
@@ -73,13 +74,14 @@ export function QuizView({
   if (result) {
     const passed = result.passed
     return (
-      <div className="flex w-full max-w-3xl flex-col items-center gap-4 rounded-2xl border p-8 text-center">
+      <div className="flex w-full max-w-3xl flex-col items-center gap-4 rounded-3xl border bg-card p-8 text-center shadow-sm animate-fade-up">
         <span
-          className={`flex size-16 items-center justify-center rounded-full text-4xl ${
+          className={cn(
+            'flex size-16 items-center justify-center rounded-full',
             passed
-              ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-400/20'
-              : 'bg-red-100 text-red-600 dark:bg-red-400/20'
-          }`}
+              ? 'bg-success/15 text-success'
+              : 'bg-destructive/10 text-destructive',
+          )}
         >
           {passed ? (
             <IconCheck className="size-8" />
@@ -87,7 +89,7 @@ export function QuizView({
             <IconX className="size-8" />
           )}
         </span>
-        <h2 className="text-2xl font-bold">
+        <h2 className="font-heading text-2xl font-bold">
           {passed ? '¡Aprobado!' : 'No aprobado'}
         </h2>
         <p className="text-3xl font-bold">{result.score}%</p>
@@ -115,10 +117,10 @@ export function QuizView({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full max-w-3xl flex-col gap-6"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-8"
     >
       {previousAttempt && (
-        <div className="rounded-xl border bg-muted/40 p-3 text-sm text-muted-foreground">
+        <div className="rounded-2xl border bg-muted/50 p-3 text-sm text-muted-foreground">
           Último intento:{' '}
           <span className="font-medium">{previousAttempt.score}%</span> (
           {previousAttempt.passed ? 'aprobado' : 'no aprobado'})
@@ -127,25 +129,42 @@ export function QuizView({
 
       {questions.map((question, qi) => (
         <fieldset key={question.id} className="flex flex-col gap-3">
-          <legend className="text-base font-semibold">
-            {qi + 1}. {question.text}
+          <legend className="rounded-2xl border bg-card px-5 py-4 text-base font-semibold shadow-sm">
+            <span className="mr-2 text-primary">{qi + 1}.</span>
+            {question.text}
           </legend>
-          <div className="flex flex-col gap-2">
-            {question.options.map((option) => (
-              <label
-                key={option.id}
-                className="flex cursor-pointer items-center gap-2 rounded-xl border p-3 text-sm transition-colors hover:bg-accent has-[:checked]:border-ring has-[:checked]:bg-accent"
-              >
-                <input
-                  type="radio"
-                  name={question.id}
-                  checked={answers[question.id] === option.id}
-                  onChange={() => setAnswer(question.id, option.id)}
-                  className="size-4"
-                />
-                {option.text}
-              </label>
-            ))}
+          <div className="flex flex-col gap-2.5">
+            {question.options.map((option) => {
+              const selected = answers[question.id] === option.id
+              return (
+                <label
+                  key={option.id}
+                  className={cn(
+                    'flex cursor-pointer items-center gap-3 rounded-2xl border bg-card p-4 text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-within:ring-3 focus-within:ring-ring/30',
+                    selected && 'border-primary bg-primary/8 font-medium',
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name={question.id}
+                    checked={selected}
+                    onChange={() => setAnswer(question.id, option.id)}
+                    className="size-4 accent-[var(--primary)]"
+                  />
+                  <span
+                    className={cn(
+                      'flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors',
+                      selected
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {String.fromCharCode(65 + question.options.indexOf(option))}
+                  </span>
+                  {option.text}
+                </label>
+              )
+            })}
           </div>
         </fieldset>
       ))}
@@ -153,6 +172,7 @@ export function QuizView({
       <div className="flex items-center gap-3">
         <Button
           type="submit"
+          size="lg"
           disabled={submitQuiz.isPending || answeredCount < questions.length}
         >
           {submitQuiz.isPending ? 'Enviando…' : 'Enviar respuestas'}

@@ -173,6 +173,12 @@ export const lesson = sqliteTable(
     content: text('content', { mode: 'json' }).$type<PostBlock[]>(),
     /** Nota mínima (0-100) para aprobar el quiz. */
     passingScore: integer('passing_score').default(70).notNull(),
+    /**
+     * Duración estimada en minutos. Null = se calcula automáticamente a
+     * partir del contenido (lectura ~200 palabras/min, quiz por pregunta,
+     * video por defecto); un valor fijo actúa como override manual.
+     */
+    estimatedMinutes: integer('estimated_minutes'),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),

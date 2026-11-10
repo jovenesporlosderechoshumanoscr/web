@@ -3,6 +3,7 @@ import { getRequestHeaders } from '@tanstack/react-start/server'
 import { and, asc, eq, inArray, sql } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
 import { generarCertificado } from '@/lib/certificate'
+import { estimateLessonMinutes } from '@/lib/lesson-duration'
 import { db } from '@/server/db'
 import {
   course,
@@ -263,11 +264,49 @@ const createLesson = createServerFn({ method: 'POST' })
         type: data.type,
         position: data.position ?? current,
         content: data.type === 'reading' ? [] : null,
+        // Nueva lección: estimación mínima por tipo; se recalcula al guardar.
+        estimatedMinutes: estimateLessonMinutes({
+          type: data.type,
+          content: data.type === 'reading' ? [] : null,
+          questionCount: 0,
+        }),
       })
       .returning()
 
     return item
   })
+
+/**
+ * Recalcula la duración automática mezclando los cambios del editor con la
+ * lección existente (el contenido/preguntas nuevos mandan; si no vienen, se
+ * usan los actuales, contando las preguntas en DB para los quizzes).
+ */
+async function estimateAutoMinutes(
+  existing: typeof lesson.$inferSelect,
+  fields: { content?: unknown; questions?: unknown[] },
+): Promise<number> {
+  if (existing.type === 'quiz') {
+    const questionCount =
+      fields.questions !== undefined
+        ? fields.questions.length
+        : (
+            await db
+              .select({ id: quizQuestion.id })
+              .from(quizQuestion)
+              .where(eq(quizQuestion.lessonId, existing.id))
+          ).length
+    return estimateLessonMinutes({
+      type: 'quiz',
+      questionCount,
+    })
+  }
+
+  const content =
+    fields.content !== undefined
+      ? (fields.content as typeof existing.content)
+      : existing.content
+  return estimateLessonMinutes({ type: 'reading', content })
+}
 
 /**
  * Actualiza una lección. Para quizzes, `questions` reemplaza TODAS las
@@ -294,6 +333,13 @@ const updateLesson = createServerFn({ method: 'POST' })
         throw new Error('Solo las lecciones de lectura tienen contenido')
       }
       updateData.content = fields.content
+    }
+
+    // Duración: override manual explícito, o recálculo automático a partir
+    // del contenido/preguntas resultantes (null = "auto" en el editor).
+    if (fields.estimatedMinutes !== undefined) {
+      updateData.estimatedMinutes =
+        fields.estimatedMinutes ?? (await estimateAutoMinutes(existing, fields))
     }
 
     if (Object.keys(updateData).length > 0) {
