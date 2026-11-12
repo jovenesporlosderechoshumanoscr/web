@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as Ley10030RouteImport } from './routes/ley-10030'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PurposeRouteImport } from './routes/purpose'
 import { Route as ResendVerificationRouteImport } from './routes/resend-verification'
@@ -85,6 +86,11 @@ const Ley10030Route = Ley10030RouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterRoute = NewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -289,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
+  '/newsletter': typeof NewsletterRoute
   '/privacy': typeof PrivacyRoute
   '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
@@ -332,6 +339,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
+  '/newsletter': typeof NewsletterRoute
   '/privacy': typeof PrivacyRoute
   '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
@@ -375,6 +383,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/ley-10030': typeof Ley10030Route
   '/login': typeof LoginRoute
+  '/newsletter': typeof NewsletterRoute
   '/privacy': typeof PrivacyRoute
   '/purpose': typeof PurposeRoute
   '/resend-verification': typeof ResendVerificationRoute
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/ley-10030'
     | '/login'
+    | '/newsletter'
     | '/privacy'
     | '/purpose'
     | '/resend-verification'
@@ -464,6 +474,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/ley-10030'
     | '/login'
+    | '/newsletter'
     | '/privacy'
     | '/purpose'
     | '/resend-verification'
@@ -506,6 +517,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/ley-10030'
     | '/login'
+    | '/newsletter'
     | '/privacy'
     | '/purpose'
     | '/resend-verification'
@@ -551,6 +563,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   Ley10030Route: typeof Ley10030Route
   LoginRoute: typeof LoginRoute
+  NewsletterRoute: typeof NewsletterRoute
   PrivacyRoute: typeof PrivacyRoute
   PurposeRoute: typeof PurposeRoute
   ResendVerificationRoute: typeof ResendVerificationRoute
@@ -617,6 +630,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter': {
+      id: '/newsletter'
+      path: '/newsletter'
+      fullPath: '/newsletter'
+      preLoaderRoute: typeof NewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -955,6 +975,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   Ley10030Route: Ley10030Route,
   LoginRoute: LoginRoute,
+  NewsletterRoute: NewsletterRoute,
   PrivacyRoute: PrivacyRoute,
   PurposeRoute: PurposeRoute,
   ResendVerificationRoute: ResendVerificationRoute,

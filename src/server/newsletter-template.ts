@@ -20,7 +20,6 @@ function escapeHtml(text: string): string {
     .replaceAll("'", '&#39;')
 }
 
-/** Convierte dobles saltos de línea en párrafos y simples en <br>. */
 function textToParagraphs(text: string): string {
   return escapeHtml(text.trim())
     .split(/\n{2,}/)
@@ -29,9 +28,7 @@ function textToParagraphs(text: string): string {
 }
 
 export interface NewsletterRenderInput {
-  /** Cuerpo en texto plano escrito por el admin. */
   content: string
-  /** Preheader (texto de vista previa en la bandeja). */
   previewText: string
 }
 
@@ -90,15 +87,14 @@ export function renderNewsletterHtml(input: NewsletterRenderInput): string {
           <tr>
             <td style="padding:24px 32px; background-color:#f9fafb; border-top:1px solid #e5e7eb;">
               <p style="margin:0 0 8px; font-family:Arial, sans-serif; font-size:12px; color:#6b7280;">
-                Recibes este correo porque te suscribiste al boletín de JPDH.
+                Recibes este correo porque te suscribiste al boletín de Jóvenes por los derechos humanos cr.
               </p>
               <p style="margin:0; font-family:Arial, sans-serif; font-size:12px; color:#6b7280;">
                 <a href="{{ unsubscribe }}" style="color:#6b7280; text-decoration:underline;">Darse de baja</a>
                 &nbsp;·&nbsp;
-                <a href="{{ update_profile }}" style="color:#6b7280; text-decoration:underline;">Actualizar preferencias</a>
               </p>
               <p style="margin:12px 0 0; font-family:Arial, sans-serif; font-size:12px; color:#9ca3af;">
-                © ${year} JPDH. Todos los derechos reservados.
+                © ${year} Jóvenes por los derechos humanos cr. Todos los derechos reservados.
               </p>
             </td>
           </tr>

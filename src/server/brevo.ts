@@ -49,7 +49,8 @@ function getBrevoConfig(): BrevoConfig {
     replyTo: process.env.BREVO_REPLY_TO ?? 'contacto@jpdh.com',
     doiTemplateId: Number(process.env.BREVO_DOI_TEMPLATE_ID ?? 0),
     doiRedirectUrl:
-      process.env.BREVO_DOI_REDIRECT_URL ?? 'https://jpdh.com/?newsletter=ok',
+      process.env.BREVO_DOI_REDIRECT_URL ??
+      'https://localhost:3000/newsletter?status=ok',
   }
 }
 

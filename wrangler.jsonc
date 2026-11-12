@@ -8,7 +8,10 @@
 	"main": "@tanstack/react-start/server-entry",
 	"vars": {
 		"BETTER_AUTH_URL": "https://jovenesporlosderechoshumanoscr.org",
-		"EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
+        "BREVO_DOI_REDIRECT_URL": "https://jovenesporlosderechoshumanoscr.org/newsletter?status=ok",
+        "BREVO_DOI_TEMPLATE_ID": "1",
+        "BREVO_LIST_ID": "3",
+        "EMAIL_FROM": "JPDH <no-reply@jpdh.com>"
 	},
 	"send_email": [
 		{
