@@ -19,6 +19,14 @@ import { cn } from 'cn'
 export const Route = createFileRoute(
   '/student/courses/$courseSlug/lesson/$lessonId',
 )({
+  head: ({ params }) => ({
+    meta: [
+      {
+        name: 'description',
+        content: `Lección del curso ${params.courseSlug.replaceAll('-', ' ')} en la plataforma de Jóvenes por los Derechos Humanos Costa Rica.`,
+      },
+    ],
+  }),
   component: RouteComponent,
 })
 

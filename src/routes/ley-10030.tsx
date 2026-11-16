@@ -6,7 +6,14 @@ import { lawContent } from '@/components/landing/Law'
 
 export const Route = createFileRoute('/ley-10030')({
   head: () => ({
-    meta: [{ title: 'Ley N.° 10030 — JPDH' }],
+    meta: [
+      { title: 'Ley N.° 10030 — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Conoce la Ley N.° 10030, impulsada por nuestra organización, que incorpora el estudio permanente de la Declaración Universal de Derechos Humanos en la educación costarricense y declara el 10 de diciembre como Día Nacional de los Derechos Humanos.',
+      },
+    ],
   }),
   component: LeyPage,
 })

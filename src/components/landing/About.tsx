@@ -10,7 +10,7 @@ export const aboutContent = {
   ],
   link: { label: 'Conoce quiénes somos', href: '/about' },
   image: {
-    src: 'https://placehold.co/800x1000',
+    src: '/landing1.webp',
     alt: 'Integrantes de Jóvenes por los Derechos Humanos Costa Rica en una actividad educativa',
   },
 } as const

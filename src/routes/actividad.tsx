@@ -5,7 +5,14 @@ import Quiz from '@/components/Quiz'
 
 export const Route = createFileRoute('/actividad')({
   head: () => ({
-    meta: [{ title: 'Actividad interactiva — JPDH' }],
+    meta: [
+      { title: 'Actividad interactiva — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Pon a prueba tus conocimientos con esta actividad interactiva sobre la Declaración Universal de Derechos Humanos: un quiz gratuito, sin registro, artículo por artículo.',
+      },
+    ],
   }),
   component: ActividadPage,
 })

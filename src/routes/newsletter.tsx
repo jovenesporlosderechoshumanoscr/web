@@ -18,7 +18,14 @@ const newsletterSearchSchema = z.object({
 export const Route = createFileRoute('/newsletter')({
 	validateSearch: newsletterSearchSchema,
 	head: () => ({
-		meta: [{ title: 'Boletín — JPDH' }],
+		meta: [
+			{ title: 'Boletín — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Confirmación de tu suscripción al boletín de Jóvenes por los Derechos Humanos Costa Rica: novedades, actividades y contenidos sobre derechos humanos.',
+			},
+		],
 	}),
 	beforeLoad: async ({ search }) => {
 		// Sin estado de confirmación no hay nada que mostrar aquí.

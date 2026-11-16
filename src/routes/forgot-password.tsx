@@ -11,6 +11,16 @@ const forgotPasswordSearchSchema = z.object({
 
 export const Route = createFileRoute('/forgot-password')({
 	validateSearch: forgotPasswordSearchSchema,
+	head: () => ({
+		meta: [
+			{ title: 'Recuperar contraseña — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Recupera el acceso a tu cuenta: ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.',
+			},
+		],
+	}),
 	beforeLoad: async () => {
 		const session = await getSession()
 		if (session) {

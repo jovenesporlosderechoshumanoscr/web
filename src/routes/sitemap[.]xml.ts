@@ -17,7 +17,6 @@ const STATIC_ROUTES: Array<{ path: string; changefreq: string; priority: string 
 	{ path: '/ley-10030', changefreq: 'monthly', priority: '0.8' },
 	{ path: '/contact', changefreq: 'daily', priority: '1.0' },
 	{ path: '/blog', changefreq: 'daily', priority: '1.0' },
-	{ path: '/actividad', changefreq: 'monthly', priority: '0.8' },
 	{ path: '/privacy', changefreq: 'daily', priority: '1.0' },
 	{ path: '/terms', changefreq: 'daily', priority: '1.0' },
 ]

@@ -4,6 +4,16 @@ import { getSession } from '@/lib/auth.functions';
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/signup')({
+	head: () => ({
+		meta: [
+			{ title: 'Crear cuenta — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Crea tu cuenta gratuita y comienza a aprender los 30 derechos humanos con los cursos de Jóvenes por los Derechos Humanos Costa Rica.',
+			},
+		],
+	}),
 	beforeLoad: async () => {
 		const session = await getSession();
 		if (session) {

@@ -4,7 +4,14 @@ import Header from '@/components/landing/Header'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
-    meta: [{ title: 'Quiénes somos — JPDH' }],
+    meta: [
+      { title: 'Quiénes somos — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Conoce a Jóvenes por los Derechos Humanos Costa Rica, una organización sin fines de lucro que promueve la educación en derechos humanos desde hace 15 años, como parte del movimiento Youth for Human Rights International.',
+      },
+    ],
   }),
   component: AboutPage,
 })

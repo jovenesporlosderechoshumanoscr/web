@@ -8,6 +8,16 @@ const resendVerificationSearchSchema = z.object({
 
 export const Route = createFileRoute('/resend-verification')({
 	validateSearch: resendVerificationSearchSchema,
+	head: () => ({
+		meta: [
+			{ title: 'Reenviar verificación — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Vuelve a enviarnos el enlace de verificación para confirmar tu correo electrónico y activar tu cuenta.',
+			},
+		],
+	}),
 	component: RouteComponent,
 })
 

@@ -4,7 +4,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/terms')({
 	head: () => ({
-		meta: [{ title: 'Términos y condiciones — JPDH' }],
+		meta: [
+			{ title: 'Términos y condiciones — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Términos y condiciones de uso del sitio web de Jóvenes por los Derechos Humanos Costa Rica: acceso a cursos, blog y contenidos educativos.',
+			},
+		],
 	}),
 	component: RouteComponent,
 })
@@ -59,7 +66,7 @@ function RouteComponent() {
 					<TermsSection id="tc-identidad" title="2. Identificación del responsable">
 						<p>
 							JPDH es una organización con sede en Calle 21, entre Avenidas 2 y 6,
-							San José, 10104, Costa Rica. Correo de contacto: contacto@jpdh.org.
+							San José, 10104, Costa Rica. Correo de contacto: jdhcostarica@gmail.com.
 							Tratamos los datos personales de los usuarios conforme a nuestra{' '}
 							<a
 								href="/privacy"
@@ -119,7 +126,7 @@ function RouteComponent() {
 							</li>
 							<li>
 								Puedes solicitar la eliminación de tu cuenta en cualquier momento
-								escribiendo a contacto@jpdh.org.
+								escribiendo a jdhcostarica@gmail.com.
 							</li>
 						</ul>
 					</TermsSection>

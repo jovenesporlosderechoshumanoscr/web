@@ -13,7 +13,19 @@ import Purpose from '@/components/landing/Purpose'
 import Stats from '@/components/landing/Stats'
 import WhatWeDo from '@/components/landing/WhatWeDo'
 
-export const Route = createFileRoute('/')({ component: LandingPage })
+export const Route = createFileRoute('/')({
+  head: () => ({
+    meta: [
+      { title: 'Jóvenes por los Derechos Humanos Costa Rica' },
+      {
+        name: 'description',
+        content:
+          'Jóvenes por los Derechos Humanos Costa Rica: educación en los 30 derechos de la Declaración Universal, cursos, blog y actividades interactivas. Impulsores de la Ley N.° 10030.',
+      },
+    ],
+  }),
+  component: LandingPage,
+})
 
 function LandingPage() {
   return (

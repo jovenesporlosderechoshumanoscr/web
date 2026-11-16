@@ -4,7 +4,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/privacy')({
 	head: () => ({
-		meta: [{ title: 'Política de privacidad — JPDH' }],
+		meta: [
+			{ title: 'Política de privacidad — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Conoce cómo Jóvenes por los Derechos Humanos Costa Rica recopila, usa y protege los datos personales de estudiantes, docentes y visitantes del sitio.',
+			},
+		],
 	}),
 	component: RouteComponent,
 })
@@ -53,10 +60,10 @@ function RouteComponent() {
 							entre Avenidas 2 y 6, San José, 10104, Costa Rica. Correo de contacto
 							para temas de privacidad:{' '}
 							<a
-								href="mailto:contacto@jpdh.org"
+								href="mailto:jdhcostarica@gmail.com"
 								className="font-medium text-foreground underline underline-offset-4"
 							>
-								contacto@jpdh.org
+								jdhcostarica@gmail.com
 							</a>
 							.
 						</p>
@@ -307,7 +314,7 @@ function RouteComponent() {
 							</li>
 							<li>
 								<strong className="text-foreground">Eliminación de cuenta:</strong>{' '}
-								solicítala a contacto@jpdh.org y la procesaremos (sección 9).
+								solicítala a jdhcostarica@gmail.com y la procesaremos (sección 9).
 							</li>
 							<li>
 								<strong className="text-foreground">Baja del boletín:</strong> con el
@@ -328,7 +335,7 @@ function RouteComponent() {
 							tráfico (HTTPS/TLS), almacenamiento de contraseñas como hash, control de
 							accessos por roles, mínimos privilegios y protección de la
 							infraestructura a través de Cloudflare. Ningún sistema es infalible; si
-							sospechas de un incidente, repórtalo de inmediato a contacto@jpdh.org.
+							sospechas de un incidente, repórtalo de inmediato a jdhcostarica@gmail.com.
 						</p>
 					</PrivacySection>
 

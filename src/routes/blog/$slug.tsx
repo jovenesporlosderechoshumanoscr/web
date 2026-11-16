@@ -15,6 +15,20 @@ export const Route = createFileRoute('/blog/$slug')({
     }
     return post
   },
+  head: ({ loaderData }) => {
+    const post = loaderData
+    return {
+      meta: [
+        { title: post ? `${post.title} — Blog JPDH` : 'Blog — JPDH' },
+        {
+          name: 'description',
+          content:
+            post?.excerpt ??
+            `Artículo "${post?.title ?? 'sobre derechos humanos'}" del blog de Jóvenes por los Derechos Humanos Costa Rica.`,
+        },
+      ],
+    }
+  },
   component: BlogPostPage,
   notFoundComponent: NotFoundPost,
 })

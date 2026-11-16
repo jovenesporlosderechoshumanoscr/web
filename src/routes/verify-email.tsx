@@ -11,6 +11,16 @@ const verifyEmailSearchSchema = z.object({
 
 export const Route = createFileRoute('/verify-email')({
 	validateSearch: verifyEmailSearchSchema,
+	head: () => ({
+		meta: [
+			{ title: 'Verificar correo — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Confirmación de tu dirección de correo electrónico en la plataforma de Jóvenes por los Derechos Humanos Costa Rica.',
+			},
+		],
+	}),
 	component: RouteComponent,
 })
 

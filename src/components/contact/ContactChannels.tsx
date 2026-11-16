@@ -16,9 +16,9 @@ export const contactContent = {
 	channels: [
 		{
 			title: 'Correo electrónico',
-			value: 'contacto@jpdh.org',
+			value: 'jdhcostarica@gmail.com',
 			description: 'Para consultas generales e información.',
-			href: 'mailto:contacto@jpdh.org',
+			href: 'mailto:jdhcostarica@gmail.com',
 			Icon: IconMail,
 		},
 		{

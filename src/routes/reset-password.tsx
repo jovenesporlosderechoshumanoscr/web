@@ -13,6 +13,16 @@ const resetPasswordSearchSchema = z.object({
 
 export const Route = createFileRoute('/reset-password')({
 	validateSearch: resetPasswordSearchSchema,
+	head: () => ({
+		meta: [
+			{ title: 'Restablecer contraseña — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Define una nueva contraseña para tu cuenta en la plataforma de Jóvenes por los Derechos Humanos Costa Rica.',
+			},
+		],
+	}),
 	component: RouteComponent,
 })
 
