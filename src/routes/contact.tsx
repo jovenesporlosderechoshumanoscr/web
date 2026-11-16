@@ -5,7 +5,14 @@ import ContactChannels from '@/components/contact/ContactChannels'
 
 export const Route = createFileRoute('/contact')({
 	head: () => ({
-		meta: [{ title: 'Contacto — JPDH' }],
+		meta: [
+			{ title: 'Contacto — JPDH' },
+			{
+				name: 'description',
+				content:
+					'Ponte en contacto con Jóvenes por los Derechos Humanos Costa Rica. Escríbenos para solicitar charlas, talleres o colaborar con nuestra organización.',
+			},
+		],
 	}),
 	component: ContactPage,
 })

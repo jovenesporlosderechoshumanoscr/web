@@ -5,7 +5,14 @@ import { whatWeDoContent } from '@/components/landing/WhatWeDo'
 
 export const Route = createFileRoute('/what-we-do')({
   head: () => ({
-    meta: [{ title: 'Qué hacemos — JPDH' }],
+    meta: [
+      { title: 'Qué hacemos — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Descubre qué hacemos: seminarios, talleres y materiales educativos sobre los 30 derechos humanos para estudiantes, docentes e instituciones de todo Costa Rica.',
+      },
+    ],
   }),
   component: WhatWeDoPage,
 })

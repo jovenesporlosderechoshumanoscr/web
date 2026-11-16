@@ -31,11 +31,11 @@ function Stamp() {
             d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
           />
         </defs>
-        <text className="fill-current text-[10px] font-semibold tracking-widest uppercase">
+        <text className="fill-current text-[10px] text-black dark:text-white font-semibold tracking-widest uppercase">
           <textPath href="#stamp-circle">{heroContent.stampText}</textPath>
         </text>
       </svg>
-      <span className="text-2xl font-bold" aria-hidden="true">
+      <span className="text-2xl font-bold text-black dark:text-white" aria-hidden="true">
         ✦
       </span>
     </div>

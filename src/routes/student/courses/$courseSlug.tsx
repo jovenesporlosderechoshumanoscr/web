@@ -21,6 +21,14 @@ import {
 import { useEffect } from 'react'
 
 export const Route = createFileRoute('/student/courses/$courseSlug')({
+  head: ({ params }) => ({
+    meta: [
+      {
+        name: 'description',
+        content: `Lecciones del curso ${params.courseSlug.replaceAll('-', ' ')} en la plataforma de Jóvenes por los Derechos Humanos Costa Rica.`,
+      },
+    ],
+  }),
   component: CourseLayout,
 })
 

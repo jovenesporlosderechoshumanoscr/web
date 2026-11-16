@@ -4,6 +4,16 @@ import { getSession } from '@/lib/auth.functions'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login')({
+  head: () => ({
+    meta: [
+      { title: 'Iniciar sesión — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Inicia sesión en la plataforma educativa de Jóvenes por los Derechos Humanos Costa Rica para acceder a tus cursos y lecciones.',
+      },
+    ],
+  }),
   beforeLoad: async () => {
     const session = await getSession()
     if (session) {

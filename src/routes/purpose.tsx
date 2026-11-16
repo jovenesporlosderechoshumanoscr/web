@@ -5,7 +5,14 @@ import { purposeContent } from '@/components/landing/Purpose'
 
 export const Route = createFileRoute('/purpose')({
   head: () => ({
-    meta: [{ title: 'Nuestro propósito — JPDH' }],
+    meta: [
+      { title: 'Nuestro propósito — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Nuestro propósito es enseñar los derechos humanos a las nuevas generaciones e inspirarlas a convertirse en defensores de la tolerancia y la paz, aplicando estos principios en la vida cotidiana.',
+      },
+    ],
   }),
   component: PurposePage,
 })

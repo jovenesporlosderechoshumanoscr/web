@@ -46,7 +46,7 @@ function getBrevoConfig(): BrevoConfig {
     listId: Number(process.env.BREVO_LIST_ID ?? 0),
     senderEmail: process.env.BREVO_SENDER_EMAIL ?? 'boletin@jpdh.com',
     senderName: process.env.BREVO_SENDER_NAME ?? 'JPDH',
-    replyTo: process.env.BREVO_REPLY_TO ?? 'contacto@jpdh.com',
+    replyTo: process.env.BREVO_REPLY_TO ?? 'jdhcostarica@gmail.com',
     doiTemplateId: Number(process.env.BREVO_DOI_TEMPLATE_ID ?? 0),
     doiRedirectUrl:
       process.env.BREVO_DOI_REDIRECT_URL ??

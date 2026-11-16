@@ -52,7 +52,7 @@ export default function Header() {
         <div className="hidden md:block">
           <Link
             to="/login"
-            className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-primary-foreground"
+            className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-black dark:text-white"
           >
             zona estudiantes
             <IconArrowRight aria-hidden="true" />

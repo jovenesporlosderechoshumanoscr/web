@@ -2,6 +2,16 @@ import { LoginForm } from '@/components/login-form'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/login')({
+  head: () => ({
+    meta: [
+      { title: 'Acceso administrativo — JPDH' },
+      {
+        name: 'description',
+        content:
+          'Acceso exclusivo para administradores y editores de Jóvenes por los Derechos Humanos Costa Rica.',
+      },
+    ],
+  }),
   component: RouteComponent,
 })
 

@@ -8,6 +8,16 @@ import { Input } from "@/components/ui/input";
 import { usePublicPosts } from "@/functions/blog-client";
 
 export const Route = createFileRoute("/blog/")({
+  head: () => ({
+    meta: [
+      { title: "Blog — JPDH" },
+      {
+        name: "description",
+        content:
+          "Artículos y noticias sobre derechos humanos: educación, la Ley N.° 10030, actividades y novedades de Jóvenes por los Derechos Humanos Costa Rica.",
+      },
+    ],
+  }),
   component: BlogListPage,
 });
 
