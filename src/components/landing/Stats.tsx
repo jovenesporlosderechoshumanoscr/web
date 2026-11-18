@@ -6,9 +6,7 @@ import {
 
 export const statsContent = {
 	title: 'Nuestro impacto',
-	intro:
-		'Estadísticas, fotografías, reconocimientos y testimonios que muestran cómo la educación en derechos humanos llega a comunidades de Costa Rica.',
-	link: { label: 'Conoce nuestro impacto', href: '/impacto' },
+	intro: '15 años apoyando y colaborando con docentes, estudiantes e instituciones que han sido parte de nuestra mision',
 	items: [
 		{
 			value: '15',
@@ -16,12 +14,12 @@ export const statsContent = {
 			Icon: IconHistory,
 		},
 		{
-			value: '[dato pendiente]',
+			value: '+50.000',
 			label: 'personas alcanzadas',
 			Icon: IconHeartHandshake,
 		},
 		{
-			value: '[dato pendiente]',
+			value: '+100',
 			label: 'instituciones y centros educativos',
 			Icon: IconBuilding,
 		},
@@ -30,7 +28,7 @@ export const statsContent = {
 
 export default function Stats() {
 	return (
-		<section aria-label="Nuestro impacto" className="border-y bg-muted">
+		<section aria-label="Nuestro impacto" className="border-y ">
 			<div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
 				<h2 className="text-2xl font-bold tracking-tight uppercase sm:text-3xl">
 					{statsContent.title}

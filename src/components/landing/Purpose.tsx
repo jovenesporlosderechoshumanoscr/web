@@ -19,7 +19,8 @@ export default function Purpose() {
 		<section
 			aria-labelledby="purpose-title"
 			id="proposito"
-			className="border-y bg-muted"
+			className="border-y bg-primary/10"
+
 		>
 			<div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
 				<div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">

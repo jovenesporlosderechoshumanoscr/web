@@ -190,16 +190,16 @@ function RouteComponent() {
                       </td>
                       <td className="px-3 py-2">
                         <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={updatePost.isPending}
-                            onClick={() => handleToggleStatus(p.id, p.status)}
-                          >
-                            {p.status === 'published'
-                              ? 'Despublicar'
-                              : 'Publicar'}
-                          </Button>
+                          {p.status !== 'published' && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={updatePost.isPending}
+                              onClick={() => handleToggleStatus(p.id, p.status)}
+                            >
+                              Publicar
+                            </Button>
+                          )}
                           <Link
                             to="/admin/panel/blog/edit/$postId"
                             params={{ postId: p.id }}
@@ -210,6 +210,16 @@ function RouteComponent() {
                           >
                             Editar
                           </Link>
+                          {p.status === 'published' && (
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              disabled={updatePost.isPending}
+                              onClick={() => handleToggleStatus(p.id, p.status)}
+                            >
+                              Despublicar
+                            </Button>
+                          )}
                           <Button
                             size="sm"
                             variant={

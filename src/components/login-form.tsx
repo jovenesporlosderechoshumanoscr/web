@@ -41,7 +41,6 @@ export function LoginForm({
 		},
 		validators: {
 			onSubmit: formSchema,
-			onBlur: formSchema,
 		},
 
 		onSubmit: async ({ value }) => {

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 
@@ -81,7 +81,7 @@ function AboutPage() {
         </section>
         <section
           aria-labelledby="about-history-title"
-          className="border-t bg-muted"
+          className="border-t bg-primary/10"
         >
           <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
             <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
@@ -126,7 +126,7 @@ function AboutPage() {
         </section>
         <section
           aria-labelledby="about-cta-title"
-          className="border-t bg-muted"
+          className="border-t bg-primary/10"
         >
           <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-24">
             <h2
@@ -138,12 +138,12 @@ function AboutPage() {
             <p className="mt-3 text-muted-foreground">
               Escríbenos y construyamos juntos.
             </p>
-            <a
-              href="/contact"
-              className="mt-6 inline-flex h-11 items-center justify-center gap-1.5 rounded-2xl bg-primary px-6 text-sm font-medium text-primary-foreground"
+            <Link
+              to="/contact"
+              className="mt-6 inline-flex h-11 items-center justify-center gap-1.5 rounded-2xl bg-primary px-6 text-sm font-medium text-black dark:text-white"
             >
               Contacto
-            </a>
+            </Link>
           </div>
         </section>
       </main>

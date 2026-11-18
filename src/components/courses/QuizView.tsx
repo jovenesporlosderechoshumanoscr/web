@@ -128,12 +128,12 @@ export function QuizView({
       )}
 
       {questions.map((question, qi) => (
-        <fieldset key={question.id} className="flex flex-col gap-5">
+        <fieldset key={question.id} className="flex flex-col">
           <legend className="rounded-2xl border bg-card px-5 py-4 text-base font-semibold shadow-sm">
             <span className="mr-2 text-primary">{qi + 1}.</span>
             {question.text}
           </legend>
-          <div className="flex flex-col gap-2.5">
+          <div className="mt-7 flex flex-col gap-2.5">
             {question.options.map((option) => {
               const selected = answers[question.id] === option.id
               return (

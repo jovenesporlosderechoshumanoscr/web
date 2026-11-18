@@ -113,7 +113,7 @@ export function ForgotPasswordForm({
 							/>
 
 							<Field>
-								<Button type="submit">Enviar enlace</Button>
+								<Button className="mt-4" type="submit">Enviar enlace</Button>
 							</Field>
 							<FieldDescription className="text-center">
 								¿Recordaste tu contraseña? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link>

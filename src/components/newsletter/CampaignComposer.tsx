@@ -9,7 +9,7 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { useSendNewsletter } from '@/functions/newsletter-client'
 import {
   NEWSLETTER_LIMITS,
-  renderNewsletterHtml,
+  renderNewsletterBodyHtml,
 } from '@/server/newsletter-template'
 
 const composerContent = {
@@ -42,12 +42,26 @@ export function CampaignComposer({
 
   const sendAll = useSendNewsletter()
 
+  // La vista previa es de solo lectura: `inert` desactiva toda interacción
+  // (clics, foco, teclado) y los estilos con scope bloquean además la
+  // selección de texto. `table-layout: fixed` fuerza a las tablas del correo
+  // a respetar el ancho del contenedor y, junto con `word-break`, las
+  // palabras largas se parten en vez de desbordar a la derecha. Se renderiza
+  // el cuerpo en línea para que la vista previa crezca hacia abajo con el
+  // contenido, en vez de cortarse.
   const previewHtml = useMemo(
     () =>
-      renderNewsletterHtml({
-        content: content || 'Escribe el contenido del boletín…',
-        previewText: previewText,
-      }),
+      `<style>
+.newsletter-preview, .newsletter-preview * { pointer-events: none !important; user-select: none !important; }
+.newsletter-preview table { table-layout: fixed !important; }
+.newsletter-preview td { word-break: break-word !important; }
+</style>
+<div class="newsletter-preview" style="background-color:#f4f4f5; padding:24px 0;">
+  ${renderNewsletterBodyHtml({
+    content: content || 'Escribe el contenido del boletín…',
+    previewText: previewText,
+  })}
+</div>`,
     [content, previewText],
   )
 
@@ -66,7 +80,10 @@ export function CampaignComposer({
         content: content.trim(),
       },
       {
-        onSuccess: () => toast.success(composerContent.successSendMessage),
+        onSuccess: () => {
+          setConfirmSend(false)
+          toast.success(composerContent.successSendMessage)
+        },
         onError: () =>
           toast.error('No se pudieron enviar los correos. Inténtalo de nuevo.'),
       },
@@ -155,11 +172,11 @@ export function CampaignComposer({
           {showPreview ? (
             <div className="flex flex-col gap-2">
               <Label>{composerContent.previewLabelShort}</Label>
-              <iframe
+              <div
                 title="Vista previa del boletín"
-                srcDoc={previewHtml}
-                sandbox="allow-same-origin"
-                className="h-[520px] w-full rounded-lg border"
+                inert
+                dangerouslySetInnerHTML={{ __html: previewHtml }}
+                className="max-w-full overflow-x-hidden break-words rounded-lg border bg-background"
               />
             </div>
           ) : null}

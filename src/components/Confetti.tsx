@@ -34,7 +34,7 @@ export default function Confetti({ cantidad = 70 }: { cantidad?: number }) {
         duracion: 2.4 + Math.random() * 1.8,
         drift: Math.round((Math.random() - 0.5) * 160),
         rotacion: Math.round(360 + Math.random() * 720),
-        color: COLORES[i % COLORES.length]!,
+        color: COLORES[i % COLORES.length],
         ancho: 8 + Math.random() * 6,
         alto: 10 + Math.random() * 8,
       })),

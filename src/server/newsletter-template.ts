@@ -48,9 +48,6 @@ export function validateNewsletterInput(
 }
 
 export function renderNewsletterHtml(input: NewsletterRenderInput): string {
-  const paragraphs = textToParagraphs(input.content)
-  const year = new Date().getFullYear()
-
   return `<!doctype html>
 <html lang="es">
 <head>
@@ -59,6 +56,19 @@ export function renderNewsletterHtml(input: NewsletterRenderInput): string {
 <title>Boletín JPDH</title>
 </head>
 <body style="margin:0; padding:0; background-color:#f4f4f5;">
+${renderNewsletterBodyHtml(input)}
+</body>
+</html>`
+}
+
+/** Cuerpo del correo sin el documento envolvente (para vistas previas en línea). */
+export function renderNewsletterBodyHtml(
+  input: NewsletterRenderInput,
+): string {
+  const paragraphs = textToParagraphs(input.content)
+  const year = new Date().getFullYear()
+
+  return `
   <!-- Preheader -->
   <div style="display:none; max-height:0; overflow:hidden;">
     ${escapeHtml(input.previewText)}
@@ -78,7 +88,7 @@ export function renderNewsletterHtml(input: NewsletterRenderInput): string {
 
           <!-- Cuerpo -->
           <tr>
-            <td style="padding:32px; font-family:Arial, sans-serif; font-size:15px; line-height:1.6; color:#1f2937;">
+            <td style="padding:32px; font-family:Arial, sans-serif; font-size:15px; line-height:1.6; color:#1f2937; word-break:break-word;">
               ${paragraphs}
             </td>
           </tr>
@@ -102,8 +112,7 @@ export function renderNewsletterHtml(input: NewsletterRenderInput): string {
       </td>
     </tr>
   </table>
-</body>
-</html>`
+  `
 }
 
 export const NEWSLETTER_LIMITS = {

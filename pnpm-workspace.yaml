@@ -4,3 +4,10 @@ allowBuilds:
   sharp: true
   unrs-resolver: false
   workerd: true
+permissions:
+  '@tanstack/devtools-vite':
+    skills: true
+  '@tanstack/react-start':
+    skills: [react-start]
+  drizzle-kit:
+    skills: [drizzle, drizzle-generate, drizzle-hints, drizzle-migrations, drizzle-output-modes, drizzle-pull, drizzle-push, drizzle-responses-and-errors]

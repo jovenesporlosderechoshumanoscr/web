@@ -824,11 +824,17 @@ function LessonRow({
       <button
         type="button"
         onClick={onSelect}
-        className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-1.5 py-1 text-left text-sm hover:bg-accent ${
-          selected ? 'bg-accent' : ''
+        className={`group/lesson-btn flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground ${
+          selected ? 'bg-accent text-accent-foreground' : ''
         }`}
       >
-        <Icon className="size-4 shrink-0 text-muted-foreground" />
+        <Icon
+          className={`size-4 shrink-0 ${
+            selected
+              ? 'text-accent-foreground'
+              : 'text-muted-foreground group-hover/lesson-btn:text-accent-foreground'
+          }`}
+        />
         <span className="truncate">{lesson.title}</span>
       </button>
       <Button
