@@ -189,16 +189,16 @@ function RouteComponent() {
                       </td>
                       <td className="px-3 py-2">
                         <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={updateCourse.isPending}
-                            onClick={() => handleToggleStatus(c.id, c.status)}
-                          >
-                            {c.status === 'published'
-                              ? 'Despublicar'
-                              : 'Publicar'}
-                          </Button>
+                          {c.status !== 'published' && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={updateCourse.isPending}
+                              onClick={() => handleToggleStatus(c.id, c.status)}
+                            >
+                              Publicar
+                            </Button>
+                          )}
                           <Link
                             to="/admin/panel/courses/builder/$courseId"
                             params={{ courseId: c.id }}
@@ -219,6 +219,16 @@ function RouteComponent() {
                           >
                             Editar
                           </Link>
+                          {c.status === 'published' && (
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              disabled={updateCourse.isPending}
+                              onClick={() => handleToggleStatus(c.id, c.status)}
+                            >
+                              Despublicar
+                            </Button>
+                          )}
                           <Button
                             size="sm"
                             variant={

@@ -5,7 +5,6 @@ interface __BaseEnv_Env {
 	MEDIA: R2Bucket;
 	PLANTILLAS: R2Bucket;
 	jpdhdb: D1Database;
-	EMAIL: SendEmail;
 	EMAIL_FROM: "JPDH <no-reply@jpdh.com>";
 	BETTER_AUTH_SECRET: string;
 	BETTER_AUTH_URL: string;
@@ -13,6 +12,7 @@ interface __BaseEnv_Env {
 	CLOUDFLARE_DATABASE_ID: string;
 	CLOUDFLARE_D1_TOKEN: string;
 	BREVO_API_KEY: string;
+	RESEND_API_KEY: string;
 }
 declare namespace Cloudflare {
 	interface Env extends __BaseEnv_Env {}
@@ -22,7 +22,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "EMAIL_FROM" | "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "CLOUDFLARE_ACCOUNT_ID" | "CLOUDFLARE_DATABASE_ID" | "CLOUDFLARE_D1_TOKEN" | "BREVO_API_KEY">> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "EMAIL_FROM" | "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "CLOUDFLARE_ACCOUNT_ID" | "CLOUDFLARE_DATABASE_ID" | "CLOUDFLARE_D1_TOKEN" | "BREVO_API_KEY" | "RESEND_API_KEY">> {}
 }
 
 // Begin runtime types

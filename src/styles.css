@@ -26,7 +26,7 @@
   /* Elevado de 0.556 a 0.44 para cumplir contraste AA sobre --background. */
   --muted-foreground: oklch(0.44 0.02 255);
   --accent: #624dea;
-  --accent-foreground: oklch(0.205 0 0);
+  --accent-foreground: oklch(0.985 0 0);
   /* Logros y progreso (insignias, checks, barras). */
   --success: oklch(0.55 0.13 155);
   --success-foreground: oklch(0.985 0 0);

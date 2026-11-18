@@ -47,7 +47,7 @@ function WhatWeDoPage() {
         </section>
         <section
           aria-labelledby="what-we-do-content-title"
-          className="border-t bg-muted"
+          className="border-t bg-primary/10"
         >
           <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
             <h2

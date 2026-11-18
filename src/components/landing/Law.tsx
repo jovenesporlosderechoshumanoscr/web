@@ -15,39 +15,31 @@ export const lawContent = {
 
 export default function Law() {
   return (
-    <section
-      aria-labelledby="law-title"
-      id="ley-10030"
-      className="border-y bg-muted"
-    >
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
-            {lawContent.eyebrow}
-          </p>
-          <h2
-            id="law-title"
-            className="mt-3 text-3xl font-bold tracking-tight uppercase sm:text-4xl"
-          >
-            {lawContent.title}
-          </h2>
-          {lawContent.paragraphs.map((paragraph) => (
-            <p
-              key={paragraph.slice(0, 24)}
-              className="mt-5 text-muted-foreground"
-            >
-              {paragraph}
-            </p>
-          ))}
-          <Link
-            to={lawContent.link.href}
-            className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
-          >
-            {lawContent.link.label}
-            <IconArrowRight aria-hidden="true" className="size-4" />
-          </Link>
-        </div>
-      </div>
-    </section>
+    <div id="ley-10030" aria-labelledby="law-title">
+      <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
+        {lawContent.eyebrow}
+      </p>
+      <h2
+        id="law-title"
+        className="mt-3 text-3xl font-bold tracking-tight uppercase sm:text-4xl"
+      >
+        {lawContent.title}
+      </h2>
+      {lawContent.paragraphs.map((paragraph) => (
+        <p
+          key={paragraph.slice(0, 24)}
+          className="mt-5 text-muted-foreground"
+        >
+          {paragraph}
+        </p>
+      ))}
+      <Link
+        to={lawContent.link.href}
+        className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
+      >
+        {lawContent.link.label}
+        <IconArrowRight aria-hidden="true" className="size-4" />
+      </Link>
+    </div>
   )
 }

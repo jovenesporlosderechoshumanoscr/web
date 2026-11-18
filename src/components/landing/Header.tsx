@@ -54,7 +54,7 @@ export default function Header() {
             to="/login"
             className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-black dark:text-white"
           >
-            zona estudiantes
+            Curso en linea
             <IconArrowRight aria-hidden="true" />
           </Link>
         </div>
@@ -68,9 +68,11 @@ export default function Header() {
                 </Button>
               }
             />
-            <SheetContent>
+            <SheetContent showCloseButton={false} className="gap-0 p-6">
               <div className="flex items-center justify-between">
-                <SheetTitle>{headerContent.logo}</SheetTitle>
+                <SheetTitle className="font-heading text-lg font-bold tracking-wide uppercase">
+                  {headerContent.logo}
+                </SheetTitle>
                 <SheetClose
                   render={
                     <Button
@@ -83,7 +85,7 @@ export default function Header() {
                   }
                 />
               </div>
-              <nav aria-label="Navegación móvil">
+              <nav aria-label="Navegación móvil" className="mt-6 flex-1">
                 <ul className="flex flex-col gap-1">
                   {headerContent.navLinks.map((link) => (
                     <li key={link.label}>
@@ -92,7 +94,7 @@ export default function Header() {
                         render={
                           <Link
                             to={link.href}
-                            className="block rounded-md px-2 py-3 text-base font-medium hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+                            className="block rounded-lg px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:outline-none"
                           >
                             {link.label}
                           </Link>
@@ -102,13 +104,20 @@ export default function Header() {
                   ))}
                 </ul>
               </nav>
-              <Link
-                to="/login"
-                className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-medium text-primary-foreground"
-              >
-                zona estudiantes
-                <IconArrowRight aria-hidden="true" />
-              </Link>
+              <div className="mt-6 border-t pt-6">
+                <SheetClose
+                  nativeButton={false}
+                  render={
+                    <Link
+                      to="/login"
+                      className="flex h-11 w-full items-center justify-center gap-1.5 rounded-2xl bg-primary px-4 text-sm font-semibold text-black transition-colors hover:bg-primary/90 dark:text-white"
+                    >
+                      zona estudiantes
+                      <IconArrowRight aria-hidden="true" />
+                    </Link>
+                  }
+                />
+              </div>
             </SheetContent>
           </Sheet>
         </div>

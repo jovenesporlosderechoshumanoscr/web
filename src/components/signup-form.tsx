@@ -51,7 +51,6 @@ export function SignupForm({
 		},
 		validators: {
 			onSubmit: formSchema,
-			onBlur: formSchema,
 		},
 
 		onSubmit: async ({ value }) => {

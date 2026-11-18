@@ -3,9 +3,9 @@ import { IconArrowRight } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 
 export const heroContent = {
-  titleLead: 'Jóvenes por los',
+  titleLead: 'Haciendo de los',
   titleBoldA: 'Derechos Humanos',
-  titleEnd: 'Costa Rica',
+  titleEnd: 'una realidad nacional',
   subtitle:
     '15 años educando para hacer de los derechos humanos una realidad en Costa Rica.',
   description:
