@@ -95,7 +95,7 @@ function LandingPage() {
               derechos de la Declaración Universal en el aula.
             </p>
             <a
-              href="https://www.youthforhumanrights.org"
+              href="https://www.youthforhumanrights.org/request-info/educators-kit.html"
               target="_blank"
               rel="noreferrer"
               className={buttonVariants({
@@ -104,7 +104,7 @@ function LandingPage() {
                 className: 'mt-8',
               })}
             >
-              Visitar Youth for Human Rights
+            Conseguir el paquete gratuito
               <IconExternalLink data-icon="inline-end" />
             </a>
           </div>
