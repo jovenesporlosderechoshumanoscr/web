@@ -1,7 +1,10 @@
 import { ResetPasswordForm } from '@/components/reset-password-form'
+import Footer from '@/components/landing/Footer'
+import Header from '@/components/landing/Header'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import * as z from 'zod'
 
+import { cn } from "cn"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FieldDescription, FieldGroup } from "@/components/ui/field"
@@ -36,33 +39,45 @@ function RouteComponent() {
 
 	if (!token) {
 		return (
-			<div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-				<Card className="w-full max-w-sm p-0">
-					<CardContent className="p-6">
-						<FieldGroup>
-							<div className="flex flex-col items-center gap-2 text-center">
-								<h1 className="text-2xl font-bold">Enlace no válido</h1>
-								<p className="text-balance text-muted-foreground">
-									{(error && ERROR_MESSAGES[error]) ??
-										'Falta el token de recuperación. Revisa el enlace de tu correo o solicita uno nuevo.'}
-								</p>
-							</div>
-							<Link to="/forgot-password" className={buttonVariants()}>
-								Solicitar nuevo enlace
-							</Link>
-						</FieldGroup>
-					</CardContent>
-				</Card>
-				<FieldDescription className="px-6 text-center">
-					<>¿Recordaste tu contraseña? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link></>
-				</FieldDescription>
+			<div className="flex min-h-svh flex-col bg-background text-foreground">
+				<Header />
+				<main className="flex flex-1 items-center justify-center p-6 md:p-10">
+					<div className="w-full max-w-sm">
+						<Card className="w-full p-0">
+							<CardContent className="p-6">
+								<FieldGroup>
+									<div className="flex flex-col items-center gap-2 text-center">
+										<h1 className="text-2xl font-bold">Enlace no válido</h1>
+										<p className="text-balance text-muted-foreground">
+											{(error && ERROR_MESSAGES[error]) ??
+												'Falta el token de recuperación. Revisa el enlace de tu correo o solicita uno nuevo.'}
+										</p>
+									</div>
+									<Link to="/forgot-password" className={cn(buttonVariants(), 'self-center')}>
+										Solicitar nuevo enlace
+									</Link>
+								</FieldGroup>
+							</CardContent>
+						</Card>
+						<FieldDescription className="mt-6 text-center">
+							<>¿Recordaste tu contraseña? <Link to="/login" className="underline underline-offset-2 hover:underline">Inicia sesión</Link></>
+						</FieldDescription>
+					</div>
+				</main>
+				<Footer />
 			</div>
 		)
 	}
 
 	return (
-		<div>
-			<ResetPasswordForm token={token} />
+		<div className="flex min-h-svh flex-col bg-background text-foreground">
+			<Header />
+			<main className="flex flex-1 items-center justify-center p-6 md:p-10">
+				<div className="w-full max-w-sm">
+					<ResetPasswordForm token={token} />
+				</div>
+			</main>
+			<Footer />
 		</div>
 	)
 }
