@@ -65,7 +65,7 @@ export function ForgotPasswordForm({
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden p-0">
-				<CardContent className="grid p-0 md:grid-cols-2">
+				<CardContent className="p-0">
 					<FieldGroup className="p-6 md:p-8">
 						<div className="flex flex-col items-center gap-2 text-center">
 							<h1 className="text-2xl font-bold">Recupera tu contraseña</h1>
@@ -120,13 +120,6 @@ export function ForgotPasswordForm({
 							</FieldDescription>
 						</form>
 					</FieldGroup>
-					<div className="relative hidden bg-muted md:block">
-						<img
-							src="/placeholder.svg"
-							alt="Image"
-							className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-						/>
-					</div>
 				</CardContent>
 			</Card >
 			<FieldDescription className="px-6 text-center">

@@ -4,6 +4,7 @@ import { buttonVariants } from '@/components/ui/button'
 import Footer from '@/components/landing/Footer'
 import Header from '@/components/landing/Header'
 import { lawContent } from '@/components/landing/Law'
+import { Rights } from '@/components/landing/Rights'
 
 export const Route = createFileRoute('/ley-10030')({
   head: () => ({
@@ -88,10 +89,9 @@ function LeyPage() {
                 <p className="mt-4 text-sm font-semibold tracking-widest text-muted-foreground uppercase">
                   Actividad interactiva
                 </p>
-                <h3
-                  className="mt-3 text-3xl font-bold tracking-tight uppercase sm:text-4xl"
-                >
-                  Pon en práctica lo <strong className="font-bold">aprendido</strong>
+                <h3 className="mt-3 text-3xl font-bold tracking-tight uppercase sm:text-4xl">
+                  Pon en práctica lo{' '}
+                  <strong className="font-bold">aprendido</strong>
                 </h3>
                 <p className="mt-5 text-muted-foreground">
                   Un quiz sencillo para conocer la Declaración Universal de
@@ -111,6 +111,7 @@ function LeyPage() {
             </div>
           </div>
         </section>
+        <Rights />
       </main>
       <Footer />
     </div>

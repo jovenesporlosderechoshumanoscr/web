@@ -127,12 +127,12 @@ export function LoginForm({
 
 										<Field data-invalid={isInvalid}>
 											<div className="flex items-center">
-												<FieldLabel htmlFor="password">Password</FieldLabel>
+												<FieldLabel htmlFor="password">Contraseña</FieldLabel>
 												<Link
 													to="/forgot-password"
 													className="ml-auto text-sm text-foreground underline-offset-2 hover:underline"
 												>
-													Forgot your password?
+													Olvidaste tu contraseña?
 												</Link>
 											</div>
 											<Input
@@ -141,7 +141,7 @@ export function LoginForm({
 												value={field.state.value}
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="enter secure password please..."
+												placeholder="Escribe la contraseña de tu cuenta..."
 												className=""
 												aria-invalid={isInvalid}
 												type="password"
@@ -157,7 +157,7 @@ export function LoginForm({
 							/>
 
 							<Field>
-								<Button className="mt-4" type="submit">Login</Button>
+								<Button className="mt-4" type="submit">Ingresar</Button>
 							</Field>
 							{verificationEmail && (
 								<FieldDescription className="text-center">
@@ -171,7 +171,7 @@ export function LoginForm({
 					</FieldGroup>
 					<div className="relative hidden bg-muted md:block">
 						<img
-							src="/placeholder.svg"
+							src="/logojpdh.webp"
 							alt="Image"
 							className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
 						/>
