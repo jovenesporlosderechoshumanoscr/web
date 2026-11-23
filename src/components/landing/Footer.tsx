@@ -3,7 +3,6 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandX,
-  IconBrandYoutube,
 } from '@tabler/icons-react'
 import ThemeToggle from '@/components/ThemeToggle'
 
@@ -24,10 +23,9 @@ export const footerContent = {
     { label: 'Privacidad', href: '/privacy' },
   ],
   socials: [
-    { label: 'X', href: '#', Icon: IconBrandX },
-    { label: 'Instagram', href: '#', Icon: IconBrandInstagram },
-    { label: 'Facebook', href: '#', Icon: IconBrandFacebook },
-    { label: 'YouTube', href: '#', Icon: IconBrandYoutube },
+    { label: 'X', href: 'https://x.com/jdh_cr', Icon: IconBrandX },
+    { label: 'Instagram', href: 'https://www.instagram.com/jdh_cr/', Icon: IconBrandInstagram },
+    { label: 'Facebook', href: 'https://www.facebook.com/jdh.cr', Icon: IconBrandFacebook },
   ],
   legal:
     '© 2026 Jóvenes por los Derechos Humanos Costa Rica. Todos los derechos reservados.',
