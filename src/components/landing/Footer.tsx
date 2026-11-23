@@ -3,7 +3,6 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandX,
-  IconBrandYoutube,
 } from '@tabler/icons-react'
 import ThemeToggle from '@/components/ThemeToggle'
 
