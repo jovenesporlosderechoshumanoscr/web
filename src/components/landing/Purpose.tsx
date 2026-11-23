@@ -31,20 +31,6 @@ export default function Purpose() {
 							loading="lazy"
 							className="aspect-[4/5] w-full rounded-2xl object-cover"
 						/>
-						<p className='text-sm text-gray-400'>
-							Photo by <a
-							className='text-gray-500 dark:text-gray-300'
-								target='_blank'
-								rel="noopener noreferrer"
-								href="https://unsplash.com/@mirandanenee?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
-								Leonardo Miranda
-							</a> on
-							<a
-								target='_blank'
-								rel="noopener noreferrer"
-								href="https://unsplash.com/photos/people-standing-near-building-during-daytime-UCSFL28xXn0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash
-							</a>
-						</p>
 					</div>
 					<div>
 						<p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">

@@ -3,9 +3,9 @@ import { IconArrowRight } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 
 export const heroContent = {
-  titleLead: 'Haciendo de los',
+  titleLead: 'Jovenes por los',
   titleBoldA: 'Derechos Humanos',
-  titleEnd: 'una realidad nacional',
+  titleEnd: 'Costa Rica',
   subtitle:
     '15 años educando para hacer de los derechos humanos una realidad en Costa Rica.',
   description:
@@ -36,16 +36,14 @@ export default function Hero() {
           />
         </picture>
 
-        {/* Difuminado negro hacia los bordes (arriba, abajo y derecha) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-l from-black/45 via-transparent to-black/50" />
 
-        {/* Difuminado con el color primario detrás del texto */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/45 via-primary/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/45 via-primary/20 to-primary/10" />
+        {/* Velado adicional en móvil, donde el texto ocupa todo el ancho */}
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/20 to-transparent md:hidden" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
           <h1
             id="hero-title"
             className="text-4xl leading-tight font-light tracking-tight uppercase sm:text-5xl lg:text-6xl"
@@ -54,10 +52,10 @@ export default function Hero() {
             <strong className="font-bold">{heroContent.titleBoldA}</strong>,{' '}
             {heroContent.titleEnd}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-white/90 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base font-medium text-white sm:text-lg">
             {heroContent.subtitle}
           </p>
-          <p className="mt-4 max-w-xl text-base text-white/75 sm:text-lg">
+          <p className="mt-4 max-w-xl text-base text-white sm:text-lg">
             {heroContent.description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

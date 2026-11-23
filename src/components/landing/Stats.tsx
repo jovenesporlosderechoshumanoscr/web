@@ -22,12 +22,12 @@ export const statsContent = {
 			Icon: IconHeartHandshake,
 		},
 		{
-			value: '+2.106',
+			value: '+1.229',
 			label: 'Seminarios y talleres impartidos',
 			Icon: IconBuilding,
 		},
 		{
-			value: '+1.745',
+			value: '+35.694',
 			label: 'Personas educadas en derechos humanos',
 			Icon: IconBook,
 		},
