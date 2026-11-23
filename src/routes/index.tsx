@@ -11,6 +11,7 @@ import Newsletter from '@/components/landing/Newsletter'
 import Purpose from '@/components/landing/Purpose'
 import Stats from '@/components/landing/Stats'
 import WhatWeDo from '@/components/landing/WhatWeDo'
+import { Rights } from '@/components/landing/Rights'
 
 export const Route = createFileRoute('/')({
 	head: () => ({
@@ -113,6 +114,7 @@ function LandingPage() {
 				<About />
 				<Purpose />
 				<WhatWeDo />
+				<Rights />
 				<Newsletter />
 			</main>
 			<Footer />
